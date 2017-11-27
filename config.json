@@ -1,0 +1,19 @@
+{
+    "production":{
+        "database": {
+            "host"     : "39.106.43.88",
+            "user"     : "root",
+            "password" : "~tkLIJA5V.dsC8zy",
+            "database" : "areashop"
+        }
+    },
+    "development":{
+        "memcache":"39.106.43.88",
+        "database": {
+            "host"     : "39.106.43.88",
+            "user"     : "root",
+            "password" : "~tkLIJA5V.dsC8zy",
+            "database" : "areashop"
+        }
+    }
+}
