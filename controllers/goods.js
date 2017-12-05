@@ -1,18 +1,18 @@
 const Goods = require('../models/goods.js');
 
-exports.getList = async (ctx, next) => {
-    try {
-        let list = await Goods.getList();
-        return list;
-    } catch (err) {
-        return err;
-    }
-}
+// exports.getList =  (ctx, next) => {
+//     try {
+//         let list = Goods.getList();
+//         return list;
+//     } catch (err) {
+//         return err;
+//     }
+// }
 
 
-exports.getDetail = async (ctx, next) => {
+exports.detail = async (ctx, next) => {
     try {
-        return 'success';
+	  	ctx.body = Goods.getList();
         // let list = await Goods.getList;
     } catch (err) {
         return 'err';

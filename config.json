@@ -8,11 +8,11 @@
         }
     },
     "development":{
-        "memcache":"39.106.43.88",
+        "memcache":"127.0.0.1",
         "database": {
-            "host"     : "39.106.43.88",
+            "host"     : "127.0.0.1",
             "user"     : "root",
-            "password" : "~tkLIJA5V.dsC8zy",
+            "password" : "123456",
             "database" : "areashop"
         }
     }

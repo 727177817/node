@@ -1,24 +1,39 @@
-const Model = require('./model.js');
+const config = require('../config.json');
+const knex   = require('knex');
+class Model {
 
+    constructor() {
+        // this.memcache    = app.memcache;
+        // this.mysql       = app.mysql;
+        this.db = async ()=>{
+            knex({client: 'mysql', connection: config[app.env].database}).select('goods_id').from('ecs_goods');
+            await next();
+        }
+        // this.db = await knex({client: 'mysql', connection: config[app.env].database});
+        // await next();
+    }
+
+}
 
 class Goods extends Model {
 
-    constructor(app) {
-        super(app);
+    constructor() {
+        super();
     }
 
-    async getList() {
-        let list = await app.db
-		   .select('goods_id')
-		   .from('ecs_goods');
-
-        return list;
+    getList() {
+     //    let list =  super.db
+		   // ;
+        return super.db;
     }
 
 
 }
 
 
-module.exports = function(app) {
-    return new Goods(app);
-}
+// module.exports = (app)=>{
+// 	new Goods(app)
+// } 
+
+module.exports = new Goods();
+

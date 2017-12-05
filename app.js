@@ -1,18 +1,18 @@
 const Koa    = require('koa');
 const app    = new Koa();
 
-const knex   = require('knex');
+// const knex   = require('knex');
 // const memcache   = require('memcache');
 
-const config = require('./config.json');
-const router  = require('./routes/goods.js');
+// const config = require('./config.json');
+const routers  = require('./routers/index');
 
 
-// connect mysql
-app.use(async (ctx, next) => {
-	app.db = knex({client: 'mysql', connection: config[app.env].database});   
-	await next();
-});
+// // connect mysql
+// app.use(async (ctx, next) => {
+// 	app.db = knex({client: 'mysql', connection: config[app.env].database});
+// 	await next();
+// });
 
 
 // app.use(async (ctx, next) => {
@@ -21,7 +21,7 @@ app.use(async (ctx, next) => {
 // });
 
 
-app.use(router.routes(), router.allowedMethods());
+app.use(routers.routes(), routers.allowedMethods());
 
 // connect memcache
 // app.use(async (ctx, next) => {
