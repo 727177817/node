@@ -10,7 +10,7 @@ const Goods = require('../models/goods.js');
 // }
 
 
-exports.detail = async (ctx, next) => {
+exports.list = async (ctx, next) => {
     try {
 	  	ctx.body = await Goods.getList();
         // let list = await Goods.getList;

@@ -9,8 +9,8 @@ class Goods extends Model {
 
     async getList() {
         var ret = await this.db
-            .select().from('ecs_goods')
-        return ret[0]
+            .select().limit(3).from('ecs_goods')
+        return ret
     }
 
 }
