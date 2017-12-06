@@ -12,7 +12,7 @@ const Goods = require('../models/goods.js');
 
 exports.detail = async (ctx, next) => {
     try {
-	  	ctx.body = Goods.getList();
+	  	ctx.body = await Goods.getList();
         // let list = await Goods.getList;
     } catch (err) {
         return 'err';
