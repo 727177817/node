@@ -12,9 +12,9 @@ class Goods extends Model {
         return ret
     }
 
-    async getDetail() {
+    async getDetail(goods_id) {
         var ret = await this.db
-            .first().from('ecs_goods').where('goods_id', 45);
+            .first().from('ecs_goods').where('goods_id', goods_id);
         return ret
     }
 

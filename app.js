@@ -9,7 +9,7 @@ const routers  = require('./routers/index');
 app.use(routers.routes(), routers.allowedMethods());
 
 
-app.listen(3000, () => {
+app.listen(3009, () => {
     process.stdout.write('[static] server started at :3000\r\n');
 });
 

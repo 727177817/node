@@ -12,8 +12,7 @@ exports.list = async (ctx, next) => {
 
 exports.detail = async (ctx, next) => {
     try {
-	  	ctx.body = await Goods.getDetail();
-        // let list = await Goods.getList;
+	  	ctx.body = await Goods.getDetail(ctx.query.goods_id);
     } catch (err) {
         return 'err';
     }
