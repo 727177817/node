@@ -1,0 +1,24 @@
+[2017-12-08T19:40:45.643] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"request":{"method":"GET","url":"/","header":{"host":"localhost:3000","connection":"keep-alive","cache-control":"max-age=0","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36","upgrade-insecure-requests":"1","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.8,en;q=0.6","cookie":"connect_id=e5ec0e36308c8a4696a41e3f827464ab; wechat_unionid=9527; wechat_nickname=989; wechat_headimgurl=localhost"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}
+*************** response log end ***************
+
+[2017-12-08T19:41:21.202] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"request":{"method":"GET","url":"/","header":{"host":"localhost:3000","connection":"keep-alive","cache-control":"max-age=0","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36","upgrade-insecure-requests":"1","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.8,en;q=0.6","cookie":"connect_id=e5ec0e36308c8a4696a41e3f827464ab; wechat_unionid=9527; wechat_nickname=989; wechat_headimgurl=localhost"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}
+*************** response log end ***************
+

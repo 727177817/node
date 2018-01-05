@@ -12,8 +12,7 @@
         "database": {
             "host"     : "127.0.0.1",
             "user"     : "root",
-            "port"     : "3307",
-            "password" : "",
+            "password" : "123456",
             "database" : "areashop"
         }
     }

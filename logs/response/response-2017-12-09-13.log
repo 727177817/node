@@ -1,0 +1,36 @@
+[2017-12-09T13:58:43.934] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /order/detail
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 17
+response status: 200
+response body: 
+{"order_id":2,"order_sn":"2009051255518","user_id":1,"order_status":4,"shipping_status":0,"pay_status":0,"consignee":"刘先生","country":1,"province":2,"city":52,"district":500,"address":"[中国 北京 北京 海淀区] 中关村海兴大厦","zipcode":"100085","tel":"010-25851234","mobile":"13986765412","email":"ecshop@ecshop.com","best_time":"中午","sign_building":"法院","postscript":"","shipping_id":3,"shipping_name":"城际快递","pay_id":1,"pay_name":"余额支付","how_oos":"等待所有商品备齐后再发","how_surplus":"","pack_name":"精品包装","card_name":"祝福贺卡","card_message":"晚来的祝福","inv_payee":"","inv_content":"","goods_amount":960,"shipping_fee":10,"insure_fee":0,"pay_fee":0,"pack_fee":0,"card_fee":5,"money_paid":0,"surplus":0,"integral":0,"integral_money":0,"bonus":0,"order_amount":0,"from_ad":0,"referer":"本站","add_time":1242142324,"confirm_time":1242142324,"pay_time":1242142324,"shipping_time":1242142389,"pack_id":1,"card_id":1,"bonus_id":0,"invoice_no":"111","extension_code":"","extension_id":0,"to_buyer":"","pay_note":"","agency_id":0,"inv_type":"","tax":0,"is_separate":0,"parent_id":0,"discount":0}
+*************** response log end ***************
+
+[2017-12-09T13:58:59.301] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /order/detail
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 19
+response status: 200
+response body: 
+[{"order_id":2,"order_sn":"2009051255518","user_id":1,"order_status":4,"shipping_status":0,"pay_status":0,"consignee":"刘先生","country":1,"province":2,"city":52,"district":500,"address":"[中国 北京 北京 海淀区] 中关村海兴大厦","zipcode":"100085","tel":"010-25851234","mobile":"13986765412","email":"ecshop@ecshop.com","best_time":"中午","sign_building":"法院","postscript":"","shipping_id":3,"shipping_name":"城际快递","pay_id":1,"pay_name":"余额支付","how_oos":"等待所有商品备齐后再发","how_surplus":"","pack_name":"精品包装","card_name":"祝福贺卡","card_message":"晚来的祝福","inv_payee":"","inv_content":"","goods_amount":960,"shipping_fee":10,"insure_fee":0,"pay_fee":0,"pack_fee":0,"card_fee":5,"money_paid":0,"surplus":0,"integral":0,"integral_money":0,"bonus":0,"order_amount":0,"from_ad":0,"referer":"本站","add_time":1242142324,"confirm_time":1242142324,"pay_time":1242142324,"shipping_time":1242142389,"pack_id":1,"card_id":1,"bonus_id":0,"invoice_no":"111","extension_code":"","extension_id":0,"to_buyer":"","pay_note":"","agency_id":0,"inv_type":"","tax":0,"is_separate":0,"parent_id":0,"discount":0}]
+*************** response log end ***************
+
+[2017-12-09T13:59:08.019] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /order/detail
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 18
+response status: 200
+response body: 
+{"order_id":2,"order_sn":"2009051255518","user_id":1,"order_status":4,"shipping_status":0,"pay_status":0,"consignee":"刘先生","country":1,"province":2,"city":52,"district":500,"address":"[中国 北京 北京 海淀区] 中关村海兴大厦","zipcode":"100085","tel":"010-25851234","mobile":"13986765412","email":"ecshop@ecshop.com","best_time":"中午","sign_building":"法院","postscript":"","shipping_id":3,"shipping_name":"城际快递","pay_id":1,"pay_name":"余额支付","how_oos":"等待所有商品备齐后再发","how_surplus":"","pack_name":"精品包装","card_name":"祝福贺卡","card_message":"晚来的祝福","inv_payee":"","inv_content":"","goods_amount":960,"shipping_fee":10,"insure_fee":0,"pay_fee":0,"pack_fee":0,"card_fee":5,"money_paid":0,"surplus":0,"integral":0,"integral_money":0,"bonus":0,"order_amount":0,"from_ad":0,"referer":"本站","add_time":1242142324,"confirm_time":1242142324,"pay_time":1242142324,"shipping_time":1242142389,"pack_id":1,"card_id":1,"bonus_id":0,"invoice_no":"111","extension_code":"","extension_id":0,"to_buyer":"","pay_note":"","agency_id":0,"inv_type":"","tax":0,"is_separate":0,"parent_id":0,"discount":0}
+*************** response log end ***************
+

@@ -1,0 +1,46 @@
+[2017-12-08T19:41:10.205] [ERROR] errorLogger - 
+*************** error log start ***************
+request method: GET
+request originalUrl:  /
+request client ip:  ::1
+request query:  {}
+response time: 2
+err name: ReferenceError
+err message: ctxs is not defined
+err stack: ReferenceError: ctxs is not defined
+    at app.use (/Users/zy/web/node/app.js:32:16)
+    at dispatch (/Users/zy/web/node/node_modules/koa-compose/index.js:42:32)
+    at next (/Users/zy/web/node/node_modules/koa-compose/index.js:43:18)
+    at app.use (/Users/zy/web/node/app.js:17:15)
+    at dispatch (/Users/zy/web/node/node_modules/koa-compose/index.js:42:32)
+    at /Users/zy/web/node/node_modules/koa-compose/index.js:34:12
+    at Server.handleRequest (/Users/zy/web/node/node_modules/koa/lib/application.js:136:14)
+    at emitTwo (events.js:125:13)
+    at Server.emit (events.js:213:7)
+    at parserOnIncoming (_http_server.js:602:12)
+    at HTTPParser.parserOnHeadersComplete (_http_common.js:116:23)
+*************** error log end ***************
+
+[2017-12-08T19:41:10.250] [ERROR] errorLogger - 
+*************** error log start ***************
+request method: GET
+request originalUrl:  /
+request client ip:  ::1
+request query:  {}
+response time: 0
+err name: ReferenceError
+err message: ctxs is not defined
+err stack: ReferenceError: ctxs is not defined
+    at app.use (/Users/zy/web/node/app.js:32:16)
+    at dispatch (/Users/zy/web/node/node_modules/koa-compose/index.js:42:32)
+    at next (/Users/zy/web/node/node_modules/koa-compose/index.js:43:18)
+    at app.use (/Users/zy/web/node/app.js:17:15)
+    at dispatch (/Users/zy/web/node/node_modules/koa-compose/index.js:42:32)
+    at /Users/zy/web/node/node_modules/koa-compose/index.js:34:12
+    at Server.handleRequest (/Users/zy/web/node/node_modules/koa/lib/application.js:136:14)
+    at emitTwo (events.js:125:13)
+    at Server.emit (events.js:213:7)
+    at parserOnIncoming (_http_server.js:602:12)
+    at HTTPParser.parserOnHeadersComplete (_http_common.js:116:23)
+*************** error log end ***************
+

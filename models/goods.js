@@ -7,15 +7,15 @@ class Goods extends Model {
     }
 
     async getList() {
-        var ret = await this.db
+        var list = await this.db
             .select().limit(3).from('ecs_goods')
-        return ret
+        return list
     }
 
     async getDetail(goods_id) {
-        var ret = await this.db
-            .first().from('ecs_goods').where('goods_id', goods_id);
-        return ret
+        var detail = await this.db
+            .select().from('ecs_goods').where('goods_id', goods_id);
+        return detail
     }
 
 }
