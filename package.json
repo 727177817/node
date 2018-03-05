@@ -15,7 +15,9 @@
   "dependencies": {
     "knex": "^0.13.0",
     "koa": "^2.3.0",
+    "koa-mysql-session": "0.0.2",
     "koa-router": "^7.2.1",
+    "koa-session-minimal": "^3.0.4",
     "log4js": "^2.3.12",
     "memcache": "^0.3.0",
     "mysql": "^2.15.0"

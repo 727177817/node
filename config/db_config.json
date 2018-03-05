@@ -2,17 +2,16 @@
     "production":{
         "database": {
             "host"     : "39.106.43.88",
-            "user"     : "root",
-            "password" : "~tkLIJA5V.dsC8zy",
+            "user"     : "zhouying",
+            "password" : "o0lo4uDZxbAyoHrsk0xmwsq3uDmQ",
             "database" : "areashop"
         }
     },
     "development":{
-        "memcache":"127.0.0.1",
         "database": {
             "host"     : "127.0.0.1",
             "user"     : "root",
-            "password" : "123456",
+            "password" : "ygelLH70rJNmq2hP",
             "database" : "areashop"
         }
     }

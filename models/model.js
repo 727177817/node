@@ -3,7 +3,7 @@ const knex   = require('knex');
 class Model {
 
     constructor() {
-        this.db = knex({client: 'mysql', connection: config["development"].database});
+        this.db = knex({client: 'mysql', connection: config["production"].database});
     }
 
 }
