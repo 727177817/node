@@ -36,9 +36,6 @@ app.use(async(ctx, next) => {
 
 app.use(response_formatter);
 
-
-app.use(routers.routes(), routers.allowedMethods());
-
 // 配置存储session信息的mysql
 let store = new mysqlSession(config["production"].database)
 
@@ -60,7 +57,10 @@ app.use(session({
   key: 'session_id',
   store: store,
   cookie: cookie
-}))
+}));
+
+//路由定义应该在中间件之后
+app.use(routers.routes(), routers.allowedMethods());
 
 app.listen(3000, () => {
     process.stdout.write('[static] server started at :3000\r\n');
