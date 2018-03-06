@@ -23,6 +23,9 @@
     "mysql": "^2.15.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-async-to-module-method": "^6.24.1",
+    "babel-register": "^6.26.0",
     "nodemon": "^1.12.5"
   }
 }

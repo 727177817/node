@@ -2,7 +2,6 @@ const Passport = require('../models/passport');
 
 
 exports.wechatLogin = async(ctx, next) => {
-	console.log( next);
     try {
         // let token = await Passport.wechatLogin(ctx.query.unionid); 
         if(!!ctx.session){
@@ -10,6 +9,7 @@ exports.wechatLogin = async(ctx, next) => {
         }else{
         	ctx.body = 'session is null';
         }
+        ctx.body = '123';
     } catch (err) {
         return 'err';
     }
