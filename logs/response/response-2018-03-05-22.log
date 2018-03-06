@@ -1,0 +1,672 @@
+[2018-03-05T22:00:02.679] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"fv3410xqtt","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:00:03.396] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T22:01:53.412] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"g8k0cfv844g","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:01:53.596] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T22:03:50.459] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"45fp4bkhlya","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:03:50.712] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T22:22:54.279] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 4
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:22:54.616] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T22:23:36.919] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:23:37.162] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 5
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"7dgvzvcumm6","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:24:05.973] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:24:06.345] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 87
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"vshsj80iv","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:24:29.466] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 7
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:24:29.851] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 96
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"lgb3graorik","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:24:59.009] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 7
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:24:59.370] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 82
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"uusiheahqbk","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:25:27.028] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 6
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:25:27.349] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 91
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"zh6vzbkshuk","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:25:36.568] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:25:37.003] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 97
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"soykroh3xi9","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:38:34.157] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:38:34.454] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 74
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"m6vkjy81d3a","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:38:37.725] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:38:37.941] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"smmencnssz","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:39:36.175] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T22:39:36.476] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 85
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"fa7tq02083a","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:39:54.647] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 10
+response status: 204
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T22:39:55.437] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 204
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T22:40:04.630] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 13
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"request":{"method":"GET","url":"/passport/wechat_login","header":{"host":"localhost:3000","connection":"keep-alive","pragma":"no-cache","cache-control":"no-cache","upgrade-insecure-requests":"1","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.9,en;q=0.8","cookie":"_ga=GA1.1.1588900861.1515039792; session_id=k-6eex3XBwIROHfFr3QRl6ZEONJVUJ0V"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/passport/wechat_login","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}}
+*************** response log end ***************
+
+[2018-03-05T22:40:05.136] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 76
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"f6b8lnxtbwl","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:41:03.204] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 85
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"f6b8lnxtbwl","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:41:03.539] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 76
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"f6b8lnxtbwl","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:20.802] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{}}
+*************** response log end ***************
+
+[2018-03-05T22:47:21.003] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{}}
+*************** response log end ***************
+
+[2018-03-05T22:47:27.658] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 5
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"4gc10ject3","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:28.002] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 75
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"xalroal3hy","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:34.902] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 76
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"p46rpm38s8n","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:35.279] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 77
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"4c8dawkjn3s","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:37.063] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 73
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"802qhh0sp8","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:37.379] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 78
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"m523zdo9db","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:38.664] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 162
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"9bm1y0tfocu","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:47:38.921] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 75
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"i3zo5sjcs0g","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:48:56.305] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"request":{"method":"GET","url":"/passport/wechat_login","header":{"host":"localhost:3000","connection":"keep-alive","upgrade-insecure-requests":"1","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.9,en;q=0.8","cookie":"_ga=GA1.1.1588900861.1515039792"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/passport/wechat_login","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}}
+*************** response log end ***************
+
+[2018-03-05T22:48:56.646] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"vd0wsw0s8im","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:52:26.369] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"request":{"method":"GET","url":"/passport/wechat_login","header":{"host":"localhost:3000","connection":"keep-alive","pragma":"no-cache","cache-control":"no-cache","upgrade-insecure-requests":"1","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.9,en;q=0.8","cookie":"_ga=GA1.1.1588900861.1515039792; session_id=U-NyieN4FVVbfEYHCHhlDCvYU0F5GemD"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/passport/wechat_login","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}}
+*************** response log end ***************
+
+[2018-03-05T22:52:26.749] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 78
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"5tj19dznvh","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:52:30.736] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"request":{"method":"GET","url":"/passport/wechat_login","header":{"host":"localhost:3000","connection":"keep-alive","pragma":"no-cache","cache-control":"no-cache","upgrade-insecure-requests":"1","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.9,en;q=0.8","cookie":"_ga=GA1.1.1588900861.1515039792; session_id=U-NyieN4FVVbfEYHCHhlDCvYU0F5GemD"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/passport/wechat_login","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}}
+*************** response log end ***************
+
+[2018-03-05T22:52:31.037] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 72
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"wv05i4k9ubt","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:52:43.494] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/
+request client ip:  ::1
+request query:  {}
+response time: 95
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"9s49sm43j4u","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:52:43.850] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 79
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"d1asgv7mxx8","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:52:55.096] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/
+request client ip:  ::1
+request query:  {}
+response time: 73
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"g7l2mbgmb5i","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:52:55.407] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 76
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"d9survuqtrs","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:53:01.019] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/
+request client ip:  ::1
+request query:  {}
+response time: 78
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"7gtbf5jffdu","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:53:01.240] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"okoe2si8nn","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:53:15.418] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport
+request client ip:  ::1
+request query:  {}
+response time: 77
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"lwknnktrmpp","count":0}}
+*************** response log end ***************
+
+[2018-03-05T22:53:15.842] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 92
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"twkf865ve1","count":0}}
+*************** response log end ***************
+

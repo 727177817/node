@@ -1,0 +1,756 @@
+[2018-03-05T21:12:39.348] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechat_login
+request client ip:  ::1
+request query:  {}
+response time: 4
+response status: 200
+response body: 
+{"code":200,"message":"success","data":"session is null"}
+*************** response log end ***************
+
+[2018-03-05T21:12:39.620] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:12:50.255] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/setSession
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:12:50.550] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:12:59.455] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"e0kpwxqb96o","count":0}}
+*************** response log end ***************
+
+[2018-03-05T21:13:00.477] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:15:12.177] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 4
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"request":{"method":"GET","url":"/passport/set","header":{"host":"localhost:3000","connection":"keep-alive","pragma":"no-cache","cache-control":"no-cache","upgrade-insecure-requests":"1","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","accept-encoding":"gzip, deflate, br","accept-language":"zh-CN,zh;q=0.9,en;q=0.8","cookie":"_ga=GA1.1.1588900861.1515039792"}},"response":{"status":200,"message":"OK","header":{"content-type":"application/json; charset=utf-8"}},"app":{"subdomainOffset":2,"proxy":false,"env":"development"},"originalUrl":"/passport/set","req":"<original node req>","res":"<original node res>","socket":"<original node socket>"}}
+*************** response log end ***************
+
+[2018-03-05T21:15:12.513] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:04.008] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:04.219] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:05.345] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:05.598] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:22.369] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 5
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:22.600] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:17:22.892] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:44:10.155] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 4
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:44:10.565] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:44:27.442] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 5
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:44:27.665] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:05.135] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 17
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:05.407] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:06.307] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:06.513] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:14.271] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:14.494] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:47.589] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 4
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:45:47.857] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:06.662] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:06.887] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:07.623] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:07.833] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:11.337] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:11.528] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:49.403] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 5
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:49.636] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:50.247] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:46:50.454] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:20.854] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:21.101] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:21.614] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:21.804] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:27.330] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:27.705] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:44.131] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:44.404] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:45.394] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:48:45.609] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:05.849] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 5
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:06.100] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:19.386] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/set
+request client ip:  ::1
+request query:  {}
+response time: 8
+response status: 200
+response body: 
+{"code":200,"message":"success","data":{"user_id":"3wsiqimso1u","count":0}}
+*************** response log end ***************
+
+[2018-03-05T21:49:19.622] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:38.955] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechatlogin
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:39.173] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:45.648] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechatlogin
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:49:45.864] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:50:03.966] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechatlogin
+request client ip:  ::1
+request query:  {}
+response time: 8
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:50:04.235] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:50:24.924] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechatlogin
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:50:25.145] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:59:42.860] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechatlogin
+request client ip:  ::1
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:59:43.143] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:59:54.087] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /passport/wechatlogin
+request client ip:  ::1
+request query:  {}
+response time: 13
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+
+[2018-03-05T21:59:54.382] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"code":0,"message":"empty"}
+*************** response log end ***************
+

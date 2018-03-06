@@ -57,7 +57,7 @@ let cookie = {
 
 // 使用session中间件
 app.use(session({
-  key: 'SESSION_ID',
+  key: 'session_id',
   store: store,
   cookie: cookie
 }))
