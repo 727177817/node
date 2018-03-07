@@ -1,8 +1,8 @@
-const router = require('koa-router')();
+const routers = require('koa-router')();
 const controller = require('../controllers/order');
 
-const routers = router
-	.get('/list', controller.list)
-	.get('/detail', controller.detail)
+Object.keys(controller).map(key => {
+	routers.get('/' + key, controller[key])
+})
 
 module.exports = routers;

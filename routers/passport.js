@@ -1,7 +1,8 @@
-const router = require('koa-router')();
+const routers = require('koa-router')();
 const controller = require('../controllers/passport');
-const routers = router
-	.get('/wechat_login', controller.wechatLogin)
-	.get('/set', controller.setSession)
+	
+Object.keys(controller).map(key => {
+	routers.get('/' + key, controller[key])
+})
 
 module.exports = routers;
