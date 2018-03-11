@@ -8,16 +8,17 @@ const Cart = require('../models/cart.js');
  * @return {[type]}        [description]
  */
 exports.add = async(ctx, next) => {
-    try {
-        let query = ctx.request.query;
-        // let result = addToCart(query.goods_id, 1);
-        if (result === 'success') {
-            ctx.body = '加入购物车成功';
-        } else {
-            ctx.body = result;
-        }
-    } catch (err) {
-        ctx.body = err.message;
+    let query = ctx.request.query;
+    if (!query.goods_id) {
+        ctx.throw(400, '缺少参数goods_id');
+        return;
+    }
+
+    // let result = addToCart(query.goods_id, 1);
+    if (result === 'success') {
+        ctx.body = '加入购物车成功';
+    } else {
+        ctx.throw(400, result);
     }
 }
 
@@ -27,7 +28,7 @@ exports.postRemove = async(ctx, next) => {
         let goods = await Goods.getDetail(ctx.query.goods_id);
         ctx.body = goods[0];
     } catch (err) {
-        return 'err';
+        ctx.throw(500, '')
     }
 }
 

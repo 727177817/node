@@ -47,14 +47,15 @@ function processCtls(r, ctls) {
 function processRouter(r, path, ctl) {
     Object.keys(ctl).map(key => {
         if (key.indexOf('post') == 0) {
-            let action = key.substring(4).toLowerCase();
-            r.post('/' + path + '/' + action, ctl[key])
+            let action = key.substring(4);
+            r.post('/' + path + '/' + action.toLowerCase(), ctl[key])
         } else if (key.indexOf('get') == 0) {
-            let action = key.substring(3).toLowerCase();
-            r.get('/' + path + '/' + action, ctl[key])
+            let action = key.substring(3);
+            r.get('/' + path + '/' + action.toLowerCase(), ctl[key])
         } else {
             r.get('/' + path + '/' + key.toLowerCase(), ctl[key])
         }
     });
 }
+
 module.exports = mainRouter;
