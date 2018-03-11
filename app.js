@@ -12,6 +12,17 @@ const logUtil = require('./utils/log_util');
 const response_formatter = require('./middlewares/response_formatter');
 const config = require('./config/db_config.json');
 
+// app.env = 'PRODUCTION';
+
+// x-response-time
+app.use(async (ctx, next) => {
+  const start = Date.now();
+  await next();
+  const ms = Date.now() - start;
+  ctx.set('X-Response-Time', `${ms}ms`);
+});
+
+
 // logger
 app.use(async(ctx, next) => {
     //响应开始时间

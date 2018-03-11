@@ -14,7 +14,7 @@ exports.add = async(ctx, next) => {
         return;
     }
 
-    // let result = addToCart(query.goods_id, 1);
+    let result = addToCart(query.goods_id, 1);
     if (result === 'success') {
         ctx.body = '加入购物车成功';
     } else {
@@ -24,12 +24,10 @@ exports.add = async(ctx, next) => {
 
 
 exports.postRemove = async(ctx, next) => {
-    try {
-        let goods = await Goods.getDetail(ctx.query.goods_id);
-        ctx.body = goods[0];
-    } catch (err) {
-        ctx.throw(500, '')
-    }
+    let body = ctx.request.body;
+
+    let goods = await Goods.getDetail(body.goods_id);
+    ctx.body = goods[0];
 }
 
 
