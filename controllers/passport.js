@@ -9,7 +9,6 @@ exports.wechatLogin = async(ctx, next) => {
         }else{
         	ctx.body = 'session is null';
         }
-        ctx.body = '123';
     } catch (err) {
         return 'err';
     }
