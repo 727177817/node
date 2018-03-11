@@ -1,6 +1,15 @@
 var WXBizDataCrypt = require('../utils/WXBizDataCrypt')
 /*
- * 微信解密
+ * 微信解密返回值格式
+ * openId: "oGZUI0egBJY1zhBYw2KhdUfwVJJE",
+ * nickName: "Band",
+ * gender: 1,
+ * language: "zh_CN",
+ * city: "Guangzhou",
+ * province: "Guangdong",
+ * country: "CN",
+ * avatarUrl: "http://wx.qlogo.cn/mmopen/vi_32/aSKcBBPpibyKNicHNTMM0qJVh8Kjgiak2AHWr8MHM4WgMEm7GFhsf8OYrySdbvAMvTsw3mo8ibKicsnfN5pRjl1p8HQ/0",
+ * unionId: "ocMvos6NjeKLIBqg5Mr9QjxrP1FA"
  */
 exports.wechatDecrypt = () => {
     var appId = 'wx4f4bc4dec97d474b'

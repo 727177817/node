@@ -1,30 +1,21 @@
-const Passport = require('../models/passport');
+const user = require('../models/user');
 const wechat = require('./wechat');
 
 /*
- * 微信快捷登录
+ * 微信快捷登录,
  */
 exports.wechatLogin = async(ctx, next) => {
     try {
-        // let token = await Passport.wechatLogin(ctx.query.unionid); 
-        if(!!ctx.session){
-        	ctx.body = ctx.session;
+        let hasUnionId = await user.getHasUnionId(ctx.query.unionid); 
+        if(hasUnionId.length == 0){
+            let userinfo = wechat.wechatDecrypt()
+            ctx.body = await user.wechatRegister(userinfo)
         }else{
-        	ctx.body = 'session is null';
+            ctx.body = "登录成功"
         }
-    } catch (err) {
-        return 'err';
-    }
-}
-
-
-exports.setSession = async(ctx, next) => {
-    try {
         ctx.session = {
-            user_id: Math.random().toString(36).substr(2),
-            count: 0
+            user_id: hasUnionId[0].user_id
         }
-        ctx.body = ctx.session
     } catch (err) {
         return 'err';
     }
@@ -35,14 +26,54 @@ exports.setSession = async(ctx, next) => {
  */
 exports.wechatRegister = async(ctx, next) => {
     try {
-        var userinfo = wechat.wechatDecrypt()
-        var query = ctx.query
-        if(!query.unionid){
-            ctx.body = 'unionid miss';
-        }else if(!query.openid){
-            ctx.body = 'openid miss';
+        let query = ctx.query
+        let userinfo = {
+            unionId: query.unionId,
+            openId: query.openId,
+            nickName: query.nickName,
+            phone: query.phone,
+            avatarUrl: query.avatarUrl,
+            province: query.province,
+            country: query.country,
+            city: query.city,
+            gender: query.gender,
+            language: query.language
+        }
+        userinfo = wechat.wechatDecrypt()
+        if(!userinfo.unionId){
+            ctx.body = 'unionId miss';
+        }else if(!userinfo.openId){
+            ctx.body = 'openId miss';
         }else{
-            ctx.body = await Passport.wechatRegister(ctx.query.unionid,ctx.query.openid)
+            ctx.body = await userinfo
+        }
+    } catch (err) {
+        return 'err';
+    }
+}
+
+/*
+ * 获取session
+ */ 
+exports.getSession = async(ctx, next) => {
+    try {
+        ctx.body = ctx.session;
+    } catch (err) {
+        return 'err';
+    }
+}
+
+/*
+ * 获取用户信息
+ * @apiParam {String} [id]   用户user_id
+ */
+exports.getUserInfo = async(ctx, next) => {
+    try {
+        let id = ctx.query.id
+        if(!id){
+            ctx.body = 'id not exist';
+        }else{
+            ctx.body = await user.getUserInfo(id)
         }
     } catch (err) {
         return 'err';
