@@ -31,24 +31,22 @@ class Passport extends Model {
         
     }
 
-    // 获取用户信息,
+    // 获取用户信息, 用user_id获取用户信息
     async getUserInfo(id) {
     	try{
 	        let userinfo = await this.db
-	            .first('user_name','sex','avatarUrl','mobile_phone').from('ecs_users').where('user_id', id);
+	            .first().from('ecs_users').where('user_id', id);
 	        return userinfo
     	} catch(err){
     		return err.sqlMessage
     	}
     }
 
-    // 获取用户信息,
-    async getHasUnionId(union_id){
+    // 获取用户信息，用unionId获取
+    async getUserInfoWechat(union_id){
     	try{
 	        let userinfo = await this.db
-	        	.from('ecs_users')
-	            .where('union_id', union_id)
-	            .select()
+                .first().from('ecs_users').where('union_id', union_id);
 	        return userinfo
     	} catch(err){
     		return err.sqlMessage

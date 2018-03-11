@@ -4,7 +4,7 @@ const app = new Koa();
 // 将session存放在MySQL数据库中
 const session = require('koa-session-minimal');
 const mysqlSession = require('koa-mysql-session');
-
+const koaBody = require('koa-body');
 
 const routers = require('./routers/index');
 const logUtil = require('./utils/log_util');
@@ -34,6 +34,7 @@ app.use(async(ctx, next) => {
     }
 });
 
+app.use(koaBody());
 app.use(response_formatter);
 
 // 配置存储session信息的mysql

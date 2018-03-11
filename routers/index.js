@@ -17,6 +17,11 @@ allCtls.push({
 });
 
 allCtls.push({
+	path: 'home',
+	ctl: require('../controllers/home')
+});
+
+allCtls.push({
 	path: 'order',
 	ctl: require('../controllers/order')
 });

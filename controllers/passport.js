@@ -2,51 +2,31 @@ const user = require('../models/user');
 const wechat = require('./wechat');
 
 /*
- * 微信快捷登录,
+ * 微信快捷登录,包含微信注册流程
  */
-exports.wechatLogin = async(ctx, next) => {
+exports.postWechatLogin = async(ctx, next) => {
     try {
-        let hasUnionId = await user.getHasUnionId(ctx.query.unionid); 
-        if(hasUnionId.length == 0){
-            let userinfo = wechat.wechatDecrypt()
-            ctx.body = await user.wechatRegister(userinfo)
+        let userinfo = ctx.request.body;
+        if(!userinfo.unionId){
+            ctx.body = "unionId 不能为空";
+            return
+        }
+        if(!userinfo.openId){
+            ctx.body = "openId 不能为空";
+            return
+        }
+        let hasUnionId = await user.getUserInfoWechat(userinfo.unionId); 
+        let obj = {}
+        if(!hasUnionId){
+            obj = await user.wechatRegister(userinfo)
+            hasUnionId = obj;
         }else{
-            ctx.body = "登录成功"
+            obj = "登录成功"
         }
         ctx.session = {
-            user_id: hasUnionId[0].user_id
+            user_id: hasUnionId.user_id
         }
-    } catch (err) {
-        return 'err';
-    }
-}
-
-/*
- * 微信注册
- */
-exports.wechatRegister = async(ctx, next) => {
-    try {
-        let query = ctx.query
-        let userinfo = {
-            unionId: query.unionId,
-            openId: query.openId,
-            nickName: query.nickName,
-            phone: query.phone,
-            avatarUrl: query.avatarUrl,
-            province: query.province,
-            country: query.country,
-            city: query.city,
-            gender: query.gender,
-            language: query.language
-        }
-        userinfo = wechat.wechatDecrypt()
-        if(!userinfo.unionId){
-            ctx.body = 'unionId miss';
-        }else if(!userinfo.openId){
-            ctx.body = 'openId miss';
-        }else{
-            ctx.body = await userinfo
-        }
+        ctx.body = obj;
     } catch (err) {
         return 'err';
     }
@@ -57,7 +37,7 @@ exports.wechatRegister = async(ctx, next) => {
  */ 
 exports.getSession = async(ctx, next) => {
     try {
-        ctx.body = ctx.session;
+        ctx.body = ctx;
     } catch (err) {
         return 'err';
     }
