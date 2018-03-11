@@ -6,18 +6,39 @@ class Goods extends Model {
         super();
     }
 
-    async getList() {
+    // 商品列表
+    async list() {
         var list = await this.db
-            .select().limit(3).from('ecs_goods')
+            .select().from('ecs_goods')
         return list
     }
-
-    async getDetail(goods_id) {
+    /*
+     * 商品详情
+     * @param {String} [goods_id]           商品Id
+     */
+    async detail(goods_id) {
         var detail = await this.db
-            .select().from('ecs_goods').where('goods_id', goods_id);
+            .first().from('ecs_goods').where('goods_id', goods_id);
         return detail
     }
 
+    /*
+     * 获取首页所有分类商品
+     */
+    async homeCategoryGoods() {
+        var list = await this.db
+            .select().from('ecs_goods').where('is_best', 1)
+        return list
+    }
+
+    /*
+     * 获取首页热销商品
+     */
+    async homeGoods() {
+        var list = await this.db
+            .select().from('ecs_goods').where('is_hot', 1)
+        return list
+    }
 }
 module.exports = new Goods();
 

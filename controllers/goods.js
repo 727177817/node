@@ -2,19 +2,16 @@ const Goods = require('../models/goods.js');
 
 
 exports.list = async (ctx, next) => {
-    try {
-        ctx.body = await Goods.getList();
-    } catch (err) {
-        return 'err';
-    }
+    ctx.body = await Goods.list();
 }
 
 
 exports.detail = async (ctx, next) => {
-    try {
-    	let goods = await Goods.getDetail(ctx.query.goods_id); 
-	  	ctx.body = goods[0];
-    } catch (err) {
-        return 'err';
+    let goods_id = ctx.query.goods_id;
+    if(!goods_id){
+        ctx.throw(400, '缺少参数goods_id');
+        return;
     }
+    let goods = await Goods.detail(goods_id); 
+    ctx.body = goods;
 }
