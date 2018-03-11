@@ -48,6 +48,11 @@ app.use(session({
 
 //路由定义应该在中间件之后
 app.use(routers.routes(), routers.allowedMethods());
+// app.use(router.allowedMethods({
+//   throw: true,
+//   notImplemented: () => new Boom.notImplemented(),
+//   methodNotAllowed: () => new Boom.methodNotAllowed()
+// }));
 
 app.listen(3000, () => {
     process.stdout.write('[static] server started at :3000\r\n');
