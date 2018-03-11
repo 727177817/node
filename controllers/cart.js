@@ -50,7 +50,7 @@ exports.change = async(ctx, next) => {
  * @param   integer user_id    用户ID
  * @return  boolean
  */
-function addToCart(goods_id, num = 1, user_id) {
+async function addToCart(goods_id, num = 1, user_id) {
 
     // /* 取得商品信息 */
     // $sql = "SELECT g.goods_name, g.goods_sn, g.is_on_sale, g.is_real, ".
@@ -62,7 +62,7 @@ function addToCart(goods_id, num = 1, user_id) {
     //         " WHERE g.goods_id = '$goods_id'" .
     //         " AND g.is_delete = 0";
     // $goods = $GLOBALS['db']->getRow($sql);
-    let goods = Goods.getDetail(goods_id);
+    let goods = await Goods.getDetail(goods_id);
 
     if (!goods) {
         return '商品不存在';
@@ -113,17 +113,11 @@ function addToCart(goods_id, num = 1, user_id) {
     /* 如果数量不为0，作为基本件插入 */
     if (num > 0) {
         /* 检查该商品是否已经存在在购物车中 */
-        // $sql = "SELECT goods_number FROM " .$GLOBALS['ecs']->table('cart').
-        //         " WHERE session_id = '" .SESS_ID. "' AND goods_id = '$goods_id' ".
-        //         " AND parent_id = 0 AND goods_attr = '" .get_goods_attr_info($spec). "' " .
-        //         " AND extension_code <> 'package_buy' " .
-        //         " AND rec_type = 'CART_GENERAL_GOODS'";
+        let cartObj = await Cart.getOne();
 
-        // $row = $GLOBALS['db']->getRow($sql);
-        let cartObj = Cart.getOne();
-
-        if (cartObj) //如果购物车已经有此物品，则更新
-        {
+        console.log(cartObj)
+        if (cartObj) {
+            //如果购物车已经有此物品，则更新
             num += cartObj['goods_number'];
             goods_storage = goods['goods_number'];
             if (num <= goods_storage) {
@@ -140,20 +134,21 @@ function addToCart(goods_id, num = 1, user_id) {
                 // "AND rec_type = 'CART_GENERAL_GOODS'";
                 // $GLOBALS['db'] - > query($sql);
 
-                Cart.update({
+                await Cart.update({
                     goods_number: num,
                     goods_price: goods_price
                 });
             } else {
                 return '购买数量超出库存';
             }
-        } else //购物车没有此物品，则插入
-        {
+        } else {
+            //购物车没有此物品，则插入
             goods_price = get_final_price(goods['shop_price'], num);
             $parent['goods_price'] = Math.max(goods_price, 0);
             $parent['goods_number'] = num;
             $parent['parent_id'] = 0;
-            Cart.insert($parent);
+            console.log($parent);
+            await Cart.insert($parent);
         }
     }
 
