@@ -7,9 +7,9 @@ class Category extends Model {
     }
 
     async list() {
-        var category = await this.db
+        var list = await this.db
             .select().from('ecs_category').where('show_in_nav', 1).orderBy('sort_order');
-        return category
+        return list
     }
 
 }
