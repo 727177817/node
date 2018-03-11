@@ -41,6 +41,10 @@ var response_formatter = async(ctx, next) => {
                 }
             default:
                 {
+                    if(ctx.app.env === 'development'){
+                        //开发环境输出更多的错误信息
+                        console.log(err);
+                    }
                     body = {
                         code: 500,
                         message: err.message
