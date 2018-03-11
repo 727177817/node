@@ -5,7 +5,6 @@ const app = new Koa();
 const session = require('koa-session-minimal');
 const mysqlSession = require('koa-mysql-session');
 
-
 const routers = require('./routers/index');
 const logUtil = require('./utils/log_util');
 // const ApiError = require('./error/ApiError');
@@ -47,6 +46,11 @@ app.use(session({
 
 //路由定义应该在中间件之后
 app.use(routers.routes(), routers.allowedMethods());
+// app.use(router.allowedMethods({
+//   throw: true,
+//   notImplemented: () => new Boom.notImplemented(),
+//   methodNotAllowed: () => new Boom.methodNotAllowed()
+// }));
 
 app.listen(3000, () => {
     process.stdout.write('[static] server started at :3000\r\n');
