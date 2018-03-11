@@ -6,32 +6,7 @@ const router = require('koa-router');
 const mainRouter = router();
 let allCtls = [];
 
-allCtls.push({
-	path: 'cart',
-	ctl: require('../controllers/cart')
-});
-
-allCtls.push({
-	path: 'goods',
-	ctl: require('../controllers/goods')
-});
-
-allCtls.push({
-	path: 'order',
-	ctl: require('../controllers/order')
-});
-
-allCtls.push({
-	path: 'passport',
-	ctl: require('../controllers/passport')
-});
-
-allCtls.push({
-	path: 'wechat',
-	ctl: require('../controllers/wechat')
-});
-
-
+[ALLROUTER]
 
 processCtls(mainRouter, allCtls);
 

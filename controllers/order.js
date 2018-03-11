@@ -1,7 +1,7 @@
 const Order = require('../models/order.js');
 
 
-exports.list = async (ctx, next) => {
+exports.getList = async (ctx, next) => {
     try {
         let orderInfo = await Order.getList();
 	  	let orderGoods = await Order.getOrderGoods();
@@ -16,7 +16,7 @@ exports.list = async (ctx, next) => {
 
 
 
-exports.detail = async (ctx, next) => {
+exports.getDetail = async (ctx, next) => {
     try {
         let orderInfo = await Order.getDetail();
         let orderGoods = await Order.getOrderGoods();
