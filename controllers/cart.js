@@ -22,7 +22,7 @@ exports.add = async(ctx, next) => {
 }
 
 
-exports.remove = async(ctx, next) => {
+exports.postRemove = async(ctx, next) => {
     try {
         let goods = await Goods.getDetail(ctx.query.goods_id);
         ctx.body = goods[0];

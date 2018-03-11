@@ -32,22 +32,29 @@ allCtls.push({
 });
 
 
-
 processCtls(mainRouter, allCtls);
 
-function processCtls(r, ctls){
-	if(!ctls){
-		return;
-	}
+function processCtls(r, ctls) {
+    if (!ctls) {
+        return;
+    }
 
-	ctls.map((item, i) => {
-		processRouter(r, item.path, item.ctl);
-	});
+    ctls.map((item, i) => {
+        processRouter(r, item.path, item.ctl);
+    });
 }
 
 function processRouter(r, path, ctl) {
     Object.keys(ctl).map(key => {
-        r.get('/' + path + '/' + key, ctl[key])
+        if (key.indexOf('post') == 0) {
+            let action = key.substring(4);
+            r.post('/' + path + '/' + action, ctl[key])
+        } else if (key.indexOf('get') == 0) {
+            let action = key.substring(3);
+            r.get('/' + path + '/' + action, ctl[key])
+        } else {
+            r.get('/' + path + '/' + key, ctl[key])
+        }
     });
 }
 module.exports = mainRouter;
