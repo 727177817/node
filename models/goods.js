@@ -6,10 +6,13 @@ class Goods extends Model {
         super();
     }
 
-    // 商品列表
+    /*
+     * 获取分类商品
+     * @param {String} [goods_id]           商品Id
+     */
     async list() {
         var list = await this.db
-            .select().from('ecs_goods')
+            .select().from('ecs_goods').where({'is_delete':0});
         return list
     }
     /*
@@ -18,7 +21,7 @@ class Goods extends Model {
      */
     async detail(goods_id) {
         var detail = await this.db
-            .first().from('ecs_goods').where('goods_id', goods_id);
+            .first().from('ecs_goods').where({'goods_id': goods_id, 'is_delete':0});
         return detail
     }
 
@@ -27,7 +30,7 @@ class Goods extends Model {
      */
     async homeCategoryGoods() {
         var list = await this.db
-            .select().from('ecs_goods').where('is_best', 1)
+            .select().from('ecs_goods').where({'is_best': 1,'is_delete':0})
         return list
     }
 
@@ -36,7 +39,7 @@ class Goods extends Model {
      */
     async homeGoods() {
         var list = await this.db
-            .select().from('ecs_goods').where('is_hot', 1)
+            .select().from('ecs_goods').where({'is_hot': 1, 'is_on_sale': 1,'is_delete':0})
         return list
     }
 }

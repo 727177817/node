@@ -12,6 +12,11 @@ allCtls.push({
 });
 
 allCtls.push({
+	path: 'category',
+	ctl: require('../controllers/category')
+});
+
+allCtls.push({
 	path: 'goods',
 	ctl: require('../controllers/goods')
 });

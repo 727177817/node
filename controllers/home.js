@@ -6,9 +6,12 @@ const Goods    = require('../models/goods.js');
  * 获取首页广告位
  */ 
 exports.getHome = async(ctx, next) => {
-	let ads = await Ad.banner()
+	// banner广告
+	let ads       = await Ad.banner()
+	// 热销商品
+	let goodsList = await Goods.homeGoods()
 	// 获取首页商品分类
-	let category = await Category.homeAds()
+	let category  = await Category.homeAds()
 	// 获取分类商品
 	let categoryGoodsList = await Goods.homeCategoryGoods()
 	for (let i = 0; i < category.length; i++) {
@@ -20,7 +23,7 @@ exports.getHome = async(ctx, next) => {
 		}
 		Object.assign(category[i],{goods: categoryGoods})
 	}
-	let goodsList = await Goods.homeGoods()
+	
     ctx.body = {
     	ads: ads,
     	category: category,
