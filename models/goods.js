@@ -4,6 +4,7 @@ class Goods extends Model {
 
     constructor() {
         super();
+        this.name = 'ecs_goods'
     }
 
     /*
@@ -12,7 +13,7 @@ class Goods extends Model {
      */
     async list() {
         var list = await this.db
-            .select().from('ecs_goods').where({'is_delete':0});
+            .select().from(this.name).where({'is_delete':0});
         return list
     }
     /*
@@ -21,7 +22,7 @@ class Goods extends Model {
      */
     async detail(goods_id) {
         var detail = await this.db
-            .first().from('ecs_goods').where({'goods_id': goods_id, 'is_delete':0});
+            .first().from(this.name).where({'goods_id': goods_id, 'is_delete':0});
         return detail
     }
 
@@ -30,7 +31,7 @@ class Goods extends Model {
      */
     async homeCategoryGoods() {
         var list = await this.db
-            .select().from('ecs_goods').where({'is_best': 1,'is_delete':0})
+            .select().from(this.name).where({'is_best': 1,'is_delete':0})
         return list
     }
 
@@ -39,7 +40,7 @@ class Goods extends Model {
      */
     async homeGoods() {
         var list = await this.db
-            .select().from('ecs_goods').where({'is_hot': 1, 'is_on_sale': 1,'is_delete':0})
+            .select().from(this.name).where({'is_hot': 1, 'is_on_sale': 1,'is_delete':0})
         return list
     }
 }

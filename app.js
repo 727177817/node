@@ -1,16 +1,16 @@
-const Koa = require('koa');
-const app = new Koa();
+const Koa                = require('koa');
+const app                = new Koa();
 
 // 将session存放在MySQL数据库中
-const session = require('koa-session-minimal');
-const mysqlSession = require('koa-mysql-session');
-const koaBody = require('koa-body');
+const session            = require('koa-session-minimal');
+const mysqlSession       = require('koa-mysql-session');
+const koaBody            = require('koa-body');
 
-const routers = require('./routers/index');
-const logUtil = require('./utils/log_util');
-// const ApiError = require('./error/ApiError');
+const routers            = require('./routers/index');
+const logUtil            = require('./utils/log_util');
+// const ApiError        = require('./error/ApiError');
 const response_formatter = require('./middlewares/response_formatter');
-const config = require('./config/db_config.json');
+const config             = require('./config/config.json');
 
 // app.env = 'PRODUCTION';
 

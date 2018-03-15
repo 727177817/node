@@ -29,15 +29,8 @@ exports.postWechatLogin = async(ctx, next) => {
 }
 
 /*
- * 获取session
- */ 
-exports.getSession = async(ctx, next) => {
-    ctx.body = ctx;
-}
-
-/*
  * 获取用户信息
- * @apiParam {String} [id]   用户user_id
+ * @param {String} [user_id]   用户user_id
  */
 exports.getUserInfo = async(ctx, next) => {
     let user_id = ctx.query.user_id

@@ -5,12 +5,13 @@ class Passport extends Model {
 
     constructor() {
         super();
+        this.name = 'ecs_users'
     }
 
     // 微信注册
     async wechatRegister(userinfo) {
     	try{
-    		await this.db('ecs_users')
+    		await this.db(this.name)
             .insert({
             	union_id: userinfo.unionId,
 	            open_id: userinfo.openId,
@@ -35,7 +36,7 @@ class Passport extends Model {
     async getUserInfo(id) {
     	try{
 	        let userinfo = await this.db
-	            .first().from('ecs_users').where('user_id', id);
+	            .first().from(this.name).where('user_id', id);
 	        return userinfo
     	} catch(err){
     		return err.sqlMessage
@@ -46,7 +47,7 @@ class Passport extends Model {
     async getUserInfoWechat(union_id){
     	try{
 	        let userinfo = await this.db
-                .first().from('ecs_users').where('union_id', union_id);
+                .first().from(this.name).where('union_id', union_id);
 	        return userinfo
     	} catch(err){
     		return err.sqlMessage

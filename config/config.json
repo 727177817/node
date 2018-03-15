@@ -1,5 +1,7 @@
 {
     "production":{
+        "wechat_appid": "wx435c0f188b8e3283",
+        "wechat_appsecret": "be1c4a02c5455a140ca6cbc96c949e4a",
         "database": {
             "host"     : "39.106.43.88",
             "user"     : "zhouying",
@@ -8,6 +10,8 @@
         }
     },
     "development":{
+        "wechat_appid": "wx435c0f188b8e3283",
+        "wechat_appsecret": "be1c4a02c5455a140ca6cbc96c949e4a",
         "database": {
             "host"     : "127.0.0.1",
             "user"     : "root",

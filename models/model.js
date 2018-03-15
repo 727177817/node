@@ -1,4 +1,4 @@
-const config = require('../config/db_config.json');
+const config = require('../config/config.json');
 const knex   = require('knex');
 class Model {
 
