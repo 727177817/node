@@ -53,7 +53,7 @@ let store = new mysqlSession(config["production"].database)
 
 // 使用session中间件
 app.use(session({
-    key: 'session_id',
+    key: 'sessionId',
     store: store,
 }));
 

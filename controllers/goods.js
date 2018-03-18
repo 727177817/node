@@ -1,15 +1,15 @@
 const Goods = require('../models/goods.js');
 
 /* 获取商品详情
- * @param {String} [goods_id]   goods_id为商品id
+ * @param {String} [goodsId]   goodsId为商品id
  * 
 */ 
 exports.detail = async (ctx, next) => {
-    let goods_id = ctx.query.goods_id;
-    if(!goods_id){
-        ctx.throw(400, '缺少参数goods_id');
+    let goodsId = ctx.query.goodsId;
+    if(!goodsId){
+        ctx.throw(400, '缺少参数goodsId');
         return;
     }
-    let goods = await Goods.detail(goods_id); 
+    let goods = await Goods.detail(goodsId); 
     ctx.body = goods;
 }

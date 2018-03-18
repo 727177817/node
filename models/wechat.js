@@ -17,17 +17,17 @@ class Wechat extends Model {
     }
 
     // 查询openid是否存在
-    async selectOpenId(open_id) {
+    async selectOpenId(openId) {
         let result = await this.db('ecs_wechat_session').where({
-        	open_id: open_id
+        	open_id: openId
         });
         return result
     }
 
     // 查询openid是否存在
-    async selectSessionId(session_id) {
+    async selectSessionId(sessionId) {
         let result = await this.db('ecs_wechat_session').frist().where({
-        	session_id: session_id
+        	session_id: sessionId
         });
         return result
     }

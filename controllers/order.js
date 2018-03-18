@@ -1,21 +1,44 @@
 const Order = require('../models/order.js');
+const Goods = require('../models/goods.js');
 
 
+/* 
+ * 获取订单列表
+ * @param {String} [state]   state为订单装
+ * 默认所有订单
+*/ 
 exports.getList = async (ctx, next) => {
-    try {
-        let orderInfo = await Order.getList();
-	  	let orderGoods = await Order.getOrderGoods();
-        orderInfo.map((value)=>{
-            Object.assign(value,{goods:orderGoods})
-        })
-        ctx.body = orderInfo
-    } catch (err) {
-        return 'err';
+    let orderState = ctx.query.orderState || '',
+    payStatus      = ctx.query.payStatus || '',
+    userId         = '1'
+    if(!ctx.session.user_id){
+        ctx.throw(401);
+        return;
     }
+    let orderList = await Order.getList(userId,orderState,payStatus);
+    // 查询订单商品
+    for (var i = 0; i < orderList.length; i++) {
+        let orderId = orderList[i].order_id
+        let orderGoods = await Order.getOrderGoods(orderId);
+        // 查询订单所有商品
+        let orderGoodsIds = []
+        for (var j = 0; j < orderGoods.length; j++) {
+            orderGoodsIds.push(orderGoods[j].goods_id)
+        }
+        // 查询订单商品详细内容
+        let orderGoodsList = await Goods.getListByIds(orderGoodsIds);
+        console.log(orderGoodsList)
+        Object.assign(orderGoodsList,orderGoods)
+        Object.assign(orderList[i],{goods: orderGoodsList})
+    }
+    ctx.body = orderGoodsList
 }
 
 
-
+/* 
+ * 获取订单详情
+ * @param {String} [order_id]   order_id订单Id
+*/ 
 exports.getDetail = async (ctx, next) => {
     try {
         let orderInfo = await Order.getDetail();

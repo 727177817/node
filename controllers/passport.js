@@ -33,11 +33,11 @@ exports.postWechatLogin = async(ctx, next) => {
  * @param {String} [user_id]   用户user_id
  */
 exports.getUserInfo = async(ctx, next) => {
-    let user_id = ctx.query.user_id
-    if(!user_id){
-        ctx.throw(400, '缺少参数user_id');
+    let userId = ctx.query.userId
+    if(!userId){
+        ctx.throw(400, '缺少参数userId');
         return
     }else{
-        ctx.body = await user.getUserInfo(user_id)
+        ctx.body = await user.getUserInfo(userId)
     }
 }

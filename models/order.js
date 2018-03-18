@@ -4,23 +4,28 @@ class Order extends Model {
 
     constructor() {
         super();
+        this.name = 'ecs_order_info'
     }
 
-    async getList() {
+    async getList(userId,state) {
         var orderInfo = await this.db
-            .select().from('ecs_order_info').where('user_id', "1");
+            .select().from(this.name).where({'user_id': userId});
+            // .select().from(this.name).where({'user_id': userId,'order_status': orderStatus,'pay_status': payStatus});
         return orderInfo
     }
 
-    async getOrderGoods() {
-        var orderGoods = await this.db
-            .select().from('ecs_order_goods').where('order_id', "14");
-        return orderGoods
-    }
-
-    async getDetail(goods_id) {
+    async getDetail(orderId) {
         var ret = await this.db
-            .first().from('ecs_order_info').where('order_sn', "2009051255518");
+            .first().from(this.name).where('order_sn', "2009051255518");
+        return ret
+    }
+     /*
+     * 获取订单商品
+     * @param {String} [orderId]   订单Id
+     */
+    async getOrderGoods(orderId) {
+        var ret = await this.db('ecs_order_goods')
+            .select().where('order_id', orderId);
         return ret
     }
 
