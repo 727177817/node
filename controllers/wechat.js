@@ -44,11 +44,11 @@ exports.getSessionKey = async (ctx, next) => {
  */
 
 exports.getUserInfo = async (ctx, next) => {
-    let session_id = ctx.query.session_id;
+    let sessionId = ctx.query.sessionId;
     let iv = ctx.query.iv;
     let encryptedData = ctx.query.encryptedData;
-    if(!session_id){
-        ctx.throw(400, '缺少参数session_id');
+    if(!sessionId){
+        ctx.throw(400, '缺少参数sessionId');
         return;
     }
     if(!iv){
@@ -59,7 +59,7 @@ exports.getUserInfo = async (ctx, next) => {
         ctx.throw(400, '缺少参数encryptedData');
         return;
     }
-    let sessionKey = await Wechat.selectSessionId(session_id);
+    let sessionKey = await Wechat.selectSessionId(sessionId);
     let result = wechatDecrypt(sessionKey.session_key,encryptedData,iv);
     ctx.body = result 
 }
