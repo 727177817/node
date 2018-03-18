@@ -1,11 +1,9 @@
 const Goods = require('../models/goods.js');
 
-
-exports.list = async (ctx, next) => {
-    ctx.body = await Goods.list();
-}
-
-
+/* 获取商品详情
+ * @param {String} [goods_id]   goods_id为商品id
+ * 
+*/ 
 exports.detail = async (ctx, next) => {
     let goods_id = ctx.query.goods_id;
     if(!goods_id){

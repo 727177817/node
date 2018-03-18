@@ -2,7 +2,7 @@ const Category = require('../models/category.js');
 const Goods    = require('../models/goods.js');
 
  /*
- * 获取分类
+ * 获取所有分类和分类商品
  */ 
 exports.getCategory = async(ctx, next) => {
 	// 获取首页商品分类
