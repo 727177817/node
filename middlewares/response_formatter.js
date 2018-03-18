@@ -27,7 +27,7 @@ var response_formatter = async(ctx, next) => {
                 {
                     body = {
                         code: err.status,
-                        message: 'Access Denied'
+                        message: 'Unauthorized'
                     }
                     break;
                 }
@@ -46,7 +46,7 @@ var response_formatter = async(ctx, next) => {
                         console.log(err);
                     }
                     body = {
-                        code: 500,
+                        code: err.status,
                         message: err.message
                     }
                     break;

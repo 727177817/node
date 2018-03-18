@@ -17,6 +17,16 @@ allCtls.push({
 });
 
 allCtls.push({
+	path: 'commit',
+	ctl: require('../controllers/commit')
+});
+
+allCtls.push({
+	path: 'common',
+	ctl: require('../controllers/common')
+});
+
+allCtls.push({
 	path: 'goods',
 	ctl: require('../controllers/goods')
 });
