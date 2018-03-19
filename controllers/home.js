@@ -6,6 +6,7 @@ const Goods    = require('../models/goods.js');
  * 获取首页广告位
  */ 
 exports.getHome = async(ctx, next) => {
+	ctx.session.suppliersId;
 	// banner广告
 	let ads       = await Ad.banner()
 	// 热销商品

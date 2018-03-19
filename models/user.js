@@ -54,6 +54,12 @@ class Passport extends Model {
     	}
     }
 
+    async update(userId, data){
+        return this.db(this.name).where({
+            user_id: userId
+        }).update(data);
+    }
+
 }
 module.exports = new Passport();
 

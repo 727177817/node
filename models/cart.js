@@ -18,7 +18,7 @@ class Cart extends Model {
         return obj;
     }
 
-    async getByGoodsIdWithUser(goodsId, userId) {
+    async getByGoodsIdAndUserId(goodsId, userId) {
         let obj = this.db(this.name).where({
             goods_id: goodsId,
             parent_id: 0,
@@ -29,7 +29,7 @@ class Cart extends Model {
         return obj;
     }
 
-    async getByRecIdWithUser(recId, userId) {
+    async getByRecIdAndUserId(recId, userId) {
         let obj = this.db(this.name).where({
             rec_id: recId,
             parent_id: 0,
@@ -57,7 +57,14 @@ class Cart extends Model {
         }).delete();
     }
 
-    async getAllWithUserIdAndSuppliersId(userId, suppliersId) {
+    async clear(userId, suppliersId){
+        return this.db(this.name).where({
+            suppliers_id: suppliersId,
+            user_id: userId
+        }).delete();
+    }
+
+    async getAllByUserIdAndSuppliersId(userId, suppliersId) {
         var detail = await this.db
             .select().from(this.name).where({'user_id': userId, 'suppliers_id': suppliersId});
         return detail

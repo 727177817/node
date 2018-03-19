@@ -11,7 +11,6 @@ const Cart = require('../models/cart.js');
 exports.getList = async(ctx, next) => {
 
     let userId = ctx.session.userId;
-    userId = 28;
     if(!userId){
         ctx.throw(401);
         return;
@@ -23,7 +22,7 @@ exports.getList = async(ctx, next) => {
         return;
     }
 
-    let result = await Cart.getAllWithUserIdAndSuppliersId(userId, suppliersId);
+    let result = await Cart.getAllByUserIdAndSuppliersId(userId, suppliersId);
     
     ctx.body = result;
 }
@@ -50,7 +49,7 @@ exports.postAdd = async(ctx, next) => {
 
     let suppliersId = ctx.session.suppliersId;
     if (!suppliersId) {
-        ctx.throw(500, '缺少当前用户的所选小区信息');
+        ctx.throw(500, '缺少当前用户所在的小区信息');
         return;
     }
 
@@ -113,7 +112,7 @@ exports.postChange = async(ctx, next) => {
         return;
     }
 
-    let cartObj = await Cart.getByRecIdWithUser(userId, recId);
+    let cartObj = await Cart.getByRecIdAndUserId(userId, recId);
     if (!cartObj) {
         ctx.throw(400, '购物车不存在该商品');
         return;
@@ -189,7 +188,7 @@ async function addToCart(goodsId, num = 1, userId, suppliersId) {
     /* 如果数量不为0，作为基本件插入 */
     if (num > 0) {
         /* 检查该商品是否已经存在在购物车中 */
-        let cartObj = await Cart.getByGoodsIdWithUser(userId, goodsId);
+        let cartObj = await Cart.getByGoodsIdAndUserId(userId, goodsId);
 
         if (cartObj) {
             //如果购物车已经有此物品，则更新
@@ -211,7 +210,7 @@ async function addToCart(goodsId, num = 1, userId, suppliersId) {
             $parent['goods_price'] = Math.max(goods_price, 0);
             $parent['goods_number'] = num;
             $parent['parent_id'] = 0;
-            return await Cart.insert($parent);
+            await Cart.insert($parent);
         }
     }
 

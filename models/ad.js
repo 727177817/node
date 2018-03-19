@@ -15,4 +15,3 @@ class Ads extends Model {
 
 }
 module.exports = new Ads();
-
