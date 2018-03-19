@@ -17,21 +17,19 @@ exports.getList = async (ctx, next) => {
     }
     let orderList = await Order.getList(userId,orderState,payStatus);
     // 查询订单商品
-    for (var i = 0; i < orderList.length; i++) {
+    for (let i = 0; i < orderList.length; i++) {
         let orderId = orderList[i].order_id
         let orderGoods = await Order.getOrderGoods(orderId);
         // 查询订单所有商品
         let orderGoodsIds = []
-        for (var j = 0; j < orderGoods.length; j++) {
+        for (let j = 0; j < orderGoods.length; j++) {
             orderGoodsIds.push(orderGoods[j].goods_id)
         }
         // 查询订单商品详细内容
-        let orderGoodsList = await Goods.getListByIds(orderGoodsIds);
-        console.log(orderGoodsList)
-        Object.assign(orderGoodsList,orderGoods)
+        var orderGoodsList = await Goods.getListByIds(orderGoodsIds);
         Object.assign(orderList[i],{goods: orderGoodsList})
     }
-    ctx.body = orderGoodsList
+    ctx.body = orderList
 }
 
 

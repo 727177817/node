@@ -47,7 +47,7 @@ class Passport extends Model {
     async getUserInfoWechat(union_id){
     	try{
 	        let userInfo = await this.db
-                .first().from(this.name).where('union_id', union_id);
+                .first('avatarUrl','user_name','supplier_id').from(this.name).where('union_id', union_id);
 	        return userInfo
     	} catch(err){
     		return err.sqlMessage

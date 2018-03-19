@@ -20,7 +20,7 @@ exports.postWechatLogin = async(ctx, next) => {
         obj = await user.wechatRegister(userinfo)
         hasUnionId = obj;
     }else{
-        obj = "登录成功"
+        obj = hasUnionId
     }
     ctx.session = {
         user_id: hasUnionId.user_id
