@@ -2,7 +2,7 @@ const Wechat         = require('../models/wechat.js');
 const WXBizDataCrypt = require('../utils/WXBizDataCrypt')
 const config         = require('../config/config.json');
 const axios          = require('axios');
-const MD5 = require("crypto-js/md5");
+const MD5            = require("crypto-js/md5");
 
 
 /*
@@ -43,10 +43,11 @@ exports.getSessionKey = async (ctx, next) => {
  * @param {String} [iv]   初始向量
  */
 
-exports.getUserInfo = async (ctx, next) => {
-    let sessionId = ctx.query.sessionId;
-    let iv = ctx.query.iv;
-    let encryptedData = ctx.query.encryptedData;
+exports.postUserInfo = async (ctx, next) => {
+    let body = ctx.request.body
+    let sessionId = body.sessionId;
+    let iv = body.iv;
+    let encryptedData = body.encryptedData;
     if(!sessionId){
         ctx.throw(400, '缺少参数sessionId');
         return;
@@ -80,12 +81,7 @@ exports.getUserInfo = async (ctx, next) => {
  * unionId: "ocMvos6NjeKLIBqg5Mr9QjxrP1FA"
  */
 function wechatDecrypt (sessionKey,encryptedData,iv){
-    var appId = 'wx4f4bc4dec97d474b'
-    var sessionKey = sessionKey
-    var encryptedData = encryptedData
-    var iv = iv
-
+    var appId = 'wx435c0f188b8e3283'
     var pc = new WXBizDataCrypt(appId, sessionKey)
-
     return pc.decryptData(encryptedData , iv)
 }

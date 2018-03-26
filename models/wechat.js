@@ -26,7 +26,7 @@ class Wechat extends Model {
 
     // 查询openid是否存在
     async selectSessionId(sessionId) {
-        let result = await this.db('ecs_wechat_session').frist().where({
+        let result = await this.db('ecs_wechat_session').first().where({
         	session_id: sessionId
         });
         return result

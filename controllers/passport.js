@@ -27,17 +27,3 @@ exports.postWechatLogin = async(ctx, next) => {
     }
     ctx.body = obj;
 }
-
-/*
- * 获取用户信息
- * @param {String} [user_id]   用户user_id
- */
-exports.getUserInfo = async(ctx, next) => {
-    let userId = ctx.query.userId
-    if(!userId){
-        ctx.throw(400, '缺少参数userId');
-        return
-    }else{
-        ctx.body = await user.getUserInfo(userId)
-    }
-}
