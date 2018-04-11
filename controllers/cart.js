@@ -9,7 +9,6 @@ const Cart = require('../models/cart.js');
  * @return {[type]}        [description]
  */
 exports.getList = async(ctx, next) => {
-
     let userId = ctx.session.userId;
     if(!userId){
         ctx.throw(401);

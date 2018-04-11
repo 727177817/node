@@ -10,18 +10,18 @@ class Goods extends Model {
     /*
      * 获取商品列表
      */
-    async list() {
+    async list(suppliersId) {
         var list = await this.db
-            .select().from(this.name).where({'is_delete':0});
+            .select().from(this.name).where({'is_delete':0, 'suppliers_id':suppliersId});
         return list
     }
     /*
      * 商品详情
      * @param {String} [goodsId]           商品Id
      */
-    async detail(goodsId) {
+    async detail(goodsId,suppliersId) {
         var detail = await this.db
-            .first().from(this.name).where({'goods_id': goodsId, 'is_delete':0});
+            .first().from(this.name).where({'goods_id': goodsId, 'is_delete':0, 'suppliers_id':suppliersId});
         return detail
     }
 
@@ -39,18 +39,18 @@ class Goods extends Model {
     /*
      * 获取首页所有分类商品
      */
-    async homeCategoryGoods() {
+    async homeCategoryGoods(suppliersId) {
         var list = await this.db
-            .select().from(this.name).where({'is_best': 1,'is_delete':0})
+            .select().from(this.name).where({'is_best': 1, 'is_delete': 0, 'suppliers_id' :suppliersId})
         return list
     }
 
     /*
      * 获取首页热销商品
      */
-    async homeGoods() {
+    async hotGoods(suppliersId) {
         var list = await this.db
-            .select().from(this.name).where({'is_hot': 1, 'is_on_sale': 1,'is_delete':0})
+            .select().from(this.name).where({'is_hot': 1, 'is_on_sale': 1, 'is_delete':0, 'suppliers_id':suppliersId })
         return list
     }
 }

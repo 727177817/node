@@ -10,7 +10,7 @@ class Category extends Model {
     // 首页广告分类
     async homeAds() {
         var list = await this.db
-            .select().from(this.name).where('show_in_nav', 1).orderBy('sort_order');
+            .select().from(this.name).where({'show_in_nav': 1}).orderBy('sort_order');
         return list
     }
 

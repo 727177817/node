@@ -7,6 +7,13 @@
             "user"     : "zhouying",
             "password" : "o0lo4uDZxbAyoHrsk0xmwsq3uDmQ",
             "database" : "areashop"
+        },
+        "redis": {
+            "host"     : "127.0.0.1",
+            "port"     : "6379",
+            "password" : "",
+            "family"   : "",
+            "db"       : ""
         }
     },
     "development":{
@@ -17,6 +24,13 @@
             "user"     : "root",
             "password" : "ygelLH70rJNmq2hP",
             "database" : "areashop"
+        },
+        "redis": {
+            "host"     : "127.0.0.1",
+            "port"     : "6379",
+            "password" : "",
+            "family"   : "",
+            "db"       : ""
         }
     }
 }

@@ -4,21 +4,22 @@ class Wechat extends Model {
 
     constructor() {
         super();
+        this.name = 'ecs_wechat_session'
     }
 
     // 保存sessionKey
     async insertSessionKey(data) {
-        await this.db('ecs_wechat_session').insert(data);
+        await this.db(this.name).insert(data);
     }
 
     // 更新sessionKey
     async updataSessionKey(data) {
-        await this.db('ecs_wechat_session').update(data);
+        await this.db(this.name).update(data);
     }
 
     // 查询openid是否存在
     async selectOpenId(openId) {
-        let result = await this.db('ecs_wechat_session').where({
+        let result = await this.db(this.name).where({
         	open_id: openId
         });
         return result
@@ -26,7 +27,7 @@ class Wechat extends Model {
 
     // 查询openid是否存在
     async selectSessionId(sessionId) {
-        let result = await this.db('ecs_wechat_session').first().where({
+        let result = await this.db(this.name).first().where({
         	session_id: sessionId
         });
         return result
