@@ -25,12 +25,6 @@ exports.getList = async(ctx, next) => {
     }
 
     let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
-    // let mergeResult = []
-    // for (let i = 0; i < result.length; i++) {
-    //     mergeResult.push(result[i].goods_id)
-    // }
-    // mergeResult = [...new Set(mergeResult)]
-   
     ctx.body = result;
 }
 

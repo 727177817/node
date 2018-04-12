@@ -1,3 +1,4 @@
+const Redis    = require('../utils/redis.js');
 const Cart = require('../models/cart.js');
 const Address = require('../models/address.js');
 const Order = require('../models/order.js');
@@ -16,8 +17,13 @@ exports.getTest = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.getCheckout = async(ctx, next) => {
-
-	let { userId, suppliersId, communityId } = ctx.session;
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    let userId = user.userId,
+        suppliersId = user.suppliersId,
+        communityId = user.communityId 
     if (!userId) {
         ctx.throw(401);
         return;
