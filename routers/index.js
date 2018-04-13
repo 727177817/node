@@ -42,6 +42,11 @@ allCtls.push({
 });
 
 allCtls.push({
+	path: 'address',
+	ctl: require('../controllers/address')
+});
+
+allCtls.push({
 	path: 'passport',
 	ctl: require('../controllers/passport')
 });
