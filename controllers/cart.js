@@ -19,8 +19,8 @@ exports.getList = async(ctx, next) => {
         return;
     }
 
-    if (!user.suppliersId) {
-        ctx.throw(500, '缺少当前用户的所选小区信息');
+    if(!suppliersId){
+        ctx.throw(400, '缺少参数suppliersId');
         return;
     }
 
@@ -44,8 +44,8 @@ exports.postAdd = async(ctx, next) => {
         return;
     }
 
-    if (!user.suppliersId) {
-        ctx.throw(500, '缺少当前用户的所选小区信息');
+    if(!suppliersId){
+        ctx.throw(400, '缺少参数suppliersId');
         return;
     }
 
@@ -102,8 +102,11 @@ exports.postRemove = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.postChange = async(ctx, next) => {
-    let userId = ctx.session.userId;
-    if(!userId){
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    if(!user.userId){
         ctx.throw(401);
         return;
     }
@@ -149,7 +152,7 @@ exports.postChange = async(ctx, next) => {
  * @return  boolean
  */
 async function addToCart(goodsId, num = 1, userId, suppliersId) {
-
+    
     // /* 取得商品信息 */
     let goods = await Goods.detail(goodsId,suppliersId);
 

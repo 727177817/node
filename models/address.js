@@ -37,6 +37,21 @@ class Address extends Model {
             }).select();
     }
 
+    async insert(data){
+        return this.db(this.name).insert(data);
+    }
+
+    async update(data){
+        return this.db(this.name).where({
+            address_id: data.addressId
+        }).update(data);
+    }
+
+    async remove(addressId){
+        return this.db(this.name).where({
+            address_id: addressId
+        }).delete();
+    }
 
 }
 module.exports = new Address();

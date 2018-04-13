@@ -28,9 +28,12 @@ exports.getCheckout = async(ctx, next) => {
         ctx.throw(401);
         return;
     }
-
     if (!suppliersId) {
-        ctx.throw(400, '缺少当前用户所在的小区信息');
+        ctx.throw(400, '缺少参数suppliersId');
+        return;
+    }
+    if (!suppliersId) {
+        ctx.throw(400, '缺少参数communityId');
         return;
     }
 
@@ -81,14 +84,19 @@ exports.getCheckout = async(ctx, next) => {
  */
 exports.getOrder = async(ctx, next) => {
 
-    let { userId, suppliersId } = ctx.session;
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    let userId = user.userId,
+        suppliersId = user.suppliersId
     if (!userId) {
         ctx.throw(401);
         return;
     }
 
     if (!suppliersId) {
-        ctx.throw(400, '缺少当前用户所在的小区信息');
+        ctx.throw(400, '缺少参数suppliersId');
         return;
     }
 

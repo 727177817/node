@@ -66,8 +66,8 @@ exports.getDetail = async (ctx, next) => {
         return;
     }
     try {
-        let orderInfo = await Order.getDetail();
-        let orderGoods = await Order.getOrderGoods();
+        let orderInfo = await Order.getDetail(orderSn);
+        let orderGoods = await Order.getOrderGoods(orderSn);
         Object.assign(orderInfo,{goods:orderGoods})
         ctx.body = await orderInfo
     } catch (err) {
