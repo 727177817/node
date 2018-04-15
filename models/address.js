@@ -41,9 +41,9 @@ class Address extends Model {
         return this.db(this.name).insert(data);
     }
 
-    async update(data){
+    async update(addressId,data){
         return this.db(this.name).where({
-            address_id: data.addressId
+            address_id: addressId
         }).update(data);
     }
 
