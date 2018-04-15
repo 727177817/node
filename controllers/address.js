@@ -38,16 +38,82 @@ exports.postAdd = async(ctx, next) => {
         return;
     }
 
-	// 获取首页商品分类
-	let data = {
-		user_id: user.userId,
-		community_id: user.communityId,
-		consignee: body.consignee,
-		mobile: body.mobile,
-		address: body.address
-	}
-	let lastId = await Address.insert(data)
-	let address  = await Address.getOne(lastId)
+    let address = ''
+	// 如果addressId存在，更新收货地址
+    if(body.addressId){
+        // 更新收货地址
+        let data = {
+            user_id: user.userId,
+            community_id: user.communityId,
+            consignee: body.consignee,
+            mobile: body.mobile,
+            address: body.address
+        }
+        await Address.update(body.addressId,data)
+        address = await Address.getOneWithUserId(user.userId, body.addressId)
+    }else{
+        // 新增收货地址
+        let data = {
+            user_id: user.userId,
+            community_id: user.communityId,
+            consignee: body.consignee,
+            mobile: body.mobile,
+            address: body.address
+        }
+        let lastId = await Address.insert(data)
+        address  = await Address.getOneWithUserId(user.userId, lastId)
+    }
 
     ctx.body = address;
+}
+
+
+/*
+ * 获取用户地址列表
+ * @param  {[type]}   ctx  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}   list     [地址列表]
+ */ 
+exports.getList = async(ctx, next) => {
+    let token = ctx.request.header.token
+    let userId = await Redis.getUser({
+        key: token,
+        field: 'userId'
+    })
+    if(!userId){
+        ctx.throw(401);
+        return;
+    }
+
+    let list = await Address.getAllByUserId(userId)
+    ctx.body = list;
+}
+
+
+/*
+ * 获取地址详情
+ * @param  {[type]}   ctx  [description]
+ * @param  {Function} next [description]
+ * @param {[type]}   id     [地址Id]
+ * @return {[type]}   detail     [地址详情]
+ */ 
+exports.getDetail = async(ctx, next) => {
+    let token = ctx.request.header.token
+    let userId = await Redis.getUser({
+        key: token,
+        field: 'userId'
+    })
+    if(!userId){
+        ctx.throw(401);
+        return;
+    }
+
+    let id = ctx.query.id;
+    if(!id){
+        ctx.throw(400, '缺少参数goodsId');
+        return;
+    }
+
+    let detail = await Address.getOneWithUserId(userId,id)
+    ctx.body = detail;
 }
