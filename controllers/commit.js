@@ -11,6 +11,11 @@ exports.getTest = async(ctx, next) => {
     ctx.body = get_random(5);
 }
 
+exports.postTest = async(ctx, next) => {
+
+    ctx.body = ctx.request.body;
+}
+
 /**
  * 获取结算数据
  * @param  {[type]}   ctx  [description]

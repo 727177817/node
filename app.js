@@ -9,7 +9,7 @@ const redis            = require('./utils/redis.js');
 // const ApiError        = require('./error/ApiError');
 const response_formatter = require('./middlewares/response_formatter');
 const abc = require('./config');
-console.log(abc);
+// console.log(abc);
 
 // app.env = 'PRODUCTION';
 

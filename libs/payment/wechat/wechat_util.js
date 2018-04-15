@@ -295,9 +295,14 @@ class WechatUtil {
      * @return array 返回网页内容
      */
     async request($url, $post_data = '') {
+        console.log('request', typeof $post_data, $post_data);
+
+        // return await axios.post('http://localhost:3000/commit/test', "test=123");
         return await axios({
             method: 'post',
+            // url: 'http://localhost:3000/commit/test',
             url: $url,
+            headers: { 'content-type': 'text/plain' },
             data: $post_data
         });
 

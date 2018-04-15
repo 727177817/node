@@ -1,6 +1,5 @@
 const CONSTANT = require('../../../config/constant.js');
 const WechatUtil = require('./wechat_util.js');
-const xml2js = require('xml2js');
 
 /**
  * 微信公众帐号支付-基类
@@ -17,7 +16,7 @@ class WechatPay {
 
         this.mch_id = '1267875101';
 
-        this.secret_key = '';
+        this.secret_key = 'be1c4a02c5455a140ca6cbc96c949e4a';
 
         this.order_api = '';
 
@@ -136,19 +135,13 @@ class WechatPay {
             // $params['spbill_create_ip'] = paymentUtil::getInstance() - > getClientIp();
         }
 
-        this.sortObject($params);
+        $params = this.sortObject($params);
 
         $params['sign'] = this.unifiedsign($params, 'md5');
 
         let $xmlInfo = WechatUtil.arrayToXml($params);
         let $response = await WechatUtil.request(this.order_api, $xmlInfo);
-
-        // let parser = new xml2js.Parser();
-        // let $result = await parser.parseString($response.data, (err, result) => {
-        //     console.log(result);
-        // });
         let $result = WechatUtil.toArray($response.data);
-        console.log($result)
 
         // $log = "-----------------------".date("Y-m-d H:i:s").
         // "-----------------------\r\n";
@@ -156,6 +149,7 @@ class WechatPay {
         // "\r\n".var_export($result, true).
         // "\r\n";
         // paymentUtil::getInstance() - > write_log($log, 'unifiedorder');
+        console.log($params, $result);
 
         if ($result && $result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
             if ($result['trade_type'] == 'JSAPI' || $result['trade_type'] == 'APP' || $result['trade_type'] == 'WAP') {
@@ -481,7 +475,7 @@ class WechatPay {
 
         let $prepay_id = await this.unifiedorder({
             'price': $total_fee,
-            'billno': $payments['billno'],
+            'billno': $payments['billno'] || '110',
             'order_id': $payments['order_id'],
             'openid': $payments['openid'],
             'total_fee': $total_fee,
