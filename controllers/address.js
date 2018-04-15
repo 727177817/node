@@ -67,6 +67,32 @@ exports.postAdd = async(ctx, next) => {
     ctx.body = address;
 }
 
+/*
+ * 删除用户地址
+ * @param  {[type]}   ctx  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}   list     [地址列表]
+ */ 
+exports.getRemove = async(ctx, next) => {
+    let token = ctx.request.header.token
+    let userId = await Redis.getUser({
+        key: token,
+        field: 'userId'
+    })
+    if(!userId){
+        ctx.throw(401);
+        return;
+    }
+
+    let id = ctx.query.id;
+    if(!id){
+        ctx.throw(400, '缺少参数addressId');
+        return;
+    }
+
+    await Address.remove(id)
+    ctx.body = id;
+}
 
 /*
  * 获取用户地址列表
@@ -110,7 +136,7 @@ exports.getDetail = async(ctx, next) => {
 
     let id = ctx.query.id;
     if(!id){
-        ctx.throw(400, '缺少参数goodsId');
+        ctx.throw(400, '缺少参数addressId');
         return;
     }
 
