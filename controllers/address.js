@@ -21,7 +21,6 @@ exports.postAdd = async(ctx, next) => {
         return;
     }
 
-
     if(!body.address){
         ctx.throw(400, '缺少参数address');
         return;
