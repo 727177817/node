@@ -11,7 +11,7 @@ class Cart extends Model {
     async getOne(goodsId) {
         let obj = this.db(this.name).where({
             goods_id: goodsId,
-            parent_id: 0,
+            parent_id: '0',
             rec_type: '1'
         }).first()
 
@@ -19,10 +19,10 @@ class Cart extends Model {
     }
 
     async getByGoodsIdAndUserId(goodsId, userId) {
-        let obj = this.db(this.name).where({
+        let obj = await this.db(this.name).where({
             goods_id: goodsId,
-            parent_id: 0,
-            rec_type: '1',
+            // parent_id: '0',
+            // rec_type: '1',
             user_id: userId
         }).first();
         
@@ -30,7 +30,7 @@ class Cart extends Model {
     }
 
     async getByRecIdAndUserId(recId, userId) {
-        let obj = this.db(this.name).where({
+        let obj = await this.db(this.name).where({
             rec_id: recId,
             parent_id: 0,
             rec_type: '1',
@@ -41,24 +41,24 @@ class Cart extends Model {
     }
 
     async insert(data){
-        return this.db(this.name).insert(data);
+        return await this.db(this.name).insert(data);
     }
 
     async update(recId, data){
-        return this.db(this.name).where({
+        return await this.db(this.name).where({
             rec_id: recId
         }).update(data);
     }
 
     async remove(userId, recId){
-        return this.db(this.name).where({
+        return await this.db(this.name).where({
             rec_id: recId,
             user_id: userId
         }).delete();
     }
 
     async clear(userId, suppliersId){
-        return this.db(this.name).where({
+        return await this.db(this.name).where({
             suppliers_id: suppliersId,
             user_id: userId
         }).delete();

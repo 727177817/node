@@ -1,7 +1,11 @@
-const Redis    = require('../utils/redis.js');
+const Redis = require('../utils/redis.js');
 const Goods = require('../models/goods.js');
 const Cart = require('../models/cart.js');
 
+exports.getTest = async(ctx, next) => {
+    let cartObj = await Cart.getByGoodsIdAndUserId(33, 47);
+    ctx.body = cartObj;
+}
 
 /**
  * 获取购物车
@@ -14,12 +18,12 @@ exports.getList = async(ctx, next) => {
     let user = await Redis.getUser({
         key: token
     })
-    if(!user.userId){
+    if (!user.userId) {
         ctx.throw(401);
         return;
     }
 
-    if(!suppliersId){
+    if (!user.suppliersId) {
         ctx.throw(400, '缺少参数suppliersId');
         return;
     }
@@ -39,12 +43,12 @@ exports.postAdd = async(ctx, next) => {
     let user = await Redis.getUser({
         key: token
     })
-    if(!user.userId){
+    if (!user.userId) {
         ctx.throw(401);
         return;
     }
 
-    if(!suppliersId){
+    if (!user.suppliersId) {
         ctx.throw(400, '缺少参数suppliersId');
         return;
     }
@@ -75,7 +79,7 @@ exports.postRemove = async(ctx, next) => {
     let user = await Redis.getUser({
         key: token
     })
-    if(!user.userId){
+    if (!user.userId) {
         ctx.throw(401);
         return;
     }
@@ -87,7 +91,7 @@ exports.postRemove = async(ctx, next) => {
     }
 
     let res = await Cart.remove(user.userId, body.recId);
-    if(res > 0){
+    if (res > 0) {
         let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
         ctx.body = result.length;
     } else {
@@ -106,7 +110,7 @@ exports.postChange = async(ctx, next) => {
     let user = await Redis.getUser({
         key: token
     })
-    if(!user.userId){
+    if (!user.userId) {
         ctx.throw(401);
         return;
     }
@@ -132,7 +136,7 @@ exports.postChange = async(ctx, next) => {
         goods_number: body.quantity,
     });
 
-    if(res > 0){
+    if (res > 0) {
         let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
         ctx.body = result.length;
     } else {
@@ -152,9 +156,9 @@ exports.postChange = async(ctx, next) => {
  * @return  boolean
  */
 async function addToCart(goodsId, num = 1, userId, suppliersId) {
-    
+
     // /* 取得商品信息 */
-    let goods = await Goods.detail(goodsId,suppliersId);
+    let goods = await Goods.detail(goodsId, suppliersId);
 
     if (!goods) {
         return '商品不存在';
@@ -199,7 +203,7 @@ async function addToCart(goodsId, num = 1, userId, suppliersId) {
     /* 如果数量不为0，作为基本件插入 */
     if (num > 0) {
         /* 检查该商品是否已经存在在购物车中 */
-        let cartObj = await Cart.getByGoodsIdAndUserId(userId, goodsId);
+        let cartObj = await Cart.getByGoodsIdAndUserId(goodsId, userId);
 
         if (cartObj) {
             //如果购物车已经有此物品，则更新
