@@ -1,3 +1,4 @@
+const Redis    = require('../utils/redis.js');
 const Order = require('../models/order.js');
 const Goods = require('../models/goods.js');
 
@@ -8,14 +9,26 @@ const Goods = require('../models/goods.js');
  * 默认所有订单
 */ 
 exports.getList = async (ctx, next) => {
-    let orderState = ctx.query.orderState || '',
-    payStatus      = ctx.query.payStatus || '',
-    userId         = '1'
-    if(!ctx.session.user_id){
+    let token = ctx.request.header.token
+    let userId = await Redis.getUser({
+        key: token,
+        field: 'userId'
+    })
+    if(!token || !user.userId){
         ctx.throw(401);
         return;
     }
-    let orderList = await Order.getList(userId,orderState,payStatus);
+    let state = ctx.query.state
+    if(!orderState){
+        ctx.throw(400, '缺少参数orderSn');
+        return;
+    }
+    let payStatus = ctx.query.payStatus
+    if(!payStatus){
+        ctx.throw(400, '缺少参数orderSn');
+        return;
+    }
+    let orderList = await Order.getList(userId,state,payStatus);
     // 查询订单商品
     for (let i = 0; i < orderList.length; i++) {
         let orderId = orderList[i].order_id
@@ -38,9 +51,23 @@ exports.getList = async (ctx, next) => {
  * @param {String} [order_id]   order_id订单Id
 */ 
 exports.getDetail = async (ctx, next) => {
+    let token = ctx.request.header.token
+    let userId = await Redis.getUser({
+        key: token,
+        field: 'userId'
+    })
+    if(!token || !user.userId){
+        ctx.throw(401);
+        return;
+    }
+    let orderSn = ctx.query.orderSn
+    if(!orderSn){
+        ctx.throw(400, '缺少参数orderSn');
+        return;
+    }
     try {
-        let orderInfo = await Order.getDetail();
-        let orderGoods = await Order.getOrderGoods();
+        let orderInfo = await Order.getDetail(orderSn);
+        let orderGoods = await Order.getOrderGoods(orderSn);
         Object.assign(orderInfo,{goods:orderGoods})
         ctx.body = await orderInfo
     } catch (err) {

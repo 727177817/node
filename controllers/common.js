@@ -1,5 +1,6 @@
+const Redis     = require('../utils/redis.js');
 const Community = require('../models/community.js');
-const User = require('../models/user.js');
+const User      = require('../models/user.js');
 
 /**
  * 测试用
@@ -39,10 +40,13 @@ exports.getCommunities = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.postCommunity = async(ctx, next) => {
-
-    let userId = ctx.session.userId;
-    if (!userId) {
-        throw (401);
+    let token = ctx.request.header.token
+    let userId = await Redis.getUser({
+        key: token,
+        field: 'userId'
+    })
+    if(!userId){
+        ctx.throw(400, '缺少参数userId');
         return;
     }
 
@@ -57,14 +61,16 @@ exports.postCommunity = async(ctx, next) => {
         throw(400, '选择的小区信息不存在');
         return;
     }
-
     let res = await User.update(userId, {
-        community_id: communityId
+        community_id: body.communityId
     });
-
     if (res > 0) {
-        ctx.session.suppliersId = community.suppliers_id;
-        ctx.session.communityId = communityId;
+        await Redis.addUser({
+            key: token,
+            userId: userId,
+            communityId: body.communityId,
+            suppliersId: community.suppliers_id 
+        })
         ctx.body = '设置小区成功';
     } else {
         throw (500, '设置失败');

@@ -1,3 +1,4 @@
+const Redis    = require('../utils/redis.js');
 const Cart = require('../models/cart.js');
 const Address = require('../models/address.js');
 const Order = require('../models/order.js');
@@ -17,15 +18,23 @@ exports.getTest = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.getCheckout = async(ctx, next) => {
-
-    let { userId, suppliersId, communityId } = ctx.session;
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    let userId = user.userId,
+        suppliersId = user.suppliersId,
+        communityId = user.communityId 
     if (!userId) {
         ctx.throw(401);
         return;
     }
-
     if (!suppliersId) {
-        ctx.throw(400, '缺少当前用户所在的小区信息');
+        ctx.throw(400, '缺少参数suppliersId');
+        return;
+    }
+    if (!suppliersId) {
+        ctx.throw(400, '缺少参数communityId');
         return;
     }
 
@@ -76,14 +85,19 @@ exports.getCheckout = async(ctx, next) => {
  */
 exports.getOrder = async(ctx, next) => {
 
-    let { userId, suppliersId } = ctx.session;
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    let userId = user.userId,
+        suppliersId = user.suppliersId
     if (!userId) {
         ctx.throw(401);
         return;
     }
 
     if (!suppliersId) {
-        ctx.throw(400, '缺少当前用户所在的小区信息');
+        ctx.throw(400, '缺少参数suppliersId');
         return;
     }
 

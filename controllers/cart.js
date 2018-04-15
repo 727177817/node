@@ -1,3 +1,4 @@
+const Redis    = require('../utils/redis.js');
 const Goods = require('../models/goods.js');
 const Cart = require('../models/cart.js');
 
@@ -9,21 +10,21 @@ const Cart = require('../models/cart.js');
  * @return {[type]}        [description]
  */
 exports.getList = async(ctx, next) => {
-
-    let userId = ctx.session.userId;
-    if(!userId){
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    if(!user.userId){
         ctx.throw(401);
         return;
     }
 
-    let suppliersId = ctx.session.suppliersId;
-    if (!suppliersId) {
-        ctx.throw(500, '缺少当前用户的所选小区信息');
+    if(!suppliersId){
+        ctx.throw(400, '缺少参数suppliersId');
         return;
     }
 
-    let result = await Cart.getAllByUserIdAndSuppliersId(userId, suppliersId);
-    
+    let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
     ctx.body = result;
 }
 
@@ -34,10 +35,17 @@ exports.getList = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.postAdd = async(ctx, next) => {
-
-    let userId = ctx.session.userId;
-    if(!userId){
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    if(!user.userId){
         ctx.throw(401);
+        return;
+    }
+
+    if(!suppliersId){
+        ctx.throw(400, '缺少参数suppliersId');
         return;
     }
 
@@ -47,15 +55,10 @@ exports.postAdd = async(ctx, next) => {
         return;
     }
 
-    let suppliersId = ctx.session.suppliersId;
-    if (!suppliersId) {
-        ctx.throw(500, '缺少当前用户所在的小区信息');
-        return;
-    }
-
-    let result = await addToCart(body.goodsId, 1, userId, suppliersId);
+    let result = await addToCart(body.goodsId, 1, user.userId, user.suppliersId);
     if (result === 'success') {
-        ctx.body = '加入购物车成功';
+        let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+        ctx.body = result.length;
     } else {
         ctx.throw(400, result);
     }
@@ -68,8 +71,11 @@ exports.postAdd = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.postRemove = async(ctx, next) => {
-    let userId = ctx.session.userId;
-    if(!userId){
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    if(!user.userId){
         ctx.throw(401);
         return;
     }
@@ -80,9 +86,10 @@ exports.postRemove = async(ctx, next) => {
         return;
     }
 
-    let res = await Cart.remove(userId, body.recId);
+    let res = await Cart.remove(user.userId, body.recId);
     if(res > 0){
-        ctx.body = '删除购物车成功';
+        let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+        ctx.body = result.length;
     } else {
         ctx.throw(400, '删除失败');
     }
@@ -95,8 +102,11 @@ exports.postRemove = async(ctx, next) => {
  * @return {[type]}        [description]
  */
 exports.postChange = async(ctx, next) => {
-    let userId = ctx.session.userId;
-    if(!userId){
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    if(!user.userId){
         ctx.throw(401);
         return;
     }
@@ -123,7 +133,8 @@ exports.postChange = async(ctx, next) => {
     });
 
     if(res > 0){
-        ctx.body = '更改购物车成功';
+        let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+        ctx.body = result.length;
     } else {
         ctx.throw(400, '更改失败');
     }
@@ -141,9 +152,9 @@ exports.postChange = async(ctx, next) => {
  * @return  boolean
  */
 async function addToCart(goodsId, num = 1, userId, suppliersId) {
-
+    
     // /* 取得商品信息 */
-    let goods = await Goods.detail(goodsId);
+    let goods = await Goods.detail(goodsId,suppliersId);
 
     if (!goods) {
         return '商品不存在';
@@ -168,9 +179,9 @@ async function addToCart(goodsId, num = 1, userId, suppliersId) {
     /* 初始化要插入购物车的基本件数据 */
     $parent = {
         'user_id': userId,
-        'session_id': '',
         'goods_id': goodsId,
         'goods_sn': goods['goods_sn'],
+        'goods_thumb': goods['goods_thumb'],
         'product_id': '0',
         'goods_name': goods['goods_name'],
         'market_price': goods['market_price'],

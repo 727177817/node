@@ -1,13 +1,11 @@
 const Koa                = require('koa');
 const app                = new Koa();
-
-// 将session存放在MySQL数据库中
-const session            = require('koa-session-minimal');
-const mysqlSession       = require('koa-mysql-session');
 const koaBody            = require('koa-body');
 
+const config             = require('./config/config.json');
 const routers            = require('./routers/index');
 const logUtil            = require('./utils/log_util');
+const redis            = require('./utils/redis.js');
 // const ApiError        = require('./error/ApiError');
 const response_formatter = require('./middlewares/response_formatter');
 const config             = require('./config/config.json');
@@ -23,7 +21,6 @@ app.use(async (ctx, next) => {
   const ms = Date.now() - start;
   ctx.set('X-Response-Time', `${ms}ms`);
 });
-
 
 // logger
 app.use(async(ctx, next) => {
@@ -47,17 +44,14 @@ app.use(async(ctx, next) => {
     }
 });
 
+/**
+ * 连接Redis服务
+ */
+redis.start();
+
 app.use(koaBody());
 app.use(response_formatter);
 
-// 配置存储session信息的mysql
-let store = new mysqlSession(config["production"].database)
-
-// 使用session中间件
-app.use(session({
-    key: 'sessionId',
-    store: store,
-}));
 
 //路由定义应该在中间件之后
 app.use(routers.routes(), routers.allowedMethods());

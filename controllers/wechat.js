@@ -61,7 +61,8 @@ exports.postUserInfo = async (ctx, next) => {
         return;
     }
     let sessionKey = await Wechat.selectSessionId(sessionId);
-    let result = wechatDecrypt(sessionKey.session_key,encryptedData,iv);
+    let result = wechatDecrypt(config[ctx.app.env].wechat_appid,sessionKey.session_key,encryptedData,iv);
+    if(result.watermark) delete result.watermark;
     ctx.body = result 
 }
 
@@ -80,8 +81,7 @@ exports.postUserInfo = async (ctx, next) => {
  * avatarUrl: "http://wx.qlogo.cn/mmopen/vi_32/aSKcBBPpibyKNicHNTMM0qJVh8Kjgiak2AHWr8MHM4WgMEm7GFhsf8OYrySdbvAMvTsw3mo8ibKicsnfN5pRjl1p8HQ/0",
  * unionId: "ocMvos6NjeKLIBqg5Mr9QjxrP1FA"
  */
-function wechatDecrypt (sessionKey,encryptedData,iv){
-    var appId = 'wx435c0f188b8e3283'
+function wechatDecrypt (appId,sessionKey,encryptedData,iv){
     var pc = new WXBizDataCrypt(appId, sessionKey)
     return pc.decryptData(encryptedData , iv)
 }

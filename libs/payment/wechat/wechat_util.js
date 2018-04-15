@@ -162,6 +162,8 @@ class WechatUtil {
     toArray($xml) {
         $reg = "/<(\\w+)[^>]*?>([\\x00-\\xFF]*?)<\\/\\1>/";
 
+        $matches = $xml.match($reg);
+
         // if(preg_match_all($reg, $xml, $matches))
         // {
         //     $count = count($matches[0]);
