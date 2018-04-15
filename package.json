@@ -24,7 +24,8 @@
     "koa-router": "^7.2.1",
     "koa-session-minimal": "^3.0.4",
     "log4js": "^2.3.12",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.24.1",
