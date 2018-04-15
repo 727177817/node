@@ -8,7 +8,6 @@ const logUtil            = require('./utils/log_util');
 const redis            = require('./utils/redis.js');
 // const ApiError        = require('./error/ApiError');
 const response_formatter = require('./middlewares/response_formatter');
-const config             = require('./config/config.json');
 const abc = require('./config');
 console.log(abc);
 
@@ -47,7 +46,7 @@ app.use(async(ctx, next) => {
 /**
  * 连接Redis服务
  */
-redis.start();
+// redis.start();
 
 app.use(koaBody());
 app.use(response_formatter);

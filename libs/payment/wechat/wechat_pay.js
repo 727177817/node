@@ -143,12 +143,12 @@ class WechatPay {
         let $xmlInfo = WechatUtil.arrayToXml($params);
         let $response = await WechatUtil.request(this.order_api, $xmlInfo);
 
-        console.log($response.data)
-        let parser = new xml2js.Parser();
-        let $result = await parser.parseString($response.data, (err, result) => {
-            console.log(result);
-        });
-        // $result = paymentUtil::getInstance() - > toArray($response);
+        // let parser = new xml2js.Parser();
+        // let $result = await parser.parseString($response.data, (err, result) => {
+        //     console.log(result);
+        // });
+        let $result = WechatUtil.toArray($response.data);
+        console.log($result)
 
         // $log = "-----------------------".date("Y-m-d H:i:s").
         // "-----------------------\r\n";
@@ -472,14 +472,14 @@ class WechatPay {
         }
     }
 
-    dopay($payments) {
+    async dopay($payments) {
         let $total_fee = Math.round($payments['price'] * 100);
 
         // this.set_appid($this - > appid);
         // this.set_key($this - > secret_key);
         // this.set_notify($this - > notify_url);
 
-        let $prepay_id = this.unifiedorder({
+        let $prepay_id = await this.unifiedorder({
             'price': $total_fee,
             'billno': $payments['billno'],
             'order_id': $payments['order_id'],

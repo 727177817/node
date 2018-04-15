@@ -153,16 +153,52 @@ class WechatUtil {
         return $xml;
     }
 
+    toArray($xml) {
+        let $reg = /<(\w+)[^>]*?>(.*?)<\/\1>/g;
+        let $matches;
+        let $arr;
+
+        while (($matches = $reg.exec($xml)) != null) {
+            if (!$arr) {
+                $arr = {};
+            }
+
+            let $key = $matches[1];
+            let $val = this.toArray($matches[2]);
+
+            if ($arr[$key]) {
+                if (Array.isArray($arr[$key])) {
+                    if ($arr[$key].length == 0) {
+                        $arr[$key] = [].concat($arr[$key]);
+                    }
+                } else {
+                    $arr[$key] = [].concat($arr[$key]);
+                }
+                $arr[$key].push($val.replace('<![CDATA[', '').replace(']]>', ''));
+            } else {
+                if (typeof $val == 'string') {
+                    $arr[$key] = $val.replace('<![CDATA[', '').replace(']]>', '');
+                } else {
+                    $arr[$key] = $val;
+                }
+            }
+        }
+
+        if ($arr) {
+            return $arr;
+        } else {
+            return $xml;
+        }
+    }
+
 
     /**
      * @desc 解析xml文件流为数组
      * @param $xml XML Document
      * @return array
      */
-    toArray($xml) {
-        $reg = "/<(\\w+)[^>]*?>([\\x00-\\xFF]*?)<\\/\\1>/";
-
-        $matches = $xml.match($reg);
+    toArray_($xml) {
+        // let $reg = /<(\w+)[^>]*?>([\x00-\xFF]*?)<\/\1>/;
 
         // if(preg_match_all($reg, $xml, $matches))
         // {
@@ -260,9 +296,9 @@ class WechatUtil {
      */
     async request($url, $post_data = '') {
         return await axios({
-          method: 'post',
-          url: $url,
-          data: $post_data
+            method: 'post',
+            url: $url,
+            data: $post_data
         });
 
         const urlObj = new URL($url);

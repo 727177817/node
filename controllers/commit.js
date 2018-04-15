@@ -139,7 +139,7 @@ exports.postPay = async(ctx, next) => {
     };
 
     let wechatPay = new WechatPay();
-    let res = wechatPay.dopay(param);
+    let res = await wechatPay.dopay(param);
 
     if (!res.code){
     	//生成支付单失败，在重试一次
