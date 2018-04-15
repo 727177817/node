@@ -3,6 +3,7 @@ const Address = require('../models/address.js');
 const Order = require('../models/order.js');
 const OrderGoods = require('../models/order_goods.js');
 const Goods = require('../models/goods.js');
+const WechatPay = require('../libs/payment/wechat/wechat_pay.js');
 
 exports.getTest = async(ctx, next) => {
 
@@ -17,7 +18,7 @@ exports.getTest = async(ctx, next) => {
  */
 exports.getCheckout = async(ctx, next) => {
 
-	let { userId, suppliersId, communityId } = ctx.session;
+    let { userId, suppliersId, communityId } = ctx.session;
     if (!userId) {
         ctx.throw(401);
         return;
@@ -30,8 +31,8 @@ exports.getCheckout = async(ctx, next) => {
 
     // 收货地址
     let myAddress = await Address.getAllByUserIdAndCommunityId(userId, communityId);
-    if(!myAddress){
-    	myAddress = [];
+    if (!myAddress) {
+        myAddress = [];
     }
 
     // 购物车中的商品
@@ -42,15 +43,15 @@ exports.getCheckout = async(ctx, next) => {
     }
     let goodsIds = [];
     cartGoods.map(item => {
-    	goodsIds.push(item.goods_id);
+        goodsIds.push(item.goods_id);
     })
     let goods = await Goods.getListByIds(goodsIds);
     cartGoods.map(item => {
-    	goods.map(sitem => {
-    		if(item.goods_id == sitem.goods_id){
-    			item.goods_thumb = sitem.goods_thumb;
-    		}
-    	})
+        goods.map(sitem => {
+            if (item.goods_id == sitem.goods_id) {
+                item.goods_thumb = sitem.goods_thumb;
+            }
+        })
     })
 
     //订单金额
@@ -58,13 +59,13 @@ exports.getCheckout = async(ctx, next) => {
 
     //TODO 获取优惠券列表
 
-	ctx.body = {
-		consignees: myAddress,
-		goods: cartGoods,
-		total: total,
-		coupons: [],
-		timestamp: new Date().getTime()//系统当前时间
-	}
+    ctx.body = {
+        consignees: myAddress,
+        goods: cartGoods,
+        total: total,
+        coupons: [],
+        timestamp: new Date().getTime() //系统当前时间
+    }
 }
 
 /**
@@ -86,25 +87,55 @@ exports.getOrder = async(ctx, next) => {
         return;
     }
 
-    let { consigneeId, couponId, shippingDate, shippingTime } = ctx.request.body;
+    let { consigneeId, couponId, shippingType, shippingTime } = ctx.request.body;
     //收货地址ID
     if (!consigneeId) {
         ctx.throw(400, '收货地址未选择');
         return;
     }
 
-    if (!shippingDate || !shippingTime) {
+    // 配送时间
+    if (!shippingType || !shippingTime) {
         ctx.throw(400, '配送时间未选择');
         return;
     }
 
-    let result = await order(userId, suppliersId, consigneeId, couponId, shippingDate, shippingTime);
+    //TODO 校验配送时间的合理性
+
+    let result = await order(userId, suppliersId, consigneeId, couponId, shippingType, shippingTime);
 
     ctx.body = result;
 }
 
+/**
+ * 发起支付，获取支付相关参数
+ * @param  {[type]}   ctx  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+exports.postPay = async(ctx, next) => {
 
-async function order(userId, suppliersId, consigneeId, couponId, shippingDate, shippingTime) {
+    let { orderId } = ctx.request.body;
+
+    let param = {
+    	price: 30,
+        orderId: '',
+        billId: '',
+        openid: ''
+    };
+
+    let wechatPay = new WechatPay();
+    let res = wechatPay.dopay(param);
+
+    if (!res.code){
+    	//生成支付单失败，在重试一次
+    }
+
+    ctx.body = res;
+}
+
+
+async function order(userId, suppliersId, consigneeId, couponId, shippingType, shippingTime) {
 
     // /* 取得购物类型 */
     //    $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
@@ -130,7 +161,6 @@ async function order(userId, suppliersId, consigneeId, couponId, shippingDate, s
     //        unset($cart_goods_stock, $_cart_goods_stock);
     //    }
 
-    //    $address_id = intval($_REQUEST['address_id']);
     $consignee = Address.getOneWithUserId(userId, consigneeId);
 
     if (!$consignee) {
@@ -158,7 +188,9 @@ async function order(userId, suppliersId, consigneeId, couponId, shippingDate, s
         'extension_code': '',
         'extension_id': 0,
         'surplus': 0,
-        'integral': 0
+        'integral': 0,
+        'shipping_type': shippingType, //当天的09-14和15-21，分别对应1、2
+        'shipping_time': shippingTime,
     };
 
 
@@ -390,45 +422,23 @@ function order_fee($order, $goods, $consignee) {
     //     $total['bonus_kill_formated'] = price_format($total['bonus_kill'], false);
     // }
 
-
-
     /* 配送费用 */
     $shipping_cod_fee = null;
 
-    // if ($order['shipping_id'] > 0 && $total['real_goods_count'] > 0) {
-    //     $region['country'] = $consignee['country'];
-    //     $region['province'] = $consignee['province'];
-    //     $region['city'] = $consignee['city'];
-    //     $region['district'] = $consignee['district'];
-    //     $shipping_info = shipping_area_info($order['shipping_id'], $region);
+    if ($order['shipping_id'] > 0 && $total['real_goods_count'] > 0) {
+        $region['country'] = $consignee['country'];
+        $region['province'] = $consignee['province'];
+        $region['city'] = $consignee['city'];
+        $region['district'] = $consignee['district'];
+        //$shipping_info = shipping_area_info($order['shipping_id'], $region);
 
-    //     if (!empty($shipping_info)) {
-    //         if ($order['extension_code'] == 'group_buy') {
-    //             $weight_price = cart_weight_price(CART_GROUP_BUY_GOODS);
-    //         } else {
-    //             $weight_price = cart_weight_price();
-    //         }
+        //if (!empty($shipping_info)) {
+        $weight_price = cart_weight_price();
 
-    //         // 查看购物车中是否全为免运费商品，若是则把运费赋为零
-    //         $sql = 'SELECT count(*) FROM '.$GLOBALS['ecs'] - > table('cart').
-    //         " WHERE  `session_id` = '".SESS_ID.
-    //         "' AND `extension_code` != 'package_buy' AND `is_shipping` = 0";
-    //         $shipping_count = $GLOBALS['db'] - > getOne($sql);
+        $total['shipping_fee'] = shipping_fee($shipping_info['shipping_code'], $shipping_info['configure'], $weight_price['weight'], $total['goods_price'], $weight_price['number']);
 
-    //         $total['shipping_fee'] = ($shipping_count == 0 AND $weight_price['free_shipping'] == 1) ? 0 : shipping_fee($shipping_info['shipping_code'], $shipping_info['configure'], $weight_price['weight'], $total['goods_price'], $weight_price['number']);
-
-    //         if (!empty($order['need_insure']) && $shipping_info['insure'] > 0) {
-    //             $total['shipping_insure'] = shipping_insure_fee($shipping_info['shipping_code'],
-    //                 $total['goods_price'], $shipping_info['insure']);
-    //         } else {
-    //             $total['shipping_insure'] = 0;
-    //         }
-
-    //         if ($shipping_info['support_cod']) {
-    //             $shipping_cod_fee = $shipping_info['pay_fee'];
-    //         }
-    //     }
-    // }
+        //}
+    }
 
     // 购物车中的商品能享受红包支付的总额
     // $bonus_amount = compute_discount_amount();
@@ -455,7 +465,6 @@ function order_fee($order, $goods, $consignee) {
     return $total;
 }
 
-
 /**
  * 得到新订单号，时间戳+5位随机数
  * @return  string
@@ -478,4 +487,36 @@ function get_random(max) {
     }
 
     return padStr + r;
+}
+
+/**
+ * 获得购物车中商品的总重量、总价格、总数量
+ *
+ * @access  public
+ * @param   int     $type   类型：默认普通商品
+ * @return  array
+ */
+function cart_weight_price($type = CART_GENERAL_GOODS) {
+    let $package_row = {
+        'weight': 0,
+        'amount': 0,
+        'number': 0
+    };
+
+    $packages_row['free_shipping'] = 1;
+
+    // $sql    = 'SELECT SUM(g.goods_weight * c.goods_number) AS weight, ' .
+    //                 'SUM(c.goods_price * c.goods_number) AS amount, ' .
+    //                 'SUM(c.goods_number) AS number '.
+    //             'FROM ' . $GLOBALS['ecs']->table('cart') . ' AS c '.
+    //             'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = c.goods_id '.
+    //             "WHERE c.session_id = '" . SESS_ID . "' " .
+    //             "AND rec_type = '$type' AND g.is_shipping = 0 AND c.extension_code != 'package_buy'";
+    // $row = $GLOBALS['db']->getRow($sql);
+
+    // $packages_row['weight'] = floatval($row['weight']) + $package_row['weight'];
+    // $packages_row['amount'] = floatval($row['amount']) + $package_row['amount'];
+    // $packages_row['number'] = intval($row['number']) + $package_row['number'];
+
+    return $packages_row;
 }
