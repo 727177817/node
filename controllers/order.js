@@ -20,12 +20,12 @@ exports.getList = async (ctx, next) => {
     }
     let state = ctx.query.state
     if(!orderState){
-        ctx.throw(400, '缺少参数orderSn');
+        ctx.throw(400, '缺少参数orderState');
         return;
     }
     let payStatus = ctx.query.payStatus
     if(!payStatus){
-        ctx.throw(400, '缺少参数orderSn');
+        ctx.throw(400, '缺少参数payStatus');
         return;
     }
     let orderList = await Order.getList(userId,state,payStatus);

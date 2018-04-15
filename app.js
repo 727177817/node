@@ -46,7 +46,7 @@ app.use(async(ctx, next) => {
 /**
  * 连接Redis服务
  */
-// redis.start();
+redis.start();
 
 app.use(koaBody());
 app.use(response_formatter);

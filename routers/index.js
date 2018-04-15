@@ -47,6 +47,12 @@ allCtls.push({
 });
 
 allCtls.push({
+	path: 'coupon',
+	ctl: require('../controllers/coupon')
+});
+
+
+allCtls.push({
 	path: 'passport',
 	ctl: require('../controllers/passport')
 });
