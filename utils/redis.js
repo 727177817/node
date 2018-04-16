@@ -2,7 +2,7 @@
  * redis 操作工具
  */
 const Redis = require('ioredis'),
-    config = require('../config/config.json');
+    config = require('../config');
 
 var client = null;
 
@@ -11,7 +11,7 @@ var client = null;
  * @return {[type]}
  */
 function start() {
-    client = new Redis(6379);
+    client = new Redis(config.redis);
 
     client.on('error', async(err, result) => {
         console.log('连接redis错误', err);

@@ -11,9 +11,7 @@
         "redis": {
             "host"     : "39.106.43.88",
             "port"     : "6379",
-            "password" : "",
-            "family"   : "",
-            "db"       : ""
+            "password" : ""
         }
     },
     "development":{
@@ -28,9 +26,7 @@
         "redis": {
             "host"     : "39.106.43.88",
             "port"     : "6379",
-            "password" : "",
-            "family"   : "",
-            "db"       : ""
+            "password" : ""
         }
     }
 }

@@ -1,9 +1,9 @@
-const config = require('../config/config.json');
+const config = require('../config');
 const knex   = require('knex');
 class Model {
 
     constructor() {
-        this.db = knex({client: 'mysql', connection: config["production"].database});
+        this.db = knex({client: 'mysql', connection: config.database});
     }
     
     async insert(data){

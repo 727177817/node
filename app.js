@@ -2,14 +2,12 @@ const Koa                = require('koa');
 const app                = new Koa();
 const koaBody            = require('koa-body');
 
-const config             = require('./config/config.json');
 const routers            = require('./routers/index');
 const logUtil            = require('./utils/log_util');
 const redis            = require('./utils/redis.js');
 // const ApiError        = require('./error/ApiError');
 const response_formatter = require('./middlewares/response_formatter');
-const abc = require('./config');
-// console.log(abc);
+const config = require('./config');
 
 // app.env = 'PRODUCTION';
 
