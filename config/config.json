@@ -9,7 +9,7 @@
             "database" : "areashop"
         },
         "redis": {
-            "host"     : "127.0.0.1",
+            "host"     : "39.106.43.88",
             "port"     : "6379",
             "password" : "",
             "family"   : "",
@@ -26,7 +26,7 @@
             "database" : "areashop"
         },
         "redis": {
-            "host"     : "127.0.0.1",
+            "host"     : "39.106.43.88",
             "port"     : "6379",
             "password" : "",
             "family"   : "",
