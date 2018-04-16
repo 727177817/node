@@ -6,6 +6,7 @@ const OrderGoods = require('../models/order_goods.js');
 const Goods = require('../models/goods.js');
 const WechatPay = require('../libs/payment/wechat/wechat_pay.js');
 const Coupon = require('../models/coupon.js');
+const Community = require('../models/community.js');
 
 exports.getTest = async(ctx, next) => {
 
@@ -31,6 +32,7 @@ exports.getCheckout = async(ctx, next) => {
     let userId = user.userId,
         warehouseId = user.warehouseId,
         communityId = user.communityId
+        console.log(user)
     if (!userId) {
         ctx.throw(401);
         return;
@@ -44,8 +46,17 @@ exports.getCheckout = async(ctx, next) => {
         return;
     }
 
-    // 收货地址
-    let myAddress = await Address.getAllByUserIdAndCommunityId(userId, communityId);
+    // 收货地址，可选择当前所选小区对应仓库的所有地址
+    let communityIds = [];
+    let communities = Community.getListByWarehouseId(warehouseId);
+
+    if(communities){
+        communities.map(item => {
+            communityIds.push(item.community_id);
+        })
+    }
+
+    let myAddress = await Address.getAllByUserIdAndCommunityIds(userId, communityIds);
     if (!myAddress) {
         myAddress = [];
     }

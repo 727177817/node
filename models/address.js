@@ -37,6 +37,15 @@ class Address extends Model {
             }).select();
     }
 
+    async getAllByUserIdAndCommunityIds(userId, communityIds) {
+        return await this.db(this.name)
+            .where({
+                user_id: userId
+            })
+            .andWhereIn('community_id', communityIds)
+            .select();
+    }
+
     async insert(data){
         return this.db(this.name).insert(data);
     }

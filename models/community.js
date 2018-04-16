@@ -18,5 +18,13 @@ class Community extends Model {
             .select();
     }
 
+    async getListByWarehouseId(warehouseId) {
+        return await this.db(this.name)
+            .where({
+                suppliers_id: warehouseId
+            })
+            .select();
+    }
+
 }
 module.exports = new Community();

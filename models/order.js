@@ -7,19 +7,41 @@ class Order extends Model {
         this.name = 'ecs_order_info'
     }
 
-    async getList(userId,state) {
+    async getList(userId) {
         var orderInfo = await this.db
-            .select().from(this.name).where({'user_id': userId});
-            // .select().from(this.name).where({'user_id': userId,'order_status': orderStatus,'pay_status': payStatus});
+            .select().from(this.name).where({
+                'user_id': userId
+            });
         return orderInfo
     }
 
-    async getDetail(orderId) {
-        var ret = await this.db
-            .first().from(this.name).where('order_sn', "2009051255518");
-        return ret
+    async getPaidOrders(userId) {
+        return await this.db(this.name)
+            .select().where({
+                'user_id': userId,
+                'pay_status': 1
+            });
     }
-     /*
+
+    async getUnpaidOrders(userId) {
+        return await this.db(this.name)
+            .select().where({
+                'user_id': userId,
+                'pay_status': 0
+            });
+    }
+
+    async getOne(orderId) {
+        return await this.db(this.name)
+            .first().where('order_id', orderId);
+    }
+
+    async getOneByOrderSn(orderSn) {
+        return await this.db(this.name)
+            .first().where('order_sn', orderSn || "2009051255518");
+    }
+
+    /*
      * 获取订单商品
      * @param {String} [orderId]   订单Id
      */
@@ -31,4 +53,3 @@ class Order extends Model {
 
 }
 module.exports = new Order();
-
