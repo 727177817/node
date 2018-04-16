@@ -1,10 +1,11 @@
-const Redis    = require('../utils/redis.js');
+const Redis = require('../utils/redis.js');
 const Cart = require('../models/cart.js');
 const Address = require('../models/address.js');
 const Order = require('../models/order.js');
 const OrderGoods = require('../models/order_goods.js');
 const Goods = require('../models/goods.js');
 const WechatPay = require('../libs/payment/wechat/wechat_pay.js');
+const Coupon = require('../models/coupon.js');
 
 exports.getTest = async(ctx, next) => {
 
@@ -29,7 +30,7 @@ exports.getCheckout = async(ctx, next) => {
     })
     let userId = user.userId,
         suppliersId = user.suppliersId,
-        communityId = user.communityId 
+        communityId = user.communityId
     if (!userId) {
         ctx.throw(401);
         return;
@@ -38,7 +39,7 @@ exports.getCheckout = async(ctx, next) => {
         ctx.throw(400, '缺少参数suppliersId');
         return;
     }
-    if (!suppliersId) {
+    if (!communityId) {
         ctx.throw(400, '缺少参数communityId');
         return;
     }
@@ -68,16 +69,19 @@ exports.getCheckout = async(ctx, next) => {
         })
     })
 
-    //订单金额
-    let total = order_fee({}, cartGoods, {});
+    //订单金额，默认配送方式
+    let total = order_fee({
+        'shipping_id': 1,
+    }, cartGoods, {});
 
-    //TODO 获取优惠券列表
+    //获取优惠券列表
+    let coupons = await Coupon.getAvaliableCoupons(userId, total.goods_price);
 
     ctx.body = {
         consignees: myAddress,
         goods: cartGoods,
         total: total,
-        coupons: [],
+        coupons: coupons,
         timestamp: new Date().getTime() //系统当前时间
     }
 }
@@ -106,7 +110,7 @@ exports.getOrder = async(ctx, next) => {
         return;
     }
 
-    let { consigneeId, couponId, shippingType, shippingTime } = ctx.request.body;
+    let { consigneeId, couponId, couponSn, shippingType, shippingTime } = ctx.request.body;
     //收货地址ID
     if (!consigneeId) {
         ctx.throw(400, '收货地址未选择');
@@ -121,7 +125,7 @@ exports.getOrder = async(ctx, next) => {
 
     //TODO 校验配送时间的合理性
 
-    let result = await order(userId, suppliersId, consigneeId, couponId, shippingType, shippingTime);
+    let result = await order(userId, suppliersId, consigneeId, couponId, couponSn, shippingType, shippingTime);
 
     ctx.body = result;
 }
@@ -137,7 +141,7 @@ exports.postPay = async(ctx, next) => {
     let { orderId } = ctx.request.body;
 
     let param = {
-    	price: 30,
+        price: 30,
         orderId: '',
         billId: '',
         openid: ''
@@ -146,15 +150,15 @@ exports.postPay = async(ctx, next) => {
     let wechatPay = new WechatPay();
     let res = await wechatPay.dopay(param);
 
-    if (!res.code){
-    	//生成支付单失败，在重试一次
+    if (!res.code) {
+        //生成支付单失败，在重试一次
     }
 
     ctx.body = res;
 }
 
 
-async function order(userId, suppliersId, consigneeId, couponId, shippingType, shippingTime) {
+async function order(userId, suppliersId, consigneeId, couponId, couponSn, shippingType, shippingTime) {
 
     // /* 取得购物类型 */
     //    $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
@@ -192,7 +196,7 @@ async function order(userId, suppliersId, consigneeId, couponId, shippingType, s
         'pack_id': 0,
         'card_id': 0,
         'card_message': '',
-        'bonus_id': 0,
+        'bonus_id': couponId,
         'inv_type': '',
         'inv_payee': '',
         'inv_content': '',
@@ -213,16 +217,14 @@ async function order(userId, suppliersId, consigneeId, couponId, shippingType, s
     };
 
 
-    //    /* 检查红包是否存在 */
-    //    if ($order['bonus_id'] > 0)
-    //    {
-    //        $bonus = bonus_info($order['bonus_id']);
+    /* 检查红包是否存在 */
+    if ($order['bonus_id'] > 0) {
+        let $bonus = await Coupon.getOne($order['bonus_id']);
 
-    //        if (empty($bonus) || $bonus['user_id'] != $user_id || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > cart_amount(true, $flow_type))
-    //        {
-    //            $order['bonus_id'] = 0;
-    //        }
-    //    }
+        if (!$bonus || $bonus['user_id'] != $userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > cart_amount(true, $flow_type)) {
+            $order['bonus_id'] = 0;
+        }
+    }
     //    elseif (isset($_POST['bonus_sn']))
     //    {
     //        $bonus_sn = trim($_POST['bonus_sn']);
@@ -243,7 +245,7 @@ async function order(userId, suppliersId, consigneeId, couponId, shippingType, s
     //        }
     //    }
 
-    $result = await create_order($order, cartGoods, $consignee, $flow_type, false);
+    $result = await create_order($order, cartGoods, $consignee, $flow_type);
 
     $new_order_id = $result['new_order_id'];
 
@@ -256,7 +258,7 @@ async function order(userId, suppliersId, consigneeId, couponId, shippingType, s
 /**
  * 创建订单
  */
-async function create_order($order, $cart_goods, $consignee, $flow_type, $plan = false) {
+async function create_order($order, $cart_goods, $consignee, $flow_type) {
 
     /* 收货人信息 */
     for (var $key in $consignee) {
@@ -267,11 +269,7 @@ async function create_order($order, $cart_goods, $consignee, $flow_type, $plan =
     /* 订单中的总额 */
     $total = order_fee($order, $cart_goods, $consignee);
     $order['bonus'] = $total['bonus'];
-    if ($plan) {
-        $order['goods_amount'] = 0;
-    } else {
-        $order['goods_amount'] = $total['goods_price'];
-    }
+    $order['goods_amount'] = $total['goods_price'];
     $order['discount'] = $total['discount'];
     $order['surplus'] = $total['surplus'];
     $order['tax'] = $total['tax'];
@@ -285,29 +283,23 @@ async function create_order($order, $cart_goods, $consignee, $flow_type, $plan =
     // }
 
     /* 配送方式 */
-    // if ($order['shipping_id'] > 0) {
-    //     $shipping = shipping_info($order['shipping_id']);
-    //     $order['shipping_name'] = addslashes($shipping['shipping_name']);
-    // }
-
-    if ($plan) {
-        $order['shipping_fee'] = 0;
-    } else {
-        $order['shipping_fee'] = $total['shipping_fee'];
+    if ($order['shipping_id'] > 0) {
+        //     $shipping = shipping_info($order['shipping_id']);
+        $order['shipping_name'] = '自己配送';
     }
+
+    $order['shipping_fee'] = $total['shipping_fee'];
 
     $order['insure_fee'] = $total['shipping_insure'];
 
     /* 支付方式 */
-    // if ($order['pay_id'] > 0) {
-    //     $payment = payment_info($order['pay_id']);
-    //     $order['pay_name'] = addslashes($payment['pay_name']);
-    // }
+    if ($order['pay_id'] > 0) {
+        //     $payment = payment_info($order['pay_id']);
+        $order['pay_name'] = '微信小程序支付';
+    }
     $order['pay_fee'] = $total['pay_fee'];
 
     // $order['order_amount'] = number_format($total['amount'], 2, '.', '');
-
-    $send = false;
 
     /* 如果订单金额为0（使用余额或积分或红包支付），修改订单状态为已确认、已付款 */
     /* if ($order['order_amount'] <= 0) */
@@ -373,7 +365,6 @@ async function create_order($order, $cart_goods, $consignee, $flow_type, $plan =
     return {
         'order': $order,
         'consignee': $consignee,
-        'send': $send,
         'new_order_id': $order['order_id'],
         'total': $total
     };
@@ -425,13 +416,11 @@ function order_fee($order, $goods, $consignee) {
     $total['save_rate'] = $total['market_price'] ? Math.round($total['saving'] * 100 / $total['market_price']) +
         '%' : 0;
 
-    // /* 红包 */
-
-    // if (!empty($order['bonus_id']))
-    // {
-    //     $bonus          = bonus_info($order['bonus_id']);
-    //     $total['bonus'] = $bonus['type_money'];
-    // }
+    /* 红包 */
+    if (!$order['bonus_id']) {
+        let $bonus = await Coupon.getOne($order['bonus_id']);
+        $total['bonus'] = $bonus['type_money'];
+    }
 
     // /* 线下红包 */
     //  if (!empty($order['bonus_kill']))
@@ -445,40 +434,42 @@ function order_fee($order, $goods, $consignee) {
     $shipping_cod_fee = null;
 
     if ($order['shipping_id'] > 0 && $total['real_goods_count'] > 0) {
-        $region['country'] = $consignee['country'];
-        $region['province'] = $consignee['province'];
-        $region['city'] = $consignee['city'];
-        $region['district'] = $consignee['district'];
+        // $region['country'] = $consignee['country'];
+        // $region['province'] = $consignee['province'];
+        // $region['city'] = $consignee['city'];
+        // $region['district'] = $consignee['district'];
         //$shipping_info = shipping_area_info($order['shipping_id'], $region);
 
         //if (!empty($shipping_info)) {
-        $weight_price = cart_weight_price();
+        // $weight_price = cart_weight_price();
 
-        $total['shipping_fee'] = shipping_fee($shipping_info['shipping_code'], $shipping_info['configure'], $weight_price['weight'], $total['goods_price'], $weight_price['number']);
+        // $total['shipping_fee'] = shipping_fee($shipping_info['shipping_code'], $shipping_info['configure'], $weight_price['weight'], $total['goods_price'], $weight_price['number']);
 
         //}
+        $total['shipping_fee'] = 3;
     }
 
     // 购物车中的商品能享受红包支付的总额
     // $bonus_amount = compute_discount_amount();
+    $bonus_amount = 0;
     // 红包和积分最多能支付的金额为商品总额
-    // $max_amount = $total['goods_price'] == 0 ? $total['goods_price'] : $total['goods_price'] - $bonus_amount;
+    $max_amount = $total['goods_price'] == 0 ? $total['goods_price'] : $total['goods_price'] - $bonus_amount;
 
     /* 计算订单总额 */
     $total['amount'] = $total['goods_price'] - $total['discount'] + $total['tax'] + $total['pack_fee'] + $total['card_fee'] +
         $total['shipping_fee'] + $total['shipping_insure'] + $total['cod_fee'];
 
     // 减去红包金额
-    // $use_bonus        = min($total['bonus'], $max_amount); // 实际减去的红包金额
+    $use_bonus = Math.min($total['bonus'], $max_amount); // 实际减去的红包金额
     // if(isset($total['bonus_kill']))
     // {
     //     $use_bonus_kill   = min($total['bonus_kill'], $max_amount);
     //     $total['amount'] -=  $price = number_format($total['bonus_kill'], 2, '.', ''); // 还需要支付的订单金额
     // }
 
-    // $total['bonus']   = $use_bonus;
+    $total['bonus'] = $use_bonus;
 
-    // $total['amount'] -= $use_bonus; // 还需要支付的订单金额
+    $total['amount'] -= $use_bonus; // 还需要支付的订单金额
     // $max_amount      -= $use_bonus; // 积分最多还能支付的金额
 
     return $total;
@@ -539,3 +530,5 @@ function cart_weight_price($type = CART_GENERAL_GOODS) {
 
     return $packages_row;
 }
+
+function bonus_info(bonus_id) {}
