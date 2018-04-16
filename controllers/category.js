@@ -7,19 +7,19 @@ const Goods    = require('../models/goods.js');
  */ 
 exports.getCategory = async(ctx, next) => {
 	let token = ctx.request.header.token
-	let suppliersId = await Redis.getUser({
+	let warehouseId = await Redis.getUser({
 		key: token,
-		field: 'suppliersId'
+		field: 'warehouseId'
 	})
-	if(!suppliersId){
-        ctx.throw(400, '缺少参数suppliersId');
+	if(!warehouseId){
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
     
 	// 获取首页商品分类
 	let category  = await Category.category()
 	// 获取分类商品
-	let goodsList = await Goods.list(suppliersId)
+	let goodsList = await Goods.list(warehouseId)
 	for (let i = 0; i < category.length; i++) {
 		let categoryGoods = [];
 		for (let j = 0; j < goodsList.length; j++) {			

@@ -29,14 +29,14 @@ exports.getCheckout = async(ctx, next) => {
         key: token
     })
     let userId = user.userId,
-        suppliersId = user.suppliersId,
+        warehouseId = user.warehouseId,
         communityId = user.communityId
     if (!userId) {
         ctx.throw(401);
         return;
     }
-    if (!suppliersId) {
-        ctx.throw(400, '缺少参数suppliersId');
+    if (!warehouseId) {
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
     if (!communityId) {
@@ -51,7 +51,7 @@ exports.getCheckout = async(ctx, next) => {
     }
 
     // 购物车中的商品
-    let cartGoods = await Cart.getAllByUserIdAndSuppliersId(userId, suppliersId);
+    let cartGoods = await Cart.getAllByUserIdAndWarehouseId(userId, warehouseId);
     if (!cartGoods || cartGoods.length == 0) {
         ctx.throw(400, '购物车中没有商品');
         return;
@@ -99,14 +99,14 @@ exports.getOrder = async(ctx, next) => {
         key: token
     })
     let userId = user.userId,
-        suppliersId = user.suppliersId
+        warehouseId = user.warehouseId
     if (!userId) {
         ctx.throw(401);
         return;
     }
 
-    if (!suppliersId) {
-        ctx.throw(400, '缺少参数suppliersId');
+    if (!warehouseId) {
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
 
@@ -125,7 +125,7 @@ exports.getOrder = async(ctx, next) => {
 
     //TODO 校验配送时间的合理性
 
-    let result = await order(userId, suppliersId, consigneeId, couponId, couponSn, shippingType, shippingTime);
+    let result = await order(userId, warehouseId, consigneeId, couponId, couponSn, shippingType, shippingTime);
 
     ctx.body = result;
 }
@@ -158,9 +158,9 @@ exports.postPay = async(ctx, next) => {
 }
 
 
-async function order(userId, suppliersId, consigneeId, couponId, couponSn, shippingType, shippingTime) {
+async function order(userId, warehouseId, consigneeId, couponId, couponSn, shippingType, shippingTime) {
 
-    let cartGoods = await Cart.getAllByUserIdAndSuppliersId(userId, suppliersId);
+    let cartGoods = await Cart.getAllByUserIdAndWarehouseId(userId, warehouseId);
     if (!cartGoods || cartGoods.length == 0) {
         return '购物车中没有商品';
     }
@@ -217,14 +217,14 @@ async function order(userId, suppliersId, consigneeId, couponId, couponSn, shipp
     if ($order['bonus_id'] > 0) {
         $bonus = await Coupon.getOne($order['bonus_id']);
 
-        if (!$bonus || $bonus['user_id'] != $userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await cart_amount(userId, suppliersId)) {
+        if (!$bonus || $bonus['user_id'] != $userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await cart_amount(userId, warehouseId)) {
             $order['bonus_id'] = 0;
         }
     } else if (couponSn) {
         couponSn = trim(couponSn);
         $bonus = await Coupon.getOneByBonusSn(couponSn);
         $now = Math.round(new Date().getTime() / 1000);
-        if (!$bonus || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await cart_amount(userId, suppliersId) || $now > $bonus['use_end_date']) {} else {
+        if (!$bonus || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await cart_amount(userId, warehouseId) || $now > $bonus['use_end_date']) {} else {
             if ($user_id > 0) {
                 Coupon.update($bonus['bonus_id'], {
                     user_id: userId
@@ -240,7 +240,7 @@ async function order(userId, suppliersId, consigneeId, couponId, couponSn, shipp
     $new_order_id = $result['new_order_id'];
 
     // 清空购物车 
-    await Cart.clear(userId, suppliersId);
+    await Cart.clear(userId, warehouseId);
 
     return 'success';
 }
@@ -526,8 +526,8 @@ function cart_weight_price($type = CART_GENERAL_GOODS) {
  * @param   int     $type           类型：默认普通商品
  * @return  float   购物车总金额
  */
-async function cart_amount(userId, suppliersId) {
-    let amount = await Cart.getCartAmount(userId, suppliersId);
+async function cart_amount(userId, warehouseId) {
+    let amount = await Cart.getCartAmount(userId, warehouseId);
 
     return amount;
 }

@@ -29,7 +29,7 @@ function start() {
  */
 async function addUser(params) {
     if (params) {
-        await client.hmset(params.key, 'userId', params.userId, 'communityId', params.communityId, 'suppliersId', params.suppliersId);
+        await client.hmset(params.key, 'userId', params.userId, 'communityId', params.communityId, 'warehouseId', params.warehouseId);
         await client.expire(params.key, 2592000);
     }
 }
@@ -44,7 +44,7 @@ async function getUser(params) {
     // return {
     //     userId: 33,
     //     communityId: 1,
-    //     suppliersId: 1
+    //     warehouseId: 1
     // }
     let user
     if (params.field) {

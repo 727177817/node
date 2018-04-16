@@ -6,9 +6,11 @@ class Ads extends Model {
         super();
     }
 
-    async banner() {
+    async banner(communityId) {
         var banner = await this.db
-            .select().from('ecs_ad')
+            .select().from('ecs_ad').where({
+            	community_id: communityId
+            })
         return banner
     }
 

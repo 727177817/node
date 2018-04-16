@@ -7,6 +7,16 @@ const mainRouter = router();
 let allCtls = [];
 
 allCtls.push({
+	path: 'address',
+	ctl: require('../controllers/address')
+});
+
+allCtls.push({
+	path: 'article',
+	ctl: require('../controllers/article')
+});
+
+allCtls.push({
 	path: 'cart',
 	ctl: require('../controllers/cart')
 });
@@ -27,6 +37,11 @@ allCtls.push({
 });
 
 allCtls.push({
+	path: 'coupon',
+	ctl: require('../controllers/coupon')
+});
+
+allCtls.push({
 	path: 'goods',
 	ctl: require('../controllers/goods')
 });
@@ -40,17 +55,6 @@ allCtls.push({
 	path: 'order',
 	ctl: require('../controllers/order')
 });
-
-allCtls.push({
-	path: 'address',
-	ctl: require('../controllers/address')
-});
-
-allCtls.push({
-	path: 'coupon',
-	ctl: require('../controllers/coupon')
-});
-
 
 allCtls.push({
 	path: 'passport',

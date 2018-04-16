@@ -23,12 +23,12 @@ exports.getList = async(ctx, next) => {
         return;
     }
 
-    if (!user.suppliersId) {
-        ctx.throw(400, '缺少参数suppliersId');
+    if (!user.warehouseId) {
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
 
-    let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+    let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
     ctx.body = result;
 }
 
@@ -48,8 +48,8 @@ exports.postAdd = async(ctx, next) => {
         return;
     }
 
-    if (!user.suppliersId) {
-        ctx.throw(400, '缺少参数suppliersId');
+    if (!user.warehouseId) {
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
 
@@ -59,9 +59,9 @@ exports.postAdd = async(ctx, next) => {
         return;
     }
 
-    let result = await addToCart(body.goodsId, 1, user.userId, user.suppliersId);
+    let result = await addToCart(body.goodsId, 1, user.userId, user.warehouseId);
     if (result === 'success') {
-        let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+        let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
         ctx.body = result.length;
     } else {
         ctx.throw(400, result);
@@ -92,7 +92,7 @@ exports.postRemove = async(ctx, next) => {
 
     let res = await Cart.remove(user.userId, body.recId);
     if (res > 0) {
-        let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+        let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
         ctx.body = result.length;
     } else {
         ctx.throw(400, '删除失败');
@@ -137,7 +137,7 @@ exports.postChange = async(ctx, next) => {
     });
 
     if (res > 0) {
-        let result = await Cart.getAllByUserIdAndSuppliersId(user.userId, user.suppliersId);
+        let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
         ctx.body = result.length;
     } else {
         ctx.throw(400, '更改失败');
@@ -152,13 +152,13 @@ exports.postChange = async(ctx, next) => {
  * @param   integer goodsId   商品编号
  * @param   integer num        商品数量
  * @param   integer userId    用户ID
- * @param   integer suppliersId    仓库ID
+ * @param   integer warehouseId    仓库ID
  * @return  boolean
  */
-async function addToCart(goodsId, num = 1, userId, suppliersId) {
+async function addToCart(goodsId, num = 1, userId, warehouseId) {
 
     // /* 取得商品信息 */
-    let goods = await Goods.detail(goodsId, suppliersId);
+    let goods = await Goods.detail(goodsId, warehouseId);
 
     if (!goods) {
         return '商品不存在';
@@ -196,7 +196,7 @@ async function addToCart(goodsId, num = 1, userId, suppliersId) {
         'is_gift': 0,
         'is_shipping': goods['is_shipping'],
         'rec_type': '1',
-        'suppliers_id': suppliersId,
+        'warehouse_id': warehouseId,
     };
 
 

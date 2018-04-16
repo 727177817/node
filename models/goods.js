@@ -10,18 +10,18 @@ class Goods extends Model {
     /*
      * 获取商品列表
      */
-    async list(suppliersId) {
+    async list(warehouseId) {
         var list = await this.db
-            .select().from(this.name).where({'is_delete':0, 'suppliers_id':suppliersId});
+            .select().from(this.name).where({'is_delete':0, 'warehouse_id':warehouseId});
         return list
     }
     /*
      * 商品详情
      * @param {String} [goodsId]           商品Id
      */
-    async detail(goodsId,suppliersId) {
+    async detail(goodsId,warehouseId) {
         var detail = await this.db
-            .first().from(this.name).where({'goods_id': goodsId, 'is_delete':0, 'suppliers_id':suppliersId});
+            .first().from(this.name).where({'goods_id': goodsId, 'is_delete':0, 'warehouse_id':warehouseId});
         return detail
     }
 
@@ -39,18 +39,18 @@ class Goods extends Model {
     /*
      * 获取首页所有分类商品
      */
-    async homeCategoryGoods(suppliersId) {
+    async homeCategoryGoods(warehouseId) {
         var list = await this.db
-            .select().from(this.name).where({'is_best': 1, 'is_delete': 0, 'suppliers_id' :suppliersId})
+            .select().from(this.name).where({'is_best': 1, 'is_delete': 0, 'warehouse_id' :warehouseId})
         return list
     }
 
     /*
      * 获取首页热销商品
      */
-    async hotGoods(suppliersId) {
+    async hotGoods(warehouseId) {
         var list = await this.db
-            .select().from(this.name).where({'is_hot': 1, 'is_on_sale': 1, 'is_delete':0, 'suppliers_id':suppliersId })
+            .select().from(this.name).where({'is_hot': 1, 'is_on_sale': 1, 'is_delete':0, 'warehouse_id':warehouseId })
         return list
     }
 }

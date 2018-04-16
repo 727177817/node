@@ -57,26 +57,26 @@ class Cart extends Model {
         }).delete();
     }
 
-    async clear(userId, suppliersId) {
+    async clear(userId, warehouseId) {
         return await this.db(this.name).where({
-            suppliers_id: suppliersId,
+            warehouse_id: warehouseId,
             user_id: userId
         }).delete();
     }
 
-    async getAllByUserIdAndSuppliersId(userId, suppliersId) {
+    async getAllByUserIdAndWarehouseId(userId, warehouseId) {
         var detail = await this.db
             .select().from(this.name).where({
                 'user_id': userId,
-                'suppliers_id': suppliersId
+                'warehouse_id': warehouseId
             });
         return detail
     }
 
-    async getCartAmount(userId,suppliersId) {
+    async getCartAmount(userId,warehouseId) {
         return await this.db(this.name).sum('goods_price * goods_number').where({
             'user_id': userId,
-            'suppliers_id': suppliersId
+            'warehouse_id': warehouseId
         });
     }
 

@@ -33,7 +33,7 @@ exports.postWechatLogin = async(ctx, next) => {
         key: token,
         userId: obj.user_id,
         communityId: obj.community_id,
-        suppliersId: community.suppliers_id 
+        warehouseId: community.warehouse_id 
     })
 
     ctx.body = token;
