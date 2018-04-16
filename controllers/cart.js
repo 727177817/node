@@ -126,13 +126,13 @@ exports.postChange = async(ctx, next) => {
         return;
     }
 
-    let cartObj = await Cart.getByRecIdAndUserId(userId, recId);
+    let cartObj = await Cart.getByRecIdAndUserId(body.recId, user.userId);
     if (!cartObj) {
         ctx.throw(400, '购物车不存在该商品');
         return;
     }
 
-    let res = await Cart.update(recId, {
+    let res = await Cart.update(body.recId, {
         goods_number: body.quantity,
     });
 
