@@ -65,5 +65,11 @@ class Coupon extends Model {
         return list
     }
 
+    async update(bonus_id, data){
+        return await this.db('ecs_user_bonus').where({
+            bonus_id: bonus_id
+        }).update(data);
+    }
+
 }
 module.exports = new Coupon();

@@ -160,11 +160,6 @@ exports.postPay = async(ctx, next) => {
 
 async function order(userId, suppliersId, consigneeId, couponId, couponSn, shippingType, shippingTime) {
 
-    // /* 取得购物类型 */
-    //    $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
-
-    $flow_type = 0;
-
     let cartGoods = await Cart.getAllByUserIdAndSuppliersId(userId, suppliersId);
     if (!cartGoods || cartGoods.length == 0) {
         return '购物车中没有商品';
@@ -218,34 +213,29 @@ async function order(userId, suppliersId, consigneeId, couponId, couponSn, shipp
 
 
     /* 检查红包是否存在 */
+    let $bonus;
     if ($order['bonus_id'] > 0) {
-        let $bonus = await Coupon.getOne($order['bonus_id']);
+        $bonus = await Coupon.getOne($order['bonus_id']);
 
-        if (!$bonus || $bonus['user_id'] != $userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > cart_amount(true, $flow_type)) {
+        if (!$bonus || $bonus['user_id'] != $userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await cart_amount(userId, suppliersId)) {
             $order['bonus_id'] = 0;
         }
+    } else if (couponSn) {
+        couponSn = trim(couponSn);
+        $bonus = await Coupon.getOneByBonusSn(couponSn);
+        $now = Math.round(new Date().getTime() / 1000);
+        if (!$bonus || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await cart_amount(userId, suppliersId) || $now > $bonus['use_end_date']) {} else {
+            if ($user_id > 0) {
+                Coupon.update($bonus['bonus_id'], {
+                    user_id: userId
+                });
+            }
+            $order['bonus_id'] = $bonus['bonus_id'];
+            $order['bonus_sn'] = couponSn;
+        }
     }
-    //    elseif (isset($_POST['bonus_sn']))
-    //    {
-    //        $bonus_sn = trim($_POST['bonus_sn']);
-    //        $bonus = bonus_info(0, $bonus_sn);
-    //        $now = gmtime();
-    //        if (empty($bonus) || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > cart_amount(true, $flow_type) || $now > $bonus['use_end_date'])
-    //        {
-    //        }
-    //        else
-    //        {
-    //            if ($user_id > 0)
-    //            {
-    //                $sql = "UPDATE " . $ecs->table('user_bonus') . " SET user_id = '$user_id' WHERE bonus_id = '$bonus[bonus_id]' LIMIT 1";
-    //                $db->query($sql);
-    //            }
-    //            $order['bonus_id'] = $bonus['bonus_id'];
-    //            $order['bonus_sn'] = $bonus_sn;
-    //        }
-    //    }
 
-    $result = await create_order($order, cartGoods, $consignee, $flow_type);
+    $result = await create_order($order, cartGoods, $consignee, $bonus);
 
     $new_order_id = $result['new_order_id'];
 
@@ -258,7 +248,7 @@ async function order(userId, suppliersId, consigneeId, couponId, couponSn, shipp
 /**
  * 创建订单
  */
-async function create_order($order, $cart_goods, $consignee, $flow_type) {
+async function create_order($order, $cart_goods, $consignee, $bonus) {
 
     /* 收货人信息 */
     for (var $key in $consignee) {
@@ -267,7 +257,7 @@ async function create_order($order, $cart_goods, $consignee, $flow_type) {
     // $order['detail_address'] = $consignee['address'];
 
     /* 订单中的总额 */
-    $total = order_fee($order, $cart_goods, $consignee);
+    $total = order_fee($order, $cart_goods, $consignee, $bonus);
     $order['bonus'] = $total['bonus'];
     $order['goods_amount'] = $total['goods_price'];
     $order['discount'] = $total['discount'];
@@ -380,7 +370,7 @@ async function create_order($order, $cart_goods, $consignee, $flow_type) {
  * @param   array   $consignee
  * @return  array
  */
-function order_fee($order, $goods, $consignee) {
+function order_fee($order, $goods, $consignee, $bonus) {
 
     $total = {
         'real_goods_count': 0,
@@ -417,8 +407,7 @@ function order_fee($order, $goods, $consignee) {
         '%' : 0;
 
     /* 红包 */
-    if (!$order['bonus_id']) {
-        let $bonus = await Coupon.getOne($order['bonus_id']);
+    if ($order['bonus_id'] && $bonus) {
         $total['bonus'] = $bonus['type_money'];
     }
 
@@ -531,4 +520,14 @@ function cart_weight_price($type = CART_GENERAL_GOODS) {
     return $packages_row;
 }
 
-function bonus_info(bonus_id) {}
+/**
+ * 取得购物车总金额
+ * @params  boolean $include_gift   是否包括赠品
+ * @param   int     $type           类型：默认普通商品
+ * @return  float   购物车总金额
+ */
+async function cart_amount(userId, suppliersId) {
+    let amount = await Cart.getCartAmount(userId, suppliersId);
+
+    return amount;
+}
