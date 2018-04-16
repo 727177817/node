@@ -5,7 +5,7 @@ const Coupon = require('../models/coupon.js');
  * 获取优惠券列表
  * @param  {[type]}   ctx  [description]
  * @param  {Function} next [description]
- * @param {[type]}   0     [类型]
+ * @param {[type]}   0    [类型]
  * @return {[type]}   list     [优惠券列表]
  */ 
 exports.getList = async(ctx, next) => {
@@ -24,8 +24,15 @@ exports.getList = async(ctx, next) => {
         ctx.throw(400, '缺少参数type');
         return;
     }
-
-    let list = await Coupon.list(userId, type)
+    let list = ''
+    if(type == 0){
+        list = await Coupon.unused(userId)
+    }else if(type == 1){
+        list = await Coupon.used(userId)
+    }else if(type == 2){
+        let list = new Date() / 1000
+        // list = await Coupon.expired(userId, date)
+    }
     ctx.body = list;
 }
 
