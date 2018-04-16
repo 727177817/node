@@ -25,7 +25,7 @@ class Cart extends Model {
             // rec_type: '1',
             user_id: userId
         }).first();
-        
+
         return obj;
     }
 
@@ -36,28 +36,28 @@ class Cart extends Model {
             rec_type: '1',
             user_id: userId
         }).first();
-        
+
         return obj;
     }
 
-    async insert(data){
+    async insert(data) {
         return await this.db(this.name).insert(data);
     }
 
-    async update(recId, data){
+    async update(recId, data) {
         return await this.db(this.name).where({
             rec_id: recId
         }).update(data);
     }
 
-    async remove(userId, recId){
+    async remove(userId, recId) {
         return await this.db(this.name).where({
             rec_id: recId,
             user_id: userId
         }).delete();
     }
 
-    async clear(userId, suppliersId){
+    async clear(userId, suppliersId) {
         return await this.db(this.name).where({
             suppliers_id: suppliersId,
             user_id: userId
@@ -66,8 +66,18 @@ class Cart extends Model {
 
     async getAllByUserIdAndSuppliersId(userId, suppliersId) {
         var detail = await this.db
-            .select().from(this.name).where({'user_id': userId, 'suppliers_id': suppliersId});
+            .select().from(this.name).where({
+                'user_id': userId,
+                'suppliers_id': suppliersId
+            });
         return detail
+    }
+
+    async getCartAmount(userId,suppliersId) {
+        return await this.db(this.name).sum('goods_price * goods_number').where({
+            'user_id': userId,
+            'suppliers_id': suppliersId
+        });
     }
 
 }
