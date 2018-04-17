@@ -24,14 +24,14 @@ exports.getList = async(ctx, next) => {
         ctx.throw(400, '缺少参数type');
         return;
     }
-    let list = ''
+
+    let list = [];
     if(type == 0){
         list = await Coupon.unused(userId)
     }else if(type == 1){
         list = await Coupon.used(userId)
     }else if(type == 2){
-        let list = new Date() / 1000
-        // list = await Coupon.expired(userId, date)
+        list = await Coupon.expired(userId);
     }
     ctx.body = list;
 }
