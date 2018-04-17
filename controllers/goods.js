@@ -7,12 +7,12 @@ const Goods = require('../models/goods.js');
 */ 
 exports.detail = async (ctx, next) => {
     let token = ctx.request.header.token
-    let suppliersId = await Redis.getUser({
+    let warehouseId = await Redis.getUser({
         key: token,
-        field: 'suppliersId'
+        field: 'warehouseId'
     })
-    if(!suppliersId){
-        ctx.throw(400, '缺少参数suppliersId');
+    if(!warehouseId){
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
 
@@ -21,7 +21,7 @@ exports.detail = async (ctx, next) => {
         ctx.throw(400, '缺少参数goodsId');
         return;
     }
-    let goods = await Goods.detail(goodsId,suppliersId); 
+    let goods = await Goods.detail(goodsId,warehouseId); 
     ctx.body = goods;
 }
 
@@ -32,15 +32,15 @@ exports.detail = async (ctx, next) => {
 */ 
 exports.hot = async (ctx, next) => {
     let token = ctx.request.header.token
-    let suppliersId = await Redis.getUser({
+    let warehouseId = await Redis.getUser({
         key: token,
-        field: 'suppliersId'
+        field: 'warehouseId'
     })
-    if(!suppliersId){
-        ctx.throw(400, '缺少参数suppliersId');
+    if(!warehouseId){
+        ctx.throw(400, '缺少参数warehouseId');
         return;
     }
     // 热销商品
-	let hotGoods = await Goods.hotGoods(suppliersId)
+	let hotGoods = await Goods.hotGoods(warehouseId)
     ctx.body = hotGoods;
 }

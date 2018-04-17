@@ -2,7 +2,7 @@
  * redis 操作工具
  */
 const Redis = require('ioredis'),
-    config = require('../config/config.json');
+    config = require('../config');
 
 var client = null;
 
@@ -11,7 +11,7 @@ var client = null;
  * @return {[type]}
  */
 function start() {
-    client = new Redis(6379);
+    client = new Redis(config.redis);
 
     client.on('error', async(err, result) => {
         console.log('连接redis错误', err);
@@ -29,7 +29,7 @@ function start() {
  */
 async function addUser(params) {
     if (params) {
-        await client.hmset(params.key, 'userId', params.userId, 'communityId', params.communityId, 'suppliersId', params.suppliersId);
+        await client.hmset(params.key, 'userId', params.userId, 'communityId', params.communityId, 'warehouseId', params.warehouseId);
         await client.expire(params.key, 2592000);
     }
 }
@@ -44,7 +44,7 @@ async function getUser(params) {
     // return {
     //     userId: 33,
     //     communityId: 1,
-    //     suppliersId: 1
+    //     warehouseId: 1
     // }
     let user
     if (params.field) {

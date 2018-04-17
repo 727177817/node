@@ -12,7 +12,7 @@ exports.getTest = async(ctx, next) => {
 
     ctx.session = {
         userId: 28,
-        suppliersId: 1,
+        warehouseId: 1,
         communityId: 1
     }
 
@@ -69,7 +69,7 @@ exports.postCommunity = async(ctx, next) => {
             key: token,
             userId: userId,
             communityId: body.communityId,
-            suppliersId: community.suppliers_id 
+            warehouseId: community.warehouse_id 
         })
         ctx.body = '设置小区成功';
     } else {
