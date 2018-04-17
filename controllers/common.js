@@ -1,6 +1,7 @@
-const Redis     = require('../utils/redis.js');
+const Redis = require('../utils/redis.js');
 const Community = require('../models/community.js');
-const User      = require('../models/user.js');
+const User = require('../models/user.js');
+const Cart = require('../models/cart.js');
 
 /**
  * 测试用
@@ -45,7 +46,7 @@ exports.postCommunity = async(ctx, next) => {
         key: token,
         field: 'userId'
     })
-    if(!userId){
+    if (!userId) {
         ctx.throw(400, '缺少参数userId');
         return;
     }
@@ -57,8 +58,8 @@ exports.postCommunity = async(ctx, next) => {
     }
 
     let community = await Community.getOne(body.communityId);
-    if(!community){
-        throw(400, '选择的小区信息不存在');
+    if (!community) {
+        throw (400, '选择的小区信息不存在');
         return;
     }
     let res = await User.update(userId, {
@@ -69,12 +70,38 @@ exports.postCommunity = async(ctx, next) => {
             key: token,
             userId: userId,
             communityId: body.communityId,
-            warehouseId: community.warehouse_id 
+            warehouseId: community.warehouse_id
         })
         ctx.body = '设置小区成功';
     } else {
         throw (500, '设置失败');
     }
+
+    ctx.body = result;
+}
+
+/**
+ * 获取所有购物车数量
+ * @param  {[type]}   ctx  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+exports.getCartCount = async(ctx, next) => {
+    let token = ctx.request.header.token
+    let user = await Redis.getUser({
+        key: token
+    })
+    if (!user.userId) {
+        ctx.throw(401);
+        return;
+    }
+
+    if (!user.warehouseId) {
+        ctx.throw(400, '缺少参数warehouseId');
+        return;
+    }
+
+    let result = await Cart.getCountByUserIdAndWarehouseId(user.userId, user.warehouseId);
 
     ctx.body = result;
 }

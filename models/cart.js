@@ -65,12 +65,19 @@ class Cart extends Model {
     }
 
     async getAllByUserIdAndWarehouseId(userId, warehouseId) {
-        var detail = await this.db
+        return await this.db
             .select().from(this.name).where({
                 'user_id': userId,
                 'warehouse_id': warehouseId
             });
-        return detail
+    }
+
+    async getCountByUserIdAndWarehouseId(userId, warehouseId) {
+        return await this.db
+            .count('* as count').from(this.name).where({
+                'user_id': userId,
+                'warehouse_id': warehouseId
+            });
     }
 
     async getCartAmount(userId,warehouseId) {
