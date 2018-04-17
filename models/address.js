@@ -39,10 +39,11 @@ class Address extends Model {
 
     async getAllByUserIdAndCommunityIds(userId, communityIds) {
         return await this.db(this.name)
+            .leftJoin('ecs_community as c', 'ecs_user_address.community_id', 'c.community_id')
             .where({
                 user_id: userId
             })
-            .andWhereIn('community_id', communityIds)
+            .andWhere('c.community_id', 'in', communityIds)
             .select();
     }
 

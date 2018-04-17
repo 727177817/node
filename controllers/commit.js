@@ -32,7 +32,6 @@ exports.getCheckout = async(ctx, next) => {
     let userId = user.userId,
         warehouseId = user.warehouseId,
         communityId = user.communityId
-        console.log(user)
     if (!userId) {
         ctx.throw(401);
         return;
@@ -48,7 +47,7 @@ exports.getCheckout = async(ctx, next) => {
 
     // 收货地址，可选择当前所选小区对应仓库的所有地址
     let communityIds = [];
-    let communities = Community.getListByWarehouseId(warehouseId);
+    let communities = await Community.getListByWarehouseId(warehouseId);
 
     if(communities){
         communities.map(item => {
