@@ -68,7 +68,7 @@ exports.getDetail = async(ctx, next) => {
         key: token,
         field: 'userId'
     })
-    if (!token || !user.userId) {
+    if (!token || !userId) {
         ctx.throw(401);
         return;
     }
@@ -79,7 +79,7 @@ exports.getDetail = async(ctx, next) => {
     }
     try {
         let orderInfo = await Order.getOneByOrderSn(orderSn);
-        let orderGoods = await Order.getOrderGoods(orderSn);
+        let orderGoods = await Order.getOrderGoods(orderInfo.order_id);
         Object.assign(orderInfo, { goods: orderGoods })
         ctx.body = await orderInfo
     } catch (err) {

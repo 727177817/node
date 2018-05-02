@@ -65,12 +65,13 @@ exports.postCommunity = async(ctx, next) => {
     let res = await User.update(userId, {
         community_id: body.communityId
     });
+    ctx.body = community;
     if (res > 0) {
         await Redis.addUser({
             key: token,
             userId: userId,
             communityId: body.communityId,
-            warehouseId: community.warehouse_id
+            warehouseId: community.suppliers_id
         })
         ctx.body = '设置小区成功';
     } else {

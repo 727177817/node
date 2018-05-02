@@ -29,7 +29,5 @@ exports.getCategory = async(ctx, next) => {
 		}
 		Object.assign(category[i],{goods: categoryGoods})
 	}
-    ctx.body = {
-    	category: category
-    };
+    ctx.body = category
 }

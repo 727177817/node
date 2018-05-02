@@ -62,7 +62,7 @@ exports.postAdd = async(ctx, next) => {
     let result = await addToCart(body.goodsId, 1, user.userId, user.warehouseId);
     if (result === 'success') {
         let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-        ctx.body = result.length;
+        ctx.body = result;
     } else {
         ctx.throw(400, result);
     }
@@ -93,7 +93,7 @@ exports.postRemove = async(ctx, next) => {
     let res = await Cart.remove(user.userId, body.recId);
     if (res > 0) {
         let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-        ctx.body = result.length;
+        ctx.body = result;
     } else {
         ctx.throw(400, '删除失败');
     }
@@ -138,7 +138,7 @@ exports.postChange = async(ctx, next) => {
 
     if (res > 0) {
         let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-        ctx.body = result.length;
+        ctx.body = result;
     } else {
         ctx.throw(400, '更改失败');
     }
@@ -189,6 +189,7 @@ async function addToCart(goodsId, num = 1, userId, warehouseId) {
         'product_id': '0',
         'goods_name': goods['goods_name'],
         'market_price': goods['market_price'],
+        'goods_weight': goods['goods_weight'],
         'goods_attr': '',
         'goods_attr_id': '',
         'is_real': goods['is_real'],

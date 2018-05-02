@@ -38,7 +38,7 @@ class Order extends Model {
 
     async getOneByOrderSn(orderSn) {
         return await this.db(this.name)
-            .first().where('order_sn', orderSn || "2009051255518");
+            .first().where('order_sn', orderSn);
     }
 
     /*

@@ -102,7 +102,7 @@ exports.getCheckout = async(ctx, next) => {
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-exports.getOrder = async(ctx, next) => {
+exports.postOrder = async(ctx, next) => {
 
     let token = ctx.request.header.token
     let user = await Redis.getUser({
@@ -119,7 +119,6 @@ exports.getOrder = async(ctx, next) => {
         ctx.throw(400, '缺少参数warehouseId');
         return;
     }
-
     let { consigneeId, couponId, couponSn, shippingType, shippingTime } = ctx.request.body;
     //收货地址ID
     if (!consigneeId) {
@@ -251,8 +250,8 @@ async function order(userId, warehouseId, consigneeId, couponId, couponSn, shipp
 
     // 清空购物车 
     await Cart.clear(userId, warehouseId);
-
-    return 'success';
+    // 返回订单号
+    return $result.order.order_sn;
 }
 
 /**
@@ -348,10 +347,13 @@ async function create_order($order, $cart_goods, $consignee, $bonus) {
             extension_code: item.extension_code,
             parent_id: item.parent_id,
             is_gift: item.is_gift,
-            goods_attr_id: item.goods_attr_id
+            goods_attr_id: item.goods_attr_id,
+            goods_weight: item.goods_weight,
+            goods_thumb: item.goods_thumb
         });
     });
     let ret0 = await OrderGoods.insert(goods);
+
 
     // /* 处理红包 */
     // if ($order['bonus_id'] > 0 && $temp_amout > 0) {
