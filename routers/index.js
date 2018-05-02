@@ -68,6 +68,7 @@ allCtls.push({
 
 
 processCtls(mainRouter, allCtls);
+// console.log(mainRouter);
 
 function processCtls(r, ctls) {
     if (!ctls) {
@@ -80,7 +81,14 @@ function processCtls(r, ctls) {
 }
 
 function processRouter(r, path, ctl) {
-    Object.keys(ctl).map(key => {
+	let arr = Object.keys(ctl);
+	if(arr.length == 1){
+		arr = Object.getOwnPropertyNames(Object.getPrototypeOf(ctl));
+	}
+    arr.map(key => {
+    	if(typeof ctl[key] != 'function'){
+    		return;
+    	}
         if (key.indexOf('post') == 0) {
             let action = key.substring(4);
             r.post('/' + path + '/' + action.toLowerCase(), ctl[key])
