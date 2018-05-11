@@ -49,7 +49,7 @@ exports.getCheckout = async(ctx, next) => {
     let communityIds = [];
     let communities = await Community.getListByWarehouseId(warehouseId);
 
-    if(communities){
+    if (communities) {
         communities.map(item => {
             communityIds.push(item.community_id);
         })
@@ -133,8 +133,13 @@ exports.postOrder = async(ctx, next) => {
     }
 
     //TODO 校验配送时间的合理性
+    let shippingDate = getShippingTime(shippingTime);
+    if(isNaN(shippingDate)){
+        ctx.throw(400, shippingDate);
+        return;
+    }
 
-    let result = await order(userId, warehouseId, consigneeId, couponId, couponSn, shippingType, shippingTime);
+    let result = await order(userId, warehouseId, consigneeId, couponId, couponSn, shippingType, shippingDate);
 
     ctx.body = result;
 }
@@ -542,4 +547,43 @@ async function cart_amount(userId, warehouseId) {
     let amount = await Cart.getCartAmount(userId, warehouseId);
 
     return amount;
+}
+
+/**
+ * 校验配送时间的合理
+ * 1. 配送时间为当天为09-14和15-21
+ * 2. 配送时间需晚1小时
+ * @return {[type]} [description]
+ */
+function getShippingTime(shippingTime) {
+    if (!/^\d+:\d+$/.test(shippingTime)) {
+        return '配送时间格式不正确';
+    }
+
+    let date = new Date();
+    let hour = date.getHours();
+    let shippingHour = parseInt(shippingTime.split(':')[0]);
+    let shippingMinute = parseInt(shippingTime.split(':')[1]);
+
+    if(hour >=21 && hour < 24){
+        date.setDate(date.getDate() + 1);
+    }
+    date.setHours(shippingHour);
+    date.setMinutes(shippingMinute);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    if (hour >= 21 || hour < 9) {
+        //21点之后第二天9点之前可以选择第二天的09-21点配送
+        if (shippingHour < 9 || shippingHour > 21) {
+            return '非法配送时间，应当选择09-21点';
+        }
+        
+    } else {
+        if (shippingHour <= hour && shippingHour > 21) {
+            return '非法配送时间，应当选择'+hour+'-21点';
+        }
+    }
+
+    return date.getTime() / 1000;
 }
