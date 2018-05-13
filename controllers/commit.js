@@ -255,6 +255,10 @@ async function order(userId, warehouseId, consigneeId, couponId, couponSn, shipp
 
     // 清空购物车 
     await Cart.clear(userId, warehouseId);
+
+    //设置默认地址
+    setDefaultConsignee(userId, consigneeId);
+    
     // 返回订单号
     return $result.order.order_sn;
 }
@@ -586,4 +590,12 @@ function getShippingTime(shippingTime) {
     }
 
     return date.getTime() / 1000;
+}
+
+/**
+ * 设置默认收货地址，该用户其余的地址取消默认
+ */
+async function setDefaultConsignee(userId, consigneeId) {
+    Address.resetDefaultByUser(userId);
+    Address.update(consigneeId, {default: 1});
 }

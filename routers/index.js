@@ -68,7 +68,7 @@ allCtls.push({
 
 
 processCtls(mainRouter, allCtls);
-// console.log(mainRouter);
+console.log(mainRouter);
 
 function processCtls(r, ctls) {
     if (!ctls) {
@@ -87,6 +87,7 @@ function processRouter(r, path, ctl) {
 	}
     arr.map(key => {
     	if(typeof ctl[key] != 'function'){
+    		console.log(key + ' is not function');
     		return;
     	}
         if (key.indexOf('post') == 0) {

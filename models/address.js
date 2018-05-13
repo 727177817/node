@@ -63,5 +63,11 @@ class Address extends Model {
         }).delete();
     }
 
+    async resetDefaultByUser(userId){
+        return this.db(this.name).where({
+            user_id: userId
+        }).update({default: 0});
+    }
+
 }
 module.exports = new Address();
