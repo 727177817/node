@@ -48,8 +48,6 @@ redis.start();
 
 app.use(koaBody());
 app.use(response_formatter);
-
-
 //路由定义应该在中间件之后
 app.use(routers.routes(), routers.allowedMethods());
 // app.use(router.allowedMethods({

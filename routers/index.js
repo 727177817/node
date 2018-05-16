@@ -7,6 +7,11 @@ const mainRouter = router();
 let allCtls = [];
 
 allCtls.push({
+	path: '',
+	ctl: require('../controllers/')
+});
+
+allCtls.push({
 	path: 'address',
 	ctl: require('../controllers/address')
 });
@@ -14,6 +19,11 @@ allCtls.push({
 allCtls.push({
 	path: 'article',
 	ctl: require('../controllers/article')
+});
+
+allCtls.push({
+	path: 'basecontroller',
+	ctl: require('../controllers/basecontroller')
 });
 
 allCtls.push({
@@ -68,7 +78,6 @@ allCtls.push({
 
 
 processCtls(mainRouter, allCtls);
-// console.log(mainRouter);
 
 function processCtls(r, ctls) {
     if (!ctls) {
@@ -81,14 +90,7 @@ function processCtls(r, ctls) {
 }
 
 function processRouter(r, path, ctl) {
-	let arr = Object.keys(ctl);
-	if(arr.length == 1){
-		arr = Object.getOwnPropertyNames(Object.getPrototypeOf(ctl));
-	}
-    arr.map(key => {
-    	if(typeof ctl[key] != 'function'){
-    		return;
-    	}
+    Object.keys(ctl).map(key => {
         if (key.indexOf('post') == 0) {
             let action = key.substring(4);
             r.post('/' + path + '/' + action.toLowerCase(), ctl[key])
