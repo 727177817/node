@@ -19,12 +19,11 @@ exports.getList = async(ctx, next) => {
         return;
     }
 
-    let type = ctx.query.type;
+    let type = ctx.query.type || 0;
     if(!type){
         ctx.throw(400, '缺少参数type');
         return;
     }
-
     let list = [];
     if(type == 0){
         list = await Coupon.unused(userId)

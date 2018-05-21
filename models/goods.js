@@ -31,9 +31,9 @@ class Goods extends Model {
      * @param {String} [orderId]   订单Id
      */
     async getListByIds(goodsIds) {
-        var ret = await this.db(this.name)
-            .select().whereIn('goods_id', [ 9, 44 ]);
-        return ret
+        var list = await this.db(this.name)
+            .select().whereIn('goods_id', goodsIds);
+        return list
     }
 
     /*

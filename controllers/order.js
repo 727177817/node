@@ -1,6 +1,6 @@
 const Redis = require('../utils/redis.js');
 const Order = require('../models/order.js');
-const Goods = require('../models/goods.js');
+const OrderGoods = require('../models/order_goods.js');
 
 /* 
  * 获取订单列表
@@ -18,8 +18,6 @@ exports.getList = async(ctx, next) => {
         ctx.throw(401);
         return;
     }
-    userId = 1;
-
     let status = ctx.query.status || '0';
 
     let orderList = [];
@@ -36,9 +34,6 @@ exports.getList = async(ctx, next) => {
             orderList = await Order.getPaidOrders(userId);
             break;
         }
-        case '3': {
-            break;
-        }
     }
 
     // 查询订单商品
@@ -51,7 +46,8 @@ exports.getList = async(ctx, next) => {
             orderGoodsIds.push(orderGoods[j].goods_id)
         }
         // 查询订单商品详细内容
-        var orderGoodsList = await Goods.getListByIds(orderGoodsIds);
+        console.log(orderGoodsIds)
+        var orderGoodsList = await OrderGoods.getListByIds(orderGoodsIds, orderId);
         Object.assign(orderList[i], { goods: orderGoodsList })
     }
     ctx.body = orderList

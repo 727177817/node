@@ -6,74 +6,69 @@ const router = require('koa-router');
 const mainRouter = router();
 let allCtls = [];
 
+// allCtls.push({
+// 	path: 'address',
+// 	ctl: require('../controllers/address')
+// });
+
 allCtls.push({
-	path: '',
-	ctl: require('../controllers/')
+    path: 'article',
+    ctl: require('../controllers/article')
 });
 
 allCtls.push({
-	path: 'address',
-	ctl: require('../controllers/address')
+    path: 'basecontroller',
+    ctl: require('../controllers/basecontroller')
 });
 
 allCtls.push({
-	path: 'article',
-	ctl: require('../controllers/article')
+    path: 'cart',
+    ctl: require('../controllers/cart')
 });
 
 allCtls.push({
-	path: 'basecontroller',
-	ctl: require('../controllers/basecontroller')
+    path: 'category',
+    ctl: require('../controllers/category')
 });
 
 allCtls.push({
-	path: 'cart',
-	ctl: require('../controllers/cart')
+    path: 'commit',
+    ctl: require('../controllers/commit')
 });
 
 allCtls.push({
-	path: 'category',
-	ctl: require('../controllers/category')
+    path: 'common',
+    ctl: require('../controllers/common')
 });
 
 allCtls.push({
-	path: 'commit',
-	ctl: require('../controllers/commit')
+    path: 'coupon',
+    ctl: require('../controllers/coupon')
 });
 
 allCtls.push({
-	path: 'common',
-	ctl: require('../controllers/common')
+    path: 'goods',
+    ctl: require('../controllers/goods')
 });
 
 allCtls.push({
-	path: 'coupon',
-	ctl: require('../controllers/coupon')
+    path: 'home',
+    ctl: require('../controllers/home')
 });
 
 allCtls.push({
-	path: 'goods',
-	ctl: require('../controllers/goods')
+    path: 'order',
+    ctl: require('../controllers/order')
 });
 
 allCtls.push({
-	path: 'home',
-	ctl: require('../controllers/home')
+    path: 'passport',
+    ctl: require('../controllers/passport')
 });
 
 allCtls.push({
-	path: 'order',
-	ctl: require('../controllers/order')
-});
-
-allCtls.push({
-	path: 'passport',
-	ctl: require('../controllers/passport')
-});
-
-allCtls.push({
-	path: 'wechat',
-	ctl: require('../controllers/wechat')
+    path: 'wechat',
+    ctl: require('../controllers/wechat')
 });
 
 

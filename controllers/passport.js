@@ -38,3 +38,21 @@ exports.postWechatLogin = async(ctx, next) => {
 
     ctx.body = token;
 }
+
+exports.postTestLogin = async(ctx, next) => {
+    let obj = await User.getUserInfo(33);
+
+    // 获取最近使用的小区信息
+    let community = await Community.getOne(obj.community_id)
+    // 签名加密token, 保存
+    let timestamp = Date.parse(new Date())
+    let token = MD5(MD5(obj.unionId + 'dota') + timestamp).toString();
+    await Redis.addUser({
+        key: token,
+        userId: obj.user_id,
+        communityId: obj.community_id,
+        warehouseId: community.suppliers_id 
+    })
+
+    ctx.body = token;
+}
