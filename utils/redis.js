@@ -53,6 +53,7 @@ async function getUser(params) {
         user = await client.hgetall(params.key);
     }
     if(user == null) return null;
+    if(Object.keys(user).length == 0) return null;
     return user;
 };
 

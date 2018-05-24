@@ -13,8 +13,9 @@ exports.getHome = async(ctx, next) => {
 	let user = await Redis.getUser({
 		key: token
 	})
+
 	if(!user){
-        ctx.throw(400, '缺少参数token');
+        ctx.throw(401);
         return;
     }
     
