@@ -17,7 +17,7 @@ exports.getHome = async(ctx, next) => {
         ctx.throw(400, '缺少参数token');
         return;
     }
-
+    
     // 获取最近使用的小区信息
 	let community = await Community.getOne(user.communityId)
 	// banner广告

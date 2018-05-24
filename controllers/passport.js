@@ -24,18 +24,26 @@ exports.postWechatLogin = async(ctx, next) => {
     }else{
         obj = hasUnionId
     }
-    // 获取最近使用的小区信息
-    let community = await Community.getOne(obj.community_id)
-    // 签名加密token, 保存
     let timestamp = Date.parse(new Date())
     let token = MD5(MD5(userinfo.unionId + 'dota') + timestamp).toString();
-    await Redis.addUser({
-        key: token,
-        userId: obj.user_id,
-        communityId: obj.community_id,
-        warehouseId: community.suppliers_id 
-    })
-
+    // 未设置小区信息的,不保存小区信息在redis
+    if(obj.community_id){
+        // 获取最近使用的小区信息
+        let community = await Community.getOne(obj.community_id)
+        // 签名加密token, 保存
+        await Redis.addUser({
+            key: token,
+            userId: obj.user_id,
+            communityId: obj.community_id,
+            warehouseId: community.suppliers_id 
+        })
+    }else{
+        // 签名加密token, 保存
+        await Redis.addUser({
+            key: token,
+            userId: obj.user_id
+        })
+    }
     ctx.body = token;
 }
 

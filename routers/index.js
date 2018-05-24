@@ -6,10 +6,10 @@ const router = require('koa-router');
 const mainRouter = router();
 let allCtls = [];
 
-// allCtls.push({
-// 	path: 'address',
-// 	ctl: require('../controllers/address')
-// });
+allCtls.push({
+	path: 'address',
+	ctl: require('../controllers/address')
+});
 
 allCtls.push({
     path: 'article',
