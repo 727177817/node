@@ -16,33 +16,37 @@ exports.postWechatLogin = async(ctx, next) => {
         ctx.throw(400, '缺少参数openId');
         return
     }
-    let hasUnionId = await User.getUserInfoWechat(userinfo.unionId); 
-    let obj = {}
-    if(!hasUnionId){
-        obj = await User.wechatRegister(userinfo)
-        hasUnionId = obj;
-    }else{
-        obj = hasUnionId
+    let users = await User.getUserInfoWechat(userinfo.unionId); 
+    if(!users){
+        var register = await User.wechatRegister(userinfo)
+        users = await User.getUserInfoWechat(userinfo.unionId); 
     }
     let timestamp = Date.parse(new Date())
     let token = MD5(MD5(userinfo.unionId + 'dota') + timestamp).toString();
     // 未设置小区信息的,不保存小区信息在redis
-    if(obj.community_id){
-        // 获取最近使用的小区信息
-        let community = await Community.getOne(obj.community_id)
+    if(register === 1){
         // 签名加密token, 保存
         await Redis.addUser({
             key: token,
-            userId: obj.user_id,
-            communityId: obj.community_id,
-            warehouseId: community.suppliers_id 
+            userId: users.user_id
         })
     }else{
+        // 获取最近使用的小区信息
+        let community = await Community.getOne(users.community_id)
         // 签名加密token, 保存
-        await Redis.addUser({
-            key: token,
-            userId: obj.user_id
-        })
+        if(community){
+            await Redis.addUser({
+                key: token,
+                userId: users.user_id,
+                communityId: users.community_id,
+                warehouseId: community.suppliers_id
+            })
+        }else{
+            await Redis.addUser({
+                key: token,
+                userId: users.user_id
+            })
+        }
     }
     ctx.body = token;
 }

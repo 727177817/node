@@ -47,7 +47,7 @@ exports.postCommunity = async(ctx, next) => {
         field: 'userId'
     })
     if (!userId) {
-        ctx.throw(400, '缺少参数userId');
+        ctx.throw(401);
         return;
     }
 

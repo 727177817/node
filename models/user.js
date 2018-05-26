@@ -25,7 +25,7 @@ class Passport extends Model {
 	            language: userInfo.language,
             	reg_time: Date.parse(new Date())/1000
             })
-        	return "注册成功"
+        	return 1
     	} catch(err) {
     		return err.sqlMessage
     	}

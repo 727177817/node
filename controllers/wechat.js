@@ -22,9 +22,6 @@ exports.getSessionKey = async (ctx, next) => {
         open_id: result.data.openid,
         session_key: result.data.session_key,
         session_id: MD5(result.data.session_key).toString()
-        // open_id: "omBHq0NB6jpyDvfoq-is6Npb3tJg",
-        // session_key: "uQ/SZoW5KkQxwmK3ONK4+A==",
-        // session_id: MD5(result.data.session_key).toString()
     }
     let sessionIdArr = await Wechat.selectOpenId(data.open_id);
     // 保存更新第三方session_id

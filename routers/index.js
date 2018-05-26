@@ -6,10 +6,10 @@ const router = require('koa-router');
 const mainRouter = router();
 let allCtls = [];
 
-// allCtls.push({
-// 	path: 'address',
-// 	ctl: require('../controllers/address')
-// });
+allCtls.push({
+	path: 'address',
+	ctl: require('../controllers/address')
+});
 
 allCtls.push({
     path: 'article',
@@ -74,6 +74,8 @@ allCtls.push({
 
 processCtls(mainRouter, allCtls);
 
+// console.log(mainRouter)
+
 function processCtls(r, ctls) {
     if (!ctls) {
         return;
@@ -85,7 +87,18 @@ function processCtls(r, ctls) {
 }
 
 function processRouter(r, path, ctl) {
-    Object.keys(ctl).map(key => {
+	let arr = Object.keys(ctl);
+ 	if(arr.indexOf('isAbc') != -1){
+ 		arr = Object.getOwnPropertyNames(Object.getPrototypeOf(ctl));
+ 	}
+	// console.log(typeof ctl.constructor, path, arr);
+
+    arr.map(key => {
+    	if(key == 'constructor' || typeof ctl[key] != 'function'){
+    		// console.log(key + ' is not function');
+     		return;
+     	}
+
         if (key.indexOf('post') == 0) {
             let action = key.substring(4);
             r.post('/' + path + '/' + action.toLowerCase(), ctl[key])
