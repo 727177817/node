@@ -53,7 +53,7 @@ exports.postCommunity = async(ctx, next) => {
 
     let body = ctx.request.body;
     if (!body.communityId) {
-        throw (400, '缺少参数communityId');
+        ctx.throw (400, '缺少参数communityId');
         return;
     }
 
@@ -75,7 +75,7 @@ exports.postCommunity = async(ctx, next) => {
         })
         ctx.body = '设置小区成功';
     } else {
-        throw (500, '设置失败');
+        ctx.throw (500, '设置失败');
     }
 
     ctx.body = result;
