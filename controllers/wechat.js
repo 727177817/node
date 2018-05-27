@@ -58,6 +58,10 @@ exports.postUserInfo = async (ctx, next) => {
         return;
     }
     let sessionKey = await Wechat.selectSessionId(sessionId);
+    if(!sessionKey){
+        ctx.throw(4001, 'sessionId不存在')
+        return;
+    }
     let result = wechatDecrypt(config[ctx.app.env].wechat_appid,sessionKey.session_key,encryptedData,iv);
     if(result.watermark) delete result.watermark;
     ctx.body = result 

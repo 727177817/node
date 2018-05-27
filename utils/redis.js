@@ -24,7 +24,7 @@ function start() {
 
 
 /**
- * 缓存用户信息
+ * 缓存/更新用户信息
  * @param {[type]} params 用户信息
  */
 async function addUser(params) {
