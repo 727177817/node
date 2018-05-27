@@ -77,8 +77,6 @@ exports.postCommunity = async(ctx, next) => {
     } else {
         ctx.throw (500, '设置失败');
     }
-
-    ctx.body = result;
 }
 
 /**
