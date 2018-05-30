@@ -307,7 +307,7 @@ async function create_order($order, $cart_goods, $consignee, $bonus) {
     }
     $order['pay_fee'] = $total['pay_fee'];
 
-    // $order['order_amount'] = number_format($total['amount'], 2, '.', '');
+    $order['order_amount'] = number_format($total['amount'], 2, '.', '');
 
     /* 如果订单金额为0（使用余额或积分或红包支付），修改订单状态为已确认、已付款 */
     /* if ($order['order_amount'] <= 0) */
@@ -598,4 +598,8 @@ function getShippingTime(shippingTime) {
 async function setDefaultConsignee(userId, consigneeId) {
     Address.resetDefaultByUser(userId);
     Address.update(consigneeId, {default: 1});
+}
+
+function number_format(num){
+    return Math.round(num * 100) / 100;
 }

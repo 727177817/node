@@ -43,7 +43,7 @@ exports.postAdd = async(ctx, next) => {
     let user = await Redis.getUser({
         key: token
     })
-    if (!user.userId) {
+    if (!user) {
         ctx.throw(401);
         return;
     }

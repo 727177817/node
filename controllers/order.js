@@ -19,19 +19,21 @@ exports.getList = async(ctx, next) => {
         return;
     }
     let status = ctx.query.status || '0';
+    let page = ctx.query.page;
+    let size = ctx.query.size;
 
     let orderList = [];
     switch(status){
         case '0':{
-            orderList = await Order.getList(userId);
+            orderList = await Order.getList(userId, page, size);
             break;
         }
         case '1':{
-            orderList = await Order.getUnpaidOrders(userId);
+            orderList = await Order.getUnpaidOrders(userId, page, size);
             break;
         }
         case '2': {
-            orderList = await Order.getPaidOrders(userId);
+            orderList = await Order.getPaidOrders(userId, page, size);
             break;
         }
     }
