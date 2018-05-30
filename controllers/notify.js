@@ -14,6 +14,10 @@ class NotifyController extends BaseController {
         this.PAY_SECURITY_FAIL = -2;
     }
 
+    getTest(ctx){
+        ctx.body = 1;
+    }
+
     /*
      * 微信支付回调
      * @param  {[type]}   ctx  [description]
@@ -21,10 +25,12 @@ class NotifyController extends BaseController {
      * @param {[type]}   id     [地址Id]
      * @return {[type]}   detail     [地址详情]
      */
-    async postWechat($response) {
+    async postWechat(ctx, $response) {
+        console.log('postWechat');
         let wechatPay = new WechatPay();
         // $response = (array) simplexml_load_string($response, 'SimpleXMLElement', LIBXML_NOCDATA);
         $response = wechatPay.toArray($response);
+        console.log($response);
 
         if ($response) {
 
