@@ -496,7 +496,7 @@ class WechatPay {
             'package': "prepay_id=" + $prepay_id
         };
 
-        this.sortObject($payinfo);
+        $payinfo = this.sortObject($payinfo);
         $payinfo['paySign'] = this.unifiedsign($payinfo, this.SIGN_TYPE);
 
         return $payinfo;

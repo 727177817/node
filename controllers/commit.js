@@ -8,6 +8,8 @@ const Coupon = require('../models/coupon.js');
 const Community = require('../models/community.js');
 const BaseController = require('./basecontroller.js');
 const User = require('../models/user.js');
+const PayLog = require('../models/pay_log.js');
+const config = require('../config');
 
 /**
  * 结算相关接口
@@ -153,11 +155,24 @@ class CommitController extends BaseController {
         }
 
         let orderInfo = await Order.getOne(orderId);
+        if(orderInfo.pay_status === config.PS_PAYED){
+            ctx.throw(400, '该订单已支付');
+            return;
+        }
+
+        //插入支付记录
+        let payLogId = await PayLog.insert({
+            order_id: orderInfo.order_id,
+            order_amount: orderInfo.order_amount,
+            order_type: 0,
+            is_paid: 0
+        });
 
         let param = {
             price: orderInfo.order_amount,
             orderId: orderInfo.order_id,
-            billId: '',
+            // billno: orderInfo.order_id + new Date().getTime().toString(32),
+            billno: payLogId,
             openid: userInfo.open_id
         };
 

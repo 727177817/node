@@ -12,7 +12,7 @@ var auth = async(ctx, next) => {
             key: token
         });
 
-        if (!user) {
+        if (!token || !user) {
             ctx.body = {
                 code: 401,
                 message: 'Unauthorized'

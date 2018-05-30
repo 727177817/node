@@ -1,46 +1,50 @@
-const Redis    = require('../utils/redis.js');
+const Redis = require('../utils/redis.js');
 const Goods = require('../models/goods.js');
+const BaseController = require('./basecontroller.js');
 
-/* 获取商品详情
- * @param {String} [goodsId]   goodsId为商品id
- * 
-*/ 
-exports.detail = async (ctx, next) => {
-    let token = ctx.request.header.token
-    let warehouseId = await Redis.getUser({
-        key: token,
-        field: 'warehouseId'
-    })
-    if(!warehouseId){
-        ctx.throw(400, '缺少参数warehouseId');
-        return;
+/**
+ * 商品相关接口
+ */
+class GoodsController extends BaseController {
+    constructor() {
+        super();
     }
 
-    let goodsId = ctx.query.goodsId;
-    if(!goodsId){
-        ctx.throw(400, '缺少参数goodsId');
-        return;
+
+    /* 获取商品详情
+     * @param {String} [goodsId]   goodsId为商品id
+     * 
+     */
+    async getDetail(ctx, next) {
+        if (!this.checkUserIntegrity(ctx)) {
+            return;
+        }
+
+        let user = ctx.user;//user.key; user.userId, user.communityId,user.warehouseId
+        let goodsId = ctx.query.goodsId;
+        if (!goodsId) {
+            ctx.throw(400, '缺少参数goodsId');
+            return;
+        }
+        let goods = await Goods.detail(goodsId, user.warehouseId);
+        ctx.body = goods;
     }
-    let goods = await Goods.detail(goodsId,warehouseId); 
-    ctx.body = goods;
+
+
+    /* 获取商品详情
+     * @param {String} [goodsId]   goodsId为商品id
+     * 
+     */
+    async getHot(ctx, next) {
+        if (!this.checkUserIntegrity(ctx)) {
+            return;
+        }
+
+        let user = ctx.user;
+        // 热销商品
+        let hotGoods = await Goods.hotGoods(warehouseId)
+        ctx.body = hotGoods;
+    }
 }
 
-
-/* 获取商品详情
- * @param {String} [goodsId]   goodsId为商品id
- * 
-*/ 
-exports.hot = async (ctx, next) => {
-    let token = ctx.request.header.token
-    let warehouseId = await Redis.getUser({
-        key: token,
-        field: 'warehouseId'
-    })
-    if(!warehouseId){
-        ctx.throw(400, '缺少参数warehouseId');
-        return;
-    }
-    // 热销商品
-	let hotGoods = await Goods.hotGoods(warehouseId)
-    ctx.body = hotGoods;
-}
+module.exports = new GoodsController();
