@@ -13,7 +13,8 @@ class OrderController extends BaseController {
     /* 
      * 获取订单列表
      * 订单列表分0全部、1待支付、2待发货、3已完成
-     * @param {String} [state]   state为订单装
+     * 订单所有状态，1待支付、2待发货、3已发货、4已完成、5已取消、6已退货
+     * @param {String} [state]   state为订单状态
      * 默认所有订单
      */
     async getList(ctx, next) {

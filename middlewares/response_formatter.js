@@ -54,16 +54,18 @@ var response_formatter = async(ctx, next) => {
         }
     }
 
-    if (ctx.body) {
-        //如果有返回数据，将返回数据添加到data中
-        body = {
-            code: 200,
-            message: 'success',
-            data: ctx.body
+    if (!ctx.response.is('xml')){
+        if (ctx.body) {
+            //如果有返回数据，将返回数据添加到data中
+            body = {
+                code: 200,
+                message: 'success',
+                data: ctx.body
+            }
         }
-    }
 
-    ctx.body = body;
+        ctx.body = body;
+    }
 }
 
 module.exports = response_formatter;

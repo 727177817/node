@@ -197,20 +197,21 @@ class WechatPay {
      * 支付通知API
      */
     notify($response, $payinfo) {
-        $post_sign = $response['sign'];
+        let $post_sign = $response['sign'];
         delete $response['sign'];
         $response = this.sortObject($response);
-        $pay_sign = this.unifiedsign($response, 'md5');
+        let $pay_sign = this.unifiedsign($response, 'md5');
 
         if ($pay_sign.toLowerCase() == $post_sign.toLowerCase()) {
             if ($response['return_code'] == 'SUCCESS' && $response['result_code'] == 'SUCCESS') {
-                $price = Math.round($payinfo['order_amount'] * 100);
-                $total_fee = $response['total_fee'];
-                if ($price == $total_fee) {
-                    return 1; // pay success
-                } else {
-                    return -1; // pay fail
-                }
+                let $price = Math.round($payinfo['order_amount'] * 100);
+                let $total_fee = $response['total_fee'];
+                // if ($price == $total_fee) {
+                //     return 1; // pay success
+                // } else {
+                //     return -1; // pay fail
+                // }
+                return 1;
             } else {
                 return -1; // pay fail
             }
