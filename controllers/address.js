@@ -3,6 +3,9 @@ const Address = require('../models/address.js');
 const Community = require('../models/community.js');
 const BaseController = require('./basecontroller.js');
 
+/**
+ * 收货地址相关接口
+ */
 class AddressController extends BaseController {
     constructor() {
         super();
@@ -16,6 +19,22 @@ class AddressController extends BaseController {
      * @return {[type]}   address     [新增地址]
      */
     async postAdd(ctx, next) {
+        // let token = ctx.request.header.token
+        // let user = await Redis.getUser({
+        //     key: token
+        // })
+        // if (!user.userId) {
+        //     ctx.throw(401);
+        //     return;
+        // }
+        // if (!user.communityId) {
+        //     ctx.throw(400, '缺少参数communityId');
+        //     return;
+        // }
+        if (!this.checkUserIntegrity(ctx)) {
+            return;
+        }
+
         let body = ctx.request.body;
         if (!body.consignee) {
             ctx.throw(400, '缺少参数consignee');
@@ -31,20 +50,8 @@ class AddressController extends BaseController {
             ctx.throw(400, '缺少参数address');
             return;
         }
-        let token = ctx.request.header.token
-        let user = await Redis.getUser({
-            key: token
-        })
-        if (!user.userId) {
-            ctx.throw(401);
-            return;
-        }
-        if (!user.communityId) {
-            ctx.throw(400, '缺少参数communityId');
-            return;
-        }
 
-        let address = ''
+        let address = '', user = ctx.user;
         // 如果addressId存在，更新收货地址
         if (body.addressId) {
             // 更新收货地址
@@ -80,15 +87,15 @@ class AddressController extends BaseController {
      * @return {[type]}   list     [地址列表]
      */
     async getRemove(ctx, next) {
-        let token = ctx.request.header.token
-        let userId = await Redis.getUser({
-            key: token,
-            field: 'userId'
-        })
-        if (!userId) {
-            ctx.throw(401);
-            return;
-        }
+        // let token = ctx.request.header.token
+        // let userId = await Redis.getUser({
+        //     key: token,
+        //     field: 'userId'
+        // })
+        // if (!userId) {
+        //     ctx.throw(401);
+        //     return;
+        // }
 
         let id = ctx.query.id;
         if (!id) {
@@ -96,7 +103,7 @@ class AddressController extends BaseController {
             return;
         }
 
-        await Address.remove(id)
+        await Address.removeWithUserId(ctx.user.userId, id)
         ctx.body = id;
     }
 
@@ -107,17 +114,17 @@ class AddressController extends BaseController {
      * @return {[type]}   list     [地址列表]
      */
     async getList(ctx, next) {
-        let token = ctx.request.header.token
-        let userId = await Redis.getUser({
-            key: token,
-            field: 'userId'
-        })
-        if (!userId) {
-            ctx.throw(401);
-            return;
-        }
+        // let token = ctx.request.header.token
+        // let userId = await Redis.getUser({
+        //     key: token,
+        //     field: 'userId'
+        // })
+        // if (!userId) {
+        //     ctx.throw(401);
+        //     return;
+        // }
 
-        let list = await Address.getAllByUserId(userId)
+        let list = await Address.getAllByUserId(ctx.user.userId)
         ctx.body = list;
     }
 
@@ -130,15 +137,15 @@ class AddressController extends BaseController {
      * @return {[type]}   detail     [地址详情]
      */
     async getDetail(ctx, next) {
-        let token = ctx.request.header.token
-        let userId = await Redis.getUser({
-            key: token,
-            field: 'userId'
-        })
-        if (!userId) {
-            ctx.throw(401);
-            return;
-        }
+        // let token = ctx.request.header.token
+        // let userId = await Redis.getUser({
+        //     key: token,
+        //     field: 'userId'
+        // })
+        // if (!userId) {
+        //     ctx.throw(401);
+        //     return;
+        // }
 
         let id = ctx.query.id;
         if (!id) {
@@ -146,7 +153,7 @@ class AddressController extends BaseController {
             return;
         }
 
-        let detail = await Address.getOneWithUserId(userId, id)
+        let detail = await Address.getOneWithUserId(ctx.user.userId, id)
         ctx.body = detail;
     }
 }

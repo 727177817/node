@@ -88,7 +88,8 @@ function processCtls(r, ctls) {
 
 function processRouter(r, path, ctl) {
 	let arr = Object.keys(ctl);
- 	if(arr.indexOf('isAbc') != -1){
+    let isAbc = arr.indexOf('isAbc') != -1;
+ 	if(isAbc){
  		arr = Object.getOwnPropertyNames(Object.getPrototypeOf(ctl));
  	}
 	// console.log(typeof ctl.constructor, path, arr);
@@ -99,14 +100,19 @@ function processRouter(r, path, ctl) {
      		return;
      	}
 
+        let justDoing = ctl[key];
+        if(isAbc){
+            justDoing = ctl[key].bind(ctl);
+        }
+
         if (key.indexOf('post') == 0) {
             let action = key.substring(4);
-            r.post('/' + path + '/' + action.toLowerCase(), ctl[key])
+            r.post('/' + path + '/' + action.toLowerCase(), justDoing)
         } else if (key.indexOf('get') == 0) {
             let action = key.substring(3);
-            r.get('/' + path + '/' + action.toLowerCase(), ctl[key])
+            r.get('/' + path + '/' + action.toLowerCase(), justDoing)
         } else {
-            r.get('/' + path + '/' + key.toLowerCase(), ctl[key])
+            r.get('/' + path + '/' + key.toLowerCase(), justDoing)
         }
     });
 }

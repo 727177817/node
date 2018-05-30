@@ -6,6 +6,7 @@ const routers            = require('./routers/index');
 const logUtil            = require('./utils/log_util');
 const redis            = require('./utils/redis.js');
 // const ApiError        = require('./error/ApiError');
+const auth = require('./middlewares/auth');
 const response_formatter = require('./middlewares/response_formatter');
 const config = require('./config');
 
@@ -47,6 +48,9 @@ app.use(async(ctx, next) => {
 redis.start();
 
 app.use(koaBody());
+// 认证拦截器
+app.use(auth);
+// 响应拦截器
 app.use(response_formatter);
 //路由定义应该在中间件之后
 app.use(routers.routes(), routers.allowedMethods());
