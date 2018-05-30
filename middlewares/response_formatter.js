@@ -14,6 +14,7 @@ var response_formatter = async(ctx, next) => {
         await next();
     } catch (err) {
         //处理通用错误
+                    console.log('response_formatter.js', err);
         switch (err.status) {
             case 400:
                 {

@@ -14,7 +14,9 @@ class Wechat extends Model {
 
     // 更新sessionKey
     async updataSessionKey(data) {
-        await this.db(this.name).update(data);
+        await this.db(this.name).where({
+            open_id: data.open_id
+        }).update(data);
     }
 
     // 查询openid是否存在
