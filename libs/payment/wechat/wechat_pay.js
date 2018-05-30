@@ -198,13 +198,13 @@ class WechatPay {
      */
     notify($response, $payinfo) {
         $post_sign = $response['sign'];
-        unset($response['sign']);
-        this.sortObject($response);
+        delete $response['sign'];
+        $response = this.sortObject($response);
         $pay_sign = this.unifiedsign($response, 'md5');
 
-        if (strtolower($pay_sign) == strtolower($post_sign)) {
+        if ($pay_sign.toLowerCase() == $post_sign.toLowerCase()) {
             if ($response['return_code'] == 'SUCCESS' && $response['result_code'] == 'SUCCESS') {
-                // $price = (int) bcmul($payinfo['price'], 100);
+                $price = Math.round($payinfo['order_amount'] * 100);
                 $total_fee = $response['total_fee'];
                 if ($price == $total_fee) {
                     return 1; // pay success
@@ -514,6 +514,10 @@ class WechatPay {
         md5.update(s);
         return md5.digest('hex');
         // return str.toUpperCase();
+    }
+
+    toArray($data){
+        return WechatUtil.toArray($data);
     }
 }
 
