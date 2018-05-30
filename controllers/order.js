@@ -12,7 +12,7 @@ class OrderController extends BaseController {
 
     /* 
      * 获取订单列表
-     * 订单列表分0全部、1未支付、2已支付、3已完成
+     * 订单列表分0全部、1待支付、2待发货、3已完成
      * @param {String} [state]   state为订单装
      * 默认所有订单
      */

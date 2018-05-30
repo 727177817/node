@@ -108,6 +108,7 @@ class CommitController extends BaseController {
         }
 
         let warehouseId = ctx.user.warehouseId
+        let userId = ctx.user.userId;
 
         let { consigneeId, couponId, couponSn, shippingType, shippingTime, postscript } = ctx.request.body;
         //收货地址ID
@@ -207,13 +208,13 @@ class CommitController extends BaseController {
         //        unset($cart_goods_stock, $_cart_goods_stock);
         //    }
 
-        $consignee = Address.getOneWithUserId(userId, consigneeId);
+        let $consignee = Address.getOneWithUserId(userId, consigneeId);
 
         if (!$consignee) {
             return '收货地址不存在';
         }
 
-        $order = {
+        let $order = {
             'shipping_id': 1,
             'pay_id': 1,
             'pack_id': 0,
@@ -263,9 +264,9 @@ class CommitController extends BaseController {
             }
         }
 
-        $result = await this.create_order($order, cartGoods, $consignee, $bonus);
+        let $result = await this.create_order($order, cartGoods, $consignee, $bonus);
 
-        $new_order_id = $result['new_order_id'];
+        let $new_order_id = $result['new_order_id'];
 
         // 清空购物车 
         await Cart.clear(userId, warehouseId);
@@ -289,7 +290,7 @@ class CommitController extends BaseController {
         // $order['detail_address'] = $consignee['address'];
 
         /* 订单中的总额 */
-        $total = this.order_fee($order, $cart_goods, $consignee, $bonus);
+        let $total = this.order_fee($order, $cart_goods, $consignee, $bonus);
         $order['bonus'] = $total['bonus'];
         $order['goods_amount'] = $total['goods_price'];
         $order['discount'] = $total['discount'];

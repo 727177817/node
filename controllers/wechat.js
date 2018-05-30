@@ -70,7 +70,7 @@ class WechatController extends BaseController {
             ctx.throw(501, 'sessionId不存在')
             return;
         }
-        let result = this.wechatDecrypt(config[ctx.app.env].wechat_appid, sessionKey.session_key, encryptedData, iv);
+        let result = this.wechatDecrypt(config.wechat_appid, sessionKey.session_key, encryptedData, iv);
         if (result.watermark) delete result.watermark;
         ctx.body = result
     }

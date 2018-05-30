@@ -466,6 +466,8 @@ class WechatPay {
 
     async dopay($payments) {
         let $total_fee = Math.round($payments['price'] * 100);
+        // TODO 测试改成1分支付
+        $total_fee = 1;
 
         // this.set_appid($this - > appid);
         // this.set_key($this - > secret_key);
