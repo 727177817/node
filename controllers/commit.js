@@ -237,7 +237,7 @@ class CommitController extends BaseController {
             'surplus': 0,
             'integral': 0,
             'shipping_type': shippingType, //当天的09-14和15-21，分别对应1、2
-            'shipping_time': shippingTime,
+            'shipping_time': 0,
             'best_time': shippingTime
         };
 
@@ -315,7 +315,7 @@ class CommitController extends BaseController {
         /* 配送方式 */
         if ($order['shipping_id'] > 0) {
             //     $shipping = shipping_info($order['shipping_id']);
-            $order['shipping_name'] = '自己配送';
+            $order['shipping_name'] = '自营配送';
         }
 
         $order['shipping_fee'] = $total['shipping_fee'];
@@ -325,7 +325,7 @@ class CommitController extends BaseController {
         /* 支付方式 */
         if ($order['pay_id'] > 0) {
             //     $payment = payment_info($order['pay_id']);
-            $order['pay_name'] = '微信小程序支付';
+            $order['pay_name'] = '微信支付';
         }
         $order['pay_fee'] = $total['pay_fee'];
 
@@ -349,8 +349,9 @@ class CommitController extends BaseController {
             $order['integral'] = $total['exchange_integral'];
         }
 
+        // 约定订单来源小程序下单
         $order['from_ad'] = '0';
-        $order['referer'] = '';
+        $order['referer'] = '微信小程序';
 
         //分成功能关闭
         $order['parent_id'] = 0;

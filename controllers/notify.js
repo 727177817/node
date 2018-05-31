@@ -52,7 +52,8 @@ class NotifyController extends BaseController {
                         is_paid: 1
                     });
                     await Order.update({
-                        order_id: payInfo.order_id
+                        order_id: payInfo.order_id,
+                        pay_time: Math.round(new Date().getTime() / 1000)
                     }, {
                         pay_status: config.PS_PAYED
                     });
