@@ -42,7 +42,7 @@ class GoodsController extends BaseController {
 
         let user = ctx.user;
         // 热销商品
-        let hotGoods = await Goods.hotGoods(warehouseId)
+        let hotGoods = await Goods.hotGoods(user.warehouseId)
         ctx.body = hotGoods;
     }
 }
