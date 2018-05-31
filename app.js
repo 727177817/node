@@ -11,6 +11,7 @@ const redis = require('./utils/redis.js');
 // const ApiError        = require('./error/ApiError');
 const auth = require('./middlewares/auth');
 const response_formatter = require('./middlewares/response_formatter');
+const Boom = require('boom');
 
 // app.env = 'PRODUCTION';
 
@@ -57,13 +58,14 @@ app.use(bodyParser());
 app.use(auth);
 // 响应拦截器
 app.use(response_formatter);
+
 //路由定义应该在中间件之后
-app.use(routers.routes(), routers.allowedMethods());
-// app.use(router.allowedMethods({
-//   throw: true,
-//   notImplemented: () => new Boom.notImplemented(),
-//   methodNotAllowed: () => new Boom.methodNotAllowed()
-// }));
+app.use(routers.routes());
+app.use(routers.allowedMethods({
+  throw: true,
+  notImplemented: () => Boom.notImplemented(),
+  methodNotAllowed: () => Boom.methodNotAllowed()
+}));
 
 app.listen(3000, () => {
     process.stdout.write('[static] server started at :3000\r\n');

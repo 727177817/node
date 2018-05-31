@@ -5,8 +5,8 @@ var response_formatter = async(ctx, next) => {
 
     let res = ctx.response;
     let body = {
-        code: 400,
-        message: ''
+        code: ctx.status || 400,
+        message: ctx.message || ''
     };
 
     try {
@@ -41,20 +41,30 @@ var response_formatter = async(ctx, next) => {
                 }
             default:
                 {
-                    if(ctx.app.env === 'development'){
+                    if (ctx.app.env === 'development') {
                         //开发环境输出更多的错误信息
-                        console.log(err);
+                        console.log(JSON.stringify(err));
                     }
-                    body = {
-                        code: err.status,
-                        message: err.message
+
+                    if (err.output) {
+                        // boom抛出的错误
+                        body = {
+                            code: err.output.statusCode,
+                            message: err.message
+                        }
+                    } else {
+
+                        body = {
+                            code: err.status,
+                            message: err.message
+                        }
                     }
                     break;
                 }
         }
     }
 
-    if (!ctx.response.is('xml')){
+    if (!ctx.response.is('xml')) {
         if (ctx.body) {
             //如果有返回数据，将返回数据添加到data中
             body = {
