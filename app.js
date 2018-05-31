@@ -1,22 +1,25 @@
-const Koa                = require('koa');
-const app                = new Koa();
-const koaBody            = require('koa-body');
+const Koa = require('koa');
+const app = new Koa();
+const koaBody = require('koa-body');
+const bodyParser = require('koa-bodyparser');
+const xmlParser = require('koa-xml-body');
 
-const routers            = require('./routers/index');
-const logUtil            = require('./utils/log_util');
-const redis            = require('./utils/redis.js');
-// const ApiError        = require('./error/ApiError');
-const response_formatter = require('./middlewares/response_formatter');
 const config = require('./config');
+const routers = require('./routers');
+const logUtil = require('./utils/log_util');
+const redis = require('./utils/redis.js');
+// const ApiError        = require('./error/ApiError');
+const auth = require('./middlewares/auth');
+const response_formatter = require('./middlewares/response_formatter');
 
 // app.env = 'PRODUCTION';
 
 // x-response-time
-app.use(async (ctx, next) => {
-  const start = Date.now();
-  await next();
-  const ms = Date.now() - start;
-  ctx.set('X-Response-Time', `${ms}ms`);
+app.use(async(ctx, next) => {
+    const start = Date.now();
+    await next();
+    const ms = Date.now() - start;
+    ctx.set('X-Response-Time', `${ms}ms`);
 });
 
 // logger
@@ -46,7 +49,13 @@ app.use(async(ctx, next) => {
  */
 redis.start();
 
-app.use(koaBody());
+// app.use(koaBody());
+// 要先解析xml在解析body
+app.use(xmlParser());
+app.use(bodyParser());
+// 认证拦截器
+app.use(auth);
+// 响应拦截器
 app.use(response_formatter);
 //路由定义应该在中间件之后
 app.use(routers.routes(), routers.allowedMethods());

@@ -22,6 +22,13 @@ class Address extends Model {
             }).first();
     }
 
+    async removeWithUserId(userId, addressId){
+        return this.db(this.name).where({
+            address_id: addressId,
+            user_id: userId
+        }).delete();
+    }
+
     async getAllByUserId(userId) {
         return await this.db(this.name)
             .where({

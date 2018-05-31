@@ -20,15 +20,32 @@ function processCtls(r, ctls) {
 }
 
 function processRouter(r, path, ctl) {
-    Object.keys(ctl).map(key => {
+    let arr = Object.keys(ctl);
+    let isAbc = arr.indexOf('isAbc') != -1;
+    if(isAbc){
+        arr = Object.getOwnPropertyNames(Object.getPrototypeOf(ctl));
+    }
+    // console.log(typeof ctl.constructor, path, arr);
+
+    arr.map(key => {
+        if(key == 'constructor' || typeof ctl[key] != 'function'){
+            // console.log(key + ' is not function');
+            return;
+        }
+
+        let justDoing = ctl[key];
+        if(isAbc){
+            justDoing = ctl[key].bind(ctl);
+        }
+
         if (key.indexOf('post') == 0) {
             let action = key.substring(4);
-            r.post('/' + path + '/' + action.toLowerCase(), ctl[key])
+            r.post('/' + path + '/' + action.toLowerCase(), justDoing)
         } else if (key.indexOf('get') == 0) {
             let action = key.substring(3);
-            r.get('/' + path + '/' + action.toLowerCase(), ctl[key])
+            r.get('/' + path + '/' + action.toLowerCase(), justDoing)
         } else {
-            r.get('/' + path + '/' + key.toLowerCase(), ctl[key])
+            r.get('/' + path + '/' + key.toLowerCase(), justDoing)
         }
     });
 }

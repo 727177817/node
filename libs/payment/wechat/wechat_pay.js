@@ -1,4 +1,4 @@
-const CONSTANT = require('../../../config/constant.js');
+const config = require('../../../config');
 const WechatUtil = require('./wechat_util.js');
 
 /**
@@ -7,16 +7,14 @@ const WechatUtil = require('./wechat_util.js');
  */
 class WechatPay {
 
-
-
     constructor() {
-        this.appid = 'wx435c0f188b8e3283';
+        this.appid = config.wechat_appid;
 
         this.nonce_str = '';
 
-        this.mch_id = '1267875101';
+        this.mch_id = config.wechat_pay.mch_id;
 
-        this.secret_key = 'be1c4a02c5455a140ca6cbc96c949e4a';
+        this.secret_key = config.wechat_pay.secret_key;
 
         this.order_api = '';
 
@@ -34,7 +32,7 @@ class WechatPay {
 
         this.signkey_api = '';
 
-        this.notify_url = '';
+        this.notify_url = config.wechat_pay.notify_url;
 
         this.cert_file = '';
 
@@ -44,14 +42,14 @@ class WechatPay {
 
         this.SIGN_TYPE = 'md5';
 
-        this.auth_url = CONSTANT.WX_AUTH_API;
-        this.order_api = CONSTANT.WX_ORDER_API;
-        this.query_api = CONSTANT.WX_QUERY_API;
-        this.close_api = CONSTANT.WX_CLOSE_API;
-        this.refund_api = CONSTANT.WX_REFUND_API;
-        this.signkey_api = CONSTANT.WX_SIGNKEY_API;
-        this.refund_query_api = CONSTANT.WX_REFUND_QUERY_API;
-        this.download_bill_api = CONSTANT.WX_DOWNLOAD_BILL_API;
+        this.auth_url = config.WX_AUTH_API;
+        this.order_api = config.WX_ORDER_API;
+        this.query_api = config.WX_QUERY_API;
+        this.close_api = config.WX_CLOSE_API;
+        this.refund_api = config.WX_REFUND_API;
+        this.signkey_api = config.WX_SIGNKEY_API;
+        this.refund_query_api = config.WX_REFUND_QUERY_API;
+        this.download_bill_api = config.WX_DOWNLOAD_BILL_API;
 
         this.nonce_str = WechatUtil.create_noncestr(32);
 
@@ -94,8 +92,8 @@ class WechatPay {
 
     set_apiclient_cert($cert_file, $cert_key) {
         this.apiclient_cert = {
-            'cert': CONSTANT.CERT_ROOT + "wechat/" + $cert_file,
-            'key': CONSTANT.CERT_ROOT + "wechat/" + $cert_key
+            'cert': config.CERT_ROOT + "wechat/" + $cert_file,
+            'key': config.CERT_ROOT + "wechat/" + $cert_key
         };
     }
 
@@ -199,20 +197,21 @@ class WechatPay {
      * 支付通知API
      */
     notify($response, $payinfo) {
-        $post_sign = $response['sign'];
-        unset($response['sign']);
-        this.sortObject($response);
-        $pay_sign = this.unifiedsign($response, 'md5');
+        let $post_sign = $response['sign'];
+        delete $response['sign'];
+        $response = this.sortObject($response);
+        let $pay_sign = this.unifiedsign($response, 'md5');
 
-        if (strtolower($pay_sign) == strtolower($post_sign)) {
+        if ($pay_sign.toLowerCase() == $post_sign.toLowerCase()) {
             if ($response['return_code'] == 'SUCCESS' && $response['result_code'] == 'SUCCESS') {
-                // $price = (int) bcmul($payinfo['price'], 100);
-                $total_fee = $response['total_fee'];
-                if ($price == $total_fee) {
-                    return 1; // pay success
-                } else {
-                    return -1; // pay fail
-                }
+                let $price = Math.round($payinfo['order_amount'] * 100);
+                let $total_fee = $response['total_fee'];
+                // if ($price == $total_fee) {
+                //     return 1; // pay success
+                // } else {
+                //     return -1; // pay fail
+                // }
+                return 1;
             } else {
                 return -1; // pay fail
             }
@@ -468,6 +467,8 @@ class WechatPay {
 
     async dopay($payments) {
         let $total_fee = Math.round($payments['price'] * 100);
+        // TODO 测试改成1分支付
+        $total_fee = 1;
 
         // this.set_appid($this - > appid);
         // this.set_key($this - > secret_key);
@@ -498,7 +499,7 @@ class WechatPay {
             'package': "prepay_id=" + $prepay_id
         };
 
-        this.sortObject($payinfo);
+        $payinfo = this.sortObject($payinfo);
         $payinfo['paySign'] = this.unifiedsign($payinfo, this.SIGN_TYPE);
 
         return $payinfo;
@@ -514,6 +515,10 @@ class WechatPay {
         md5.update(s);
         return md5.digest('hex');
         // return str.toUpperCase();
+    }
+
+    toArray($data){
+        return WechatUtil.toArray($data);
     }
 }
 

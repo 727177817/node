@@ -20,9 +20,12 @@
     "knex": "^0.13.0",
     "koa": "^2.5.0",
     "koa-body": "^2.5.0",
+    "koa-bodyparser": "^4.2.1",
     "koa-mysql-session": "0.0.2",
     "koa-router": "^7.2.1",
     "koa-session-minimal": "^3.0.4",
+    "koa-xml": "^1.0.2",
+    "koa-xml-body": "^2.0.0",
     "log4js": "^2.3.12",
     "mysql": "^2.15.0",
     "xml2js": "^0.4.19"

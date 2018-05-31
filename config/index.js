@@ -1,5 +1,6 @@
 const config = require('./config.json');
 const constant = require('./constant.js');
+const routerConfig = require('./router_config.js');
 
 let environment = 'production';
 try {
@@ -12,4 +13,4 @@ try {
 
 }
 
-module.exports = Object.assign(config[environment], constant);
+module.exports = Object.assign(config[environment], constant, routerConfig);

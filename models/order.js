@@ -7,28 +7,28 @@ class Order extends Model {
         this.name = 'ecs_order_info'
     }
 
-    async getList(userId) {
+    async getList(userId, page, size) {
         var orderInfo = await this.db
             .select().from(this.name).where({
                 'user_id': userId
-            }).orderBy('add_time', 'desc');
+            }).orderBy('add_time', 'desc').limit(this.getSize(size)).offset(this.getPage(page));
         return orderInfo
     }
 
-    async getPaidOrders(userId) {
+    async getPaidOrders(userId, page, size) {
         return await this.db(this.name)
             .select().where({
                 'user_id': userId,
                 'pay_status': 1
-            }).orderBy('add_time', 'desc');
+            }).orderBy('add_time', 'desc').limit(this.getSize(size)).offset(this.getPage(page));
     }
 
-    async getUnpaidOrders(userId) {
+    async getUnpaidOrders(userId, page, size) {
         return await this.db(this.name)
             .select().where({
                 'user_id': userId,
                 'pay_status': 0
-            }).orderBy('add_time', 'desc');
+            }).orderBy('add_time', 'desc').limit(this.getSize(size)).offset(this.getPage(page));
     }
 
     async getOne(orderId) {

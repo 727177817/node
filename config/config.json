@@ -12,6 +12,11 @@
             "host"     : "39.106.43.88",
             "port"     : "6379",
             "password" : "36f718ee612435b3738926247d8b9b04fb518552"
+        },
+        "wechat_pay": {
+            "mch_id": "1505092061",
+            "secret_key": "36f718Ee612435b3738DZb04fb5E8552",
+            "notify_url": "http://api.areashop.cn:3000/notify/wechat"
         }
     },
     "development":{
@@ -27,6 +32,11 @@
             "host"     : "39.106.43.88",
             "port"     : "6379",
             "password" : "36f718ee612435b3738926247d8b9b04fb518552"
+        },
+        "wechat_pay": {
+            "mch_id": "1505092061",
+            "secret_key": "36f718Ee612435b3738DZb04fb5E8552",
+            "notify_url": "http://api.areashop.cn:3000/notify/wechat"
         }
     }
 }
