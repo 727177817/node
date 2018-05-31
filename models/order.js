@@ -36,9 +36,12 @@ class Order extends Model {
             .first().where('order_id', orderId);
     }
 
-    async getOneByOrderSn(orderSn) {
+    async getOneByOrderSn(userId, orderSn) {
         return await this.db(this.name)
-            .first().where('order_sn', orderSn);
+            .first().where({
+                'user_id': userId,
+                'order_sn': orderSn
+            });
     }
 
     /*

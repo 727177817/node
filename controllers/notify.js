@@ -1,8 +1,10 @@
 const BaseController = require('./basecontroller.js');
 const Order = require('../models/order.js');
 const PayLog = require('../models/pay_log.js');
+const OrderAction = require('../models/order_action.js');
 const config = require('../config');
 const WechatPay = require('../libs/payment/wechat/wechat_pay.js');
+const moment = require('moment');
 
 /**
  * 支付回调
@@ -42,22 +44,28 @@ class NotifyController extends BaseController {
 
             if (payInfo && payInfo.is_paid == 0) {
                 let $result = wechatPay.notify(body, payInfo);
-                
+
                 if ($result == 1) {
                     $code = this.PAY_SUCCESS;
-                    //校验通过更改订单状态
+                    //校验通过更改订单状态，更新支付记录，订单状态，订单操作记录
+                    //没有做事务可能存在数据不一致问题
                     await PayLog.update({
                         log_id: payInfo.log_id
                     }, {
                         is_paid: 1
                     });
                     await Order.update({
-                        order_id: payInfo.order_id,
-                        pay_time: Math.round(new Date().getTime() / 1000)
+                        order_id: payInfo.order_id
                     }, {
-                        pay_status: config.PS_PAYED
+                        pay_status: config.PS_PAYED,
+                        pay_time: Math.round(new Date().getTime() / 1000)
                     });
-                    
+
+                    // orderId, actionUser, orderStatus, shippingStatus, payStatus, actionNote, logTime
+                    let actionNote = '微信支付回调处理';
+                    let logTime = Math.round(new Date().getTime() / 1000) - 8 * 3600;
+                    await OrderAction.record(payInfo.order_id, 'system', config.OS_CONFIRMED, config.SS_UNSHIPPED, config.PS_PAYED, actionNote, logTime);
+
                 } else if ($result == -1) {
                     $code = this.PAY_FAIL;
                 } else if ($result == -2) {

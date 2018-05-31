@@ -10,6 +10,7 @@ const BaseController = require('./basecontroller.js');
 const User = require('../models/user.js');
 const PayLog = require('../models/pay_log.js');
 const config = require('../config');
+const moment = require('moment');
 
 /**
  * 结算相关接口
@@ -21,7 +22,7 @@ class CommitController extends BaseController {
 
     async getTest(ctx, next) {
 
-        ctx.body = get_random(5);
+        ctx.body = Math.round(new Date().getTime() / 1000) - 8 * 3600;
     }
 
     async postTest(ctx, next) {
@@ -156,8 +157,9 @@ class CommitController extends BaseController {
         }
 
         let orderInfo = await Order.getOne(orderId);
-        if(orderInfo.pay_status === config.PS_PAYED){
-            ctx.throw(400, '该订单已支付');
+        // 只有已确认、未支付的订单可以发起支付
+        if(orderInfo.order_status != config.OS_CONFIRMED || orderInfo.pay_status != config.PS_UNPAYED){
+            ctx.throw(400, '该订单已支付或已取消');
             return;
         }
 

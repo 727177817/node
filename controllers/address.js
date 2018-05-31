@@ -19,18 +19,6 @@ class AddressController extends BaseController {
      * @return {[type]}   address     [新增地址]
      */
     async postAdd(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user.userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-        // if (!user.communityId) {
-        //     ctx.throw(400, '缺少参数communityId');
-        //     return;
-        // }
         if (!this.checkUserIntegrity(ctx)) {
             return;
         }
@@ -87,16 +75,6 @@ class AddressController extends BaseController {
      * @return {[type]}   list     [地址列表]
      */
     async getRemove(ctx, next) {
-        // let token = ctx.request.header.token
-        // let userId = await Redis.getUser({
-        //     key: token,
-        //     field: 'userId'
-        // })
-        // if (!userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
         let id = ctx.query.id;
         if (!id) {
             ctx.throw(400, '缺少参数addressId');
@@ -114,16 +92,6 @@ class AddressController extends BaseController {
      * @return {[type]}   list     [地址列表]
      */
     async getList(ctx, next) {
-        // let token = ctx.request.header.token
-        // let userId = await Redis.getUser({
-        //     key: token,
-        //     field: 'userId'
-        // })
-        // if (!userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
         let list = await Address.getAllByUserId(ctx.user.userId)
         let assignList = []
         for (var i = 0; i < list.length; i++) {
@@ -143,16 +111,6 @@ class AddressController extends BaseController {
      * @return {[type]}   detail     [地址详情]
      */
     async getDetail(ctx, next) {
-        // let token = ctx.request.header.token
-        // let userId = await Redis.getUser({
-        //     key: token,
-        //     field: 'userId'
-        // })
-        // if (!userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
         let id = ctx.query.id;
         if (!id) {
             ctx.throw(400, '缺少参数addressId');

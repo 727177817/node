@@ -24,20 +24,6 @@ class CartController extends BaseController {
      * @return {[type]}        [description]
      */
     async getCartCount(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user.userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
-        // if (!user.warehouseId) {
-        //     ctx.throw(400, '缺少参数warehouseId');
-        //     return;
-        // }
-
         if (!this.checkUserIntegrity(ctx)) {
             return;
         }
@@ -55,20 +41,6 @@ class CartController extends BaseController {
      * @return {[type]}        [description]
      */
     async getList(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user.userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
-        // if (!user.warehouseId) {
-        //     ctx.throw(400, '缺少参数warehouseId');
-        //     return;
-        // }
-
         if (!this.checkUserIntegrity(ctx)) {
             return;
         }
@@ -85,20 +57,6 @@ class CartController extends BaseController {
      * @return {[type]}        [description]
      */
     async postAdd(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
-        // if (!user.warehouseId) {
-        //     ctx.throw(400, '缺少参数warehouseId');
-        //     return;
-        // }
-
         if (!this.checkUserIntegrity(ctx)) {
             return;
         }
@@ -126,15 +84,6 @@ class CartController extends BaseController {
      * @return {[type]}        [description]
      */
     async postRemove(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user.userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
         let body = ctx.request.body;
         let user = ctx.user;
         if (!body.recId) {
@@ -158,15 +107,6 @@ class CartController extends BaseController {
      * @return {[type]}        [description]
      */
     async postChange(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user.userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
         let body = ctx.request.body;
         let user = ctx.user;
         if (!body.recId) {
@@ -182,6 +122,13 @@ class CartController extends BaseController {
         let cartObj = await Cart.getByRecIdAndUserId(body.recId, user.userId);
         if (!cartObj) {
             ctx.throw(400, '购物车不存在该商品');
+            return;
+        }
+
+        // 校验商品库存
+        let goods = await Goods.detail(cartObj.goods_id, user.warehouseId);
+        if(body.quantity > goods.goods_number){
+            ctx.throw(400, '操作失败，商品库存不足');
             return;
         }
 
@@ -227,10 +174,14 @@ class CartController extends BaseController {
             return '该商品不支持单独销售';
         }
 
+        //检查：商品购买数量是否大于总库存
+        if (goods['goods_number'] == 0) {
+            return '加入购物车失败，该商品已售罄';
+        }
         /* 检查：库存 */
         //检查：商品购买数量是否大于总库存
         if (num > goods['goods_number']) {
-            return '购买数量超出库存';
+            return '加入购物车失败，购买数量超出库存';
         }
 
         /* 初始化要插入购物车的基本件数据 */
@@ -250,7 +201,7 @@ class CartController extends BaseController {
             'is_gift': 0,
             'is_shipping': goods['is_shipping'],
             'rec_type': '1',
-            'warehouse_id': warehouseId,
+            'warehouse_id': warehouseId
         };
 
 
@@ -271,7 +222,7 @@ class CartController extends BaseController {
                         goods_price: goods_price
                     });
                 } else {
-                    return '购买数量超出库存';
+                    return '加入购物车失败，商品库存不足';
                 }
             } else {
                 //购物车没有此物品，则插入
@@ -293,7 +244,8 @@ class CartController extends BaseController {
      * @return {[type]}       [description]
      */
     getFinalPrice(price, num) {
-        return price * num;
+        // return price * num;
+        return price;
     }
 
 }

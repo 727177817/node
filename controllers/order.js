@@ -1,6 +1,8 @@
 const Order = require('../models/order.js');
 const OrderGoods = require('../models/order_goods.js');
 const BaseController = require('./basecontroller.js');
+const config = require('../config');
+const OrderAction = require('../models/order_action.js');
 
 /**
  * 订单相关接口
@@ -71,14 +73,62 @@ class OrderController extends BaseController {
             ctx.throw(400, '缺少参数orderSn');
             return;
         }
-        try {
-            let orderInfo = await Order.getOneByOrderSn(orderSn);
-            let orderGoods = await Order.getOrderGoods(orderInfo.order_id);
-            Object.assign(orderInfo, { goods: orderGoods })
-            ctx.body = await orderInfo
-        } catch (err) {
-            return 'err';
+
+        let orderInfo = await Order.getOneByOrderSn(userId, orderSn);
+
+        if (!orderInfo) {
+            ctx.throw(400, '订单信息不存在');
+            return;
         }
+
+        let orderGoods = await Order.getOrderGoods(orderInfo.order_id);
+        Object.assign(orderInfo, { goods: orderGoods })
+        ctx.body = await orderInfo
+    }
+
+    /* 
+     * 取消订单
+     * @param {String} [order_id]   order_id订单Id
+     */
+    async postCancel(ctx, next) {
+        let userId = ctx.user.userId;
+        let { orderSn } = ctx.request.body;
+        if (!orderSn) {
+            ctx.throw(400, '缺少参数orderSn');
+            return;
+        }
+
+        let orderInfo = await Order.getOneByOrderSn(userId, orderSn);
+        if (!orderInfo) {
+            ctx.throw(400, '操作失败，订单信息不存在');
+            return;
+        }
+
+        //只有未支付订单可以取消
+        if (orderInfo.pay_status != config.PS_UNPAYED) {
+            ctx.throw(400, '操作失败，只有未支付订单可以取消');
+            return;
+        }
+
+        // 不重复取消
+        if (orderInfo.order_status == config.OS_CANCELED) {
+            ctx.throw(400, '操作失败，该订单已取消');
+            return;
+        }
+
+        // 更新订单状态
+        await Order.update({
+            order_id: orderInfo.order_id
+        }, {
+            order_status: config.OS_CANCELED
+        });
+
+        // 记录订单操作日志
+        let actionNote = '用户主动取消订单';
+        let logTime = Math.round(new Date().getTime() / 1000) - 8 * 3600;
+        await OrderAction.record(orderInfo.order_id, 'guest', config.OS_CANCELED, orderInfo.shipping_status, orderInfo.pay_status, actionNote, logTime);
+
+        ctx.body = 1;
     }
 }
 

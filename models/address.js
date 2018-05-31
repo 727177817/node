@@ -33,7 +33,7 @@ class Address extends Model {
         return await this.db(this.name)
             .where({
                 user_id: userId
-            }).select();
+            }).select().orderBy('address_id', 'desc');
     }
 
     async getAllByUserIdAndCommunityId(userId, communityId) {
@@ -41,7 +41,7 @@ class Address extends Model {
             .where({
                 user_id: userId,
                 community_id: communityId
-            }).select();
+            }).select().orderBy('address_id', 'desc');
     }
 
     async getAllByUserIdAndCommunityIds(userId, communityIds) {
@@ -51,7 +51,7 @@ class Address extends Model {
                 user_id: userId
             })
             .andWhere('c.community_id', 'in', communityIds)
-            .select();
+            .select().orderBy('address_id', 'desc');
     }
 
     async insert(data){

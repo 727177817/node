@@ -15,16 +15,6 @@ class CategoryController extends BaseController {
      * 获取所有分类和分类商品
      */
     async getCategory(ctx, next) {
-        // let token = ctx.request.header.token
-        // let warehouseId = await Redis.getUser({
-        //     key: token,
-        //     field: 'warehouseId'
-        // })
-        // if (!warehouseId) {
-        //     ctx.throw(400, '缺少参数warehouseId');
-        //     return;
-        // }
-
         if (!this.checkUserIntegrity(ctx)) {
             return;
         }
