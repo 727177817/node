@@ -62,6 +62,7 @@ class CommonController extends BaseController {
         // }
 
         let body = ctx.request.body;
+        let token = ctx.request.header.token;
         let user = ctx.user;
         if (!body.communityId) {
             ctx.throw(400, '缺少参数communityId');
@@ -77,15 +78,14 @@ class CommonController extends BaseController {
             community_id: body.communityId
         });
 
-        ctx.body = community;
         if (res > 0) {
             await Redis.addUser({
-                key: user.token,
+                key: token,
                 userId: user.userId,
                 communityId: body.communityId,
                 warehouseId: community.suppliers_id
             })
-            ctx.body = '设置小区成功';
+            ctx.body = res;
         } else {
             ctx.throw(500, '设置失败');
         }

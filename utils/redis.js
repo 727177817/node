@@ -41,11 +41,6 @@ async function addUser(params) {
  * @return {[type]}        用户信息
  */
 async function getUser(params) {
-    // return {
-    //     userId: 33,
-    //     communityId: 1,
-    //     warehouseId: 1
-    // }
     let user
     if (params.field) {
         user = await client.hget(params.key, params.field);

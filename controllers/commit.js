@@ -208,7 +208,7 @@ class CommitController extends BaseController {
         //        unset($cart_goods_stock, $_cart_goods_stock);
         //    }
 
-        let $consignee = Address.getOneWithUserId(userId, consigneeId);
+        let $consignee = await Address.getOneWithUserId(userId, consigneeId);
 
         if (!$consignee) {
             return '收货地址不存在';
@@ -228,9 +228,9 @@ class CommitController extends BaseController {
             'how_oos': '',
             'user_id': userId,
             'add_time': Math.round(new Date().getTime() / 1000),
-            'order_status': 0,
-            'shipping_status': 0,
-            'pay_status': 0,
+            'order_status': config.OS_CONFIRMED,
+            'shipping_status': config.SS_UNSHIPPED,
+            'pay_status': config.PS_UNPAYED,
             'agency_id': 0,
             'extension_code': '',
             'extension_id': 0,
@@ -238,6 +238,7 @@ class CommitController extends BaseController {
             'integral': 0,
             'shipping_type': shippingType, //当天的09-14和15-21，分别对应1、2
             'shipping_time': shippingTime,
+            'best_time': shippingTime
         };
 
 
@@ -284,10 +285,16 @@ class CommitController extends BaseController {
     async create_order($order, $cart_goods, $consignee, $bonus) {
 
         /* 收货人信息 */
-        for (var $key in $consignee) {
-            $order[$key] = $consignee[$key];
-        }
-        // $order['detail_address'] = $consignee['address'];
+        $order['consignee'] = $consignee['consignee'];
+        $order['mobile'] = $consignee['mobile'];
+        $order['address'] = $consignee['address'];
+
+        //处理小区信息，存储小区名称地址到订单信息
+        // $consignee['community_id']
+        let community = await Community.getOne($consignee['community_id']);
+        $order['community_name'] = community['community_name'];
+        $order['community_city'] = community['community_city'];
+        $order['community_address'] = community['community_address'];
 
         /* 订单中的总额 */
         let $total = this.order_fee($order, $cart_goods, $consignee, $bonus);

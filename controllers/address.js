@@ -125,6 +125,12 @@ class AddressController extends BaseController {
         // }
 
         let list = await Address.getAllByUserId(ctx.user.userId)
+        let assignList = []
+        for (var i = 0; i < list.length; i++) {
+            let community = await Community.getOne(list[i].community_id)
+            assignList.push(Object.assign(list[i],community))
+        }
+        ctx.body = assignList;
         ctx.body = list;
     }
 
