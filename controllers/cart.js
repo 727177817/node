@@ -48,7 +48,6 @@ class CartController extends BaseController {
         let user = ctx.user;
         let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
 
-        // 计算购物车的数量和价格
         ctx.body = {
             goods: result,
             total: this.calcTotal(result)
@@ -143,7 +142,11 @@ class CartController extends BaseController {
 
         if (res > 0) {
             let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-            ctx.body = result;
+            ctx.body = {
+                goods: result,
+                total: this.calcTotal(result)
+            };
+
         } else {
             ctx.throw(400, '更改失败');
         }
