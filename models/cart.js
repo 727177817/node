@@ -64,27 +64,43 @@ class Cart extends Model {
         }).delete();
     }
 
+    /**
+     * 获取购物车商品
+     * 1. 根据仓库筛选
+     * 2. 过滤没有上架以及删除的商品
+     * @param  {[type]} userId      [description]
+     * @param  {[type]} warehouseId [description]
+     * @return {[type]}             [description]
+     */
     async getAllByUserIdAndWarehouseId(userId, warehouseId) {
         return await this.db
-            .select().from(this.name).where({
+            .select('ecs_cart.*', 'ecs_goods.goods_thumb', 'ecs_goods.goods_img', 'ecs_goods.goods_number as store').from(this.name)
+            .leftJoin('ecs_goods', 'ecs_cart.goods_id', 'ecs_goods.goods_id')
+            .where({
                 'user_id': userId,
-                'warehouse_id': warehouseId
+                'ecs_cart.warehouse_id': warehouseId,
+                'ecs_goods.is_delete': 0,
+                'ecs_goods.is_on_sale': 1
             });
     }
 
+    /**
+     * 获取购物车商品数量
+     * 过滤规则同上
+     * @param  {[type]} userId      [description]
+     * @param  {[type]} warehouseId [description]
+     * @return {[type]}             [description]
+     */
     async getCountByUserIdAndWarehouseId(userId, warehouseId) {
         return await this.db
-            .count('* as count').from(this.name).where({
+            .count('* as count').from(this.name)
+            .leftJoin('ecs_goods', 'ecs_cart.goods_id', 'ecs_goods.goods_id')
+            .where({
                 'user_id': userId,
-                'warehouse_id': warehouseId
+                'ecs_cart.warehouse_id': warehouseId,
+                'ecs_goods.is_delete': 0,
+                'ecs_goods.is_on_sale': 1
             });
-    }
-
-    async getCartAmount(userId,warehouseId) {
-        return await this.db(this.name).sum('goods_price * goods_number').where({
-            'user_id': userId,
-            'warehouse_id': warehouseId
-        });
     }
 
 }

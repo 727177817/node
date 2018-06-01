@@ -49,6 +49,14 @@ class BaseController {
 
         return true;
     }
+
+    /**
+     * 获取时间戳
+     * @return {[type]} [description]
+     */
+    getTimestamp() {
+        return Date.parse(new Date()) / 1000 - 8 * 3600;
+    }
 }
 
 module.exports = BaseController;

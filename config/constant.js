@@ -49,4 +49,7 @@ add('WX_DOWNLOAD_BILL_API', 'https://api.mch.weixin.qq.com/pay/downloadbill');
 add('WX_SIGNKEY_API', 'https://api.mch.weixin.qq.com/sandboxnew/pay/getsignkey');
 add('WX_AUTH_API', 'https://open.weixin.qq.com/connect/oauth2/authorize');
 
+/* 默认配送费用 */
+add('AS_SHIPPING_FEE', 3);
+
 module.exports = CONSTANT;

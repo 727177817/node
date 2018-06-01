@@ -17,21 +17,23 @@ class CouponController extends BaseController {
      * @return {[type]}   list     [优惠券列表]
      */
     async getList(ctx, next) {
-        let type = ctx.query.type || 0;
-        if (!type) {
-            ctx.throw(400, '缺少参数type');
-            return;
-        }
-
+        let type = ctx.query.type || '0';
         let list = [];
         let userId = ctx.user.userId;
-        if (type == 0) {
-            list = await Coupon.unused(userId)
-        } else if (type == 1) {
-            list = await Coupon.used(userId)
-        } else if (type == 2) {
-            list = await Coupon.expired(userId);
+        let timestamp = this.getTimestamp();
+
+        switch (type) {
+            case '0':
+                list = await Coupon.unused(userId, timestamp);
+                break;
+            case '1':
+                list = await Coupon.used(userId, timestamp);
+                break;
+            case '2':
+                list = await Coupon.expired(userId, timestamp);
+                break;
         }
+
         ctx.body = list;
     }
 }

@@ -3,6 +3,8 @@ const OrderGoods = require('../models/order_goods.js');
 const BaseController = require('./basecontroller.js');
 const config = require('../config');
 const OrderAction = require('../models/order_action.js');
+const Coupon = require('../models/coupon.js');
+const Goods = require('../models/goods.js');
 
 /**
  * 订单相关接口
@@ -110,7 +112,7 @@ class OrderController extends BaseController {
             return;
         }
 
-        // 不重复取消
+        // 不能重复取消
         if (orderInfo.order_status == config.OS_CANCELED) {
             ctx.throw(400, '操作失败，该订单已取消');
             return;
@@ -123,10 +125,22 @@ class OrderController extends BaseController {
             order_status: config.OS_CANCELED
         });
 
+        // 如果使用优惠券则退回
+        if (orderInfo.bonus_id > 0)
+        {
+            await Coupon.setUnUsed(orderInfo.bonus_id);
+        }
+
         // 记录订单操作日志
         let actionNote = '用户主动取消订单';
-        let logTime = Math.round(new Date().getTime() / 1000) - 8 * 3600;
+        let logTime = this.getTimestamp();
         await OrderAction.record(orderInfo.order_id, 'guest', config.OS_CANCELED, orderInfo.shipping_status, orderInfo.pay_status, actionNote, logTime);
+
+        // 取消订单退回库存
+        let orderGoods = await Order.getOrderGoods(orderInfo.order_id);
+        orderGoods.map((item) => {
+            Goods.changeQuantity(item.goods_id, item.goods_number);
+        });
 
         ctx.body = 1;
     }

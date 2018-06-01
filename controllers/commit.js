@@ -22,7 +22,7 @@ class CommitController extends BaseController {
 
     async getTest(ctx, next) {
 
-        ctx.body = Math.round(new Date().getTime() / 1000) - 8 * 3600;
+        ctx.body = this.getTimestamp();
     }
 
     async postTest(ctx, next) {
@@ -85,14 +85,14 @@ class CommitController extends BaseController {
         }, cartGoods, {});
 
         //获取优惠券列表
-        let coupons = await Coupon.getAvaliableCoupons(userId, total.goods_price);
+        let coupons = await Coupon.getAvaliableCoupons(userId, total.goods_price, this.getTimestamp());
 
         ctx.body = {
             consignees: myAddress,
             goods: cartGoods,
             total: total,
             coupons: coupons,
-            timestamp: new Date().getTime() //系统当前时间
+            timestamp: this.getTimestamp() //系统当前时间
         }
     }
 
@@ -158,7 +158,7 @@ class CommitController extends BaseController {
 
         let orderInfo = await Order.getOne(orderId);
         // 只有已确认、未支付的订单可以发起支付
-        if(orderInfo.order_status != config.OS_CONFIRMED || orderInfo.pay_status != config.PS_UNPAYED){
+        if (orderInfo.order_status != config.OS_CONFIRMED || orderInfo.pay_status != config.PS_UNPAYED) {
             ctx.throw(400, '该订单已支付或已取消');
             return;
         }
@@ -174,7 +174,6 @@ class CommitController extends BaseController {
         let param = {
             price: orderInfo.order_amount,
             orderId: orderInfo.order_id,
-            // billno: orderInfo.order_id + new Date().getTime().toString(32),
             billno: payLogId,
             openid: userInfo.open_id
         };
@@ -196,19 +195,11 @@ class CommitController extends BaseController {
             return '购物车中没有商品';
         }
 
-        //    /* 检查商品库存 */
-        //    /* 如果使用库存，且下订单时减库存，则减少库存 */
-        //    if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE)
-        //    {
-        //        $cart_goods_stock = get_cart_goods();
-        //        $_cart_goods_stock = array();
-        //        foreach ($cart_goods_stock['goods_list'] as $value)
-        //        {
-        //            $_cart_goods_stock[$value['rec_id']] = $value['goods_number'];
-        //        }
-        //        flow_cart_stock($_cart_goods_stock);
-        //        unset($cart_goods_stock, $_cart_goods_stock);
-        //    }
+        /* 检查商品库存 */
+        let e = await this.flow_cart_stock(cartGoods);
+        if(e.length > 0){
+            return  e.join(',') + '库存不足';
+        }
 
         let $consignee = await Address.getOneWithUserId(userId, consigneeId);
 
@@ -229,7 +220,7 @@ class CommitController extends BaseController {
             'postscript': postscript,
             'how_oos': '',
             'user_id': userId,
-            'add_time': Math.round(new Date().getTime() / 1000),
+            'add_time': this.getTimestamp(),
             'order_status': config.OS_CONFIRMED,
             'shipping_status': config.SS_UNSHIPPED,
             'pay_status': config.PS_UNPAYED,
@@ -243,21 +234,28 @@ class CommitController extends BaseController {
             'best_time': shippingTime
         };
 
+        //计算购物车中的商品总价
+        let cartAmount = this.getCartAmount(cartGoods);
 
         /* 检查红包是否存在 */
         let $bonus;
         if ($order['bonus_id'] > 0) {
             $bonus = await Coupon.getOne($order['bonus_id']);
 
-            if (!$bonus || $bonus['user_id'] != $userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await this.cart_amount(userId, warehouseId)) {
+            if (!$bonus || $bonus['user_id'] != userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > cartAmount) {
                 $order['bonus_id'] = 0;
             }
         } else if (couponSn) {
             couponSn = trim(couponSn);
             $bonus = await Coupon.getOneByBonusSn(couponSn);
-            $now = Math.round(new Date().getTime() / 1000);
-            if (!$bonus || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > await this.cart_amount(userId, warehouseId) || $now > $bonus['use_end_date']) {} else {
-                if ($user_id > 0) {
+            $now = this.getTimestamp();
+
+            if (!$bonus || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 ||
+                $bonus['min_goods_amount'] > cartAmount ||
+                $now > $bonus['use_end_date']) {
+
+            } else {
+                if (userId > 0) {
                     Coupon.update($bonus['bonus_id'], {
                         user_id: userId
                     });
@@ -292,7 +290,6 @@ class CommitController extends BaseController {
         $order['address'] = $consignee['address'];
 
         //处理小区信息，存储小区名称地址到订单信息
-        // $consignee['community_id']
         let community = await Community.getOne($consignee['community_id']);
         $order['community_name'] = community['community_name'];
         $order['community_city'] = community['community_city'];
@@ -305,14 +302,6 @@ class CommitController extends BaseController {
         $order['discount'] = $total['discount'];
         $order['surplus'] = $total['surplus'];
         $order['tax'] = $total['tax'];
-
-        // // 购物车中的商品能享受红包支付的总额
-        // $discount_amout = compute_discount_amount();
-        // // 红包和积分最多能支付的金额为商品总额
-        // $temp_amout = $order['goods_amount'] - $discount_amout;
-        // if ($temp_amout <= 0) {
-        //     $order['bonus_id'] = 0;
-        // }
 
         /* 配送方式 */
         if ($order['shipping_id'] > 0) {
@@ -389,15 +378,14 @@ class CommitController extends BaseController {
         let ret0 = await OrderGoods.insert(goods);
 
 
-        // /* 处理红包 */
-        // if ($order['bonus_id'] > 0 && $temp_amout > 0) {
-        //     use_bonus($order['bonus_id'], $new_order_id);
-        // }
+        /* 处理红包 */
+        if ($order['bonus_id'] > 0) {
+            this.use_bonus($order['bonus_id'], $order['order_id']);
+        }
 
-        // /* 如果使用库存，且下订单时减库存，则减少库存 */
-        // if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
-        //     change_order_goods_storage($order['order_id'], true, SDT_PLACE);
-        // }
+        /* 下订单时减库存 */
+        this.change_order_goods_storage(goods, true);
+
         return {
             'order': $order,
             'consignee': $consignee,
@@ -457,31 +445,9 @@ class CommitController extends BaseController {
             $total['bonus'] = $bonus['type_money'];
         }
 
-        // /* 线下红包 */
-        //  if (!empty($order['bonus_kill']))
-        // {
-        //     $bonus          = bonus_info(0,$order['bonus_kill']);
-        //     $total['bonus_kill'] = $order['bonus_kill'];
-        //     $total['bonus_kill_formated'] = price_format($total['bonus_kill'], false);
-        // }
-
         /* 配送费用 */
-        let $shipping_cod_fee = null;
-
         if ($order['shipping_id'] > 0 && $total['real_goods_count'] > 0) {
-            // $region['country'] = $consignee['country'];
-            // $region['province'] = $consignee['province'];
-            // $region['city'] = $consignee['city'];
-            // $region['district'] = $consignee['district'];
-            //$shipping_info = shipping_area_info($order['shipping_id'], $region);
-
-            //if (!empty($shipping_info)) {
-            // $weight_price = this.cart_weight_price();
-
-            // $total['shipping_fee'] = shipping_fee($shipping_info['shipping_code'], $shipping_info['configure'], $weight_price['weight'], $total['goods_price'], $weight_price['number']);
-
-            //}
-            $total['shipping_fee'] = 3;
+            $total['shipping_fee'] = config.AS_SHIPPING_FEE;
         }
 
         // 购物车中的商品能享受红包支付的总额
@@ -515,7 +481,7 @@ class CommitController extends BaseController {
      * @return  string
      */
     get_order_sn() {
-        return new Date().getTime() + this.get_random(5);
+        return this.getTimestamp() + this.get_random(5);
     }
 
     get_random(max) {
@@ -535,45 +501,15 @@ class CommitController extends BaseController {
     }
 
     /**
-     * 获得购物车中商品的总重量、总价格、总数量
-     *
-     * @access  public
-     * @param   int     $type   类型：默认普通商品
-     * @return  array
-     */
-    cart_weight_price($type = CART_GENERAL_GOODS) {
-        let $package_row = {
-            'weight': 0,
-            'amount': 0,
-            'number': 0
-        };
-
-        $packages_row['free_shipping'] = 1;
-
-        // $sql    = 'SELECT SUM(g.goods_weight * c.goods_number) AS weight, ' .
-        //                 'SUM(c.goods_price * c.goods_number) AS amount, ' .
-        //                 'SUM(c.goods_number) AS number '.
-        //             'FROM ' . $GLOBALS['ecs']->table('cart') . ' AS c '.
-        //             'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = c.goods_id '.
-        //             "WHERE c.session_id = '" . SESS_ID . "' " .
-        //             "AND rec_type = '$type' AND g.is_shipping = 0 AND c.extension_code != 'package_buy'";
-        // $row = $GLOBALS['db']->getRow($sql);
-
-        // $packages_row['weight'] = floatval($row['weight']) + $package_row['weight'];
-        // $packages_row['amount'] = floatval($row['amount']) + $package_row['amount'];
-        // $packages_row['number'] = intval($row['number']) + $package_row['number'];
-
-        return $packages_row;
-    }
-
-    /**
      * 取得购物车总金额
-     * @params  boolean $include_gift   是否包括赠品
-     * @param   int     $type           类型：默认普通商品
+     * @param {array} 购物车商品
      * @return  float   购物车总金额
      */
-    async cart_amount(userId, warehouseId) {
-        let amount = await Cart.getCartAmount(userId, warehouseId);
+    getCartAmount(cartGoods) {
+        let amount = 0;
+        cartGoods.map((item) => {
+            amount += item.goods_price * item.goods_number;
+        });
 
         return amount;
     }
@@ -614,7 +550,8 @@ class CommitController extends BaseController {
             }
         }
 
-        return date.getTime() / 1000;
+        // 转换成utc时间戳
+        return Date.parse(date) / 1000 - 8 * 3600;
     }
 
     /**
@@ -627,6 +564,85 @@ class CommitController extends BaseController {
 
     number_format(num) {
         return Math.round(num * 100) / 100;
+    }
+
+    /**
+     * 设置红包为已使用
+     * @param   int     bonusId   红包id
+     * @param   int     orderId   订单id
+     * @return  bool
+     */
+    async use_bonus(bonusId, orderId) {
+        let usedTime = this.getTimestamp();
+
+        return await Coupon.setUsed(bonusId, orderId, usedTime);
+    }
+
+    /**
+     * 改变订单中商品库存
+     * @param   int     goods   订单商品
+     * @param   bool    $is_dec     是否减少库存
+     */
+    change_order_goods_storage(goods, $is_dec = true) {
+        goods.map((item) => {
+            if ($is_dec) {
+                this.change_goods_storage(item['goods_id'], -item['goods_number']);
+            } else {
+                this.change_goods_storage(item['goods_id'], item['goods_number']);
+            }
+        })
+    }
+
+    /**
+     * 商品库存增与减
+     *
+     * @param   int    goodsId         商品ID
+     * @param   int    number          增减数量，默认0；
+     * @return  bool               true，成功；false，失败；
+     */
+    async change_goods_storage(goodsId, number = 0) {
+        if (number == 0) {
+            return true; // 值为0即不做、增减操作，返回true
+        }
+
+        if (!goodsId) {
+            return false;
+        }
+
+        /* 处理商品库存 */
+        let res = await Goods.changeQuantity(goodsId, number);
+
+        return res > 0;
+    }
+
+    /**
+     * 检查订单中商品库存
+     *
+     * @access  public
+     * @param   array   cartGoods 购物车商品
+     *
+     * @return  void
+     */
+    async flow_cart_stock(cartGoods) {
+        let goodsIds = [];
+        cartGoods.map((goods) => {
+            goodsIds.push(goods.goods_id);
+        });
+        let realGoods = await Goods.getListByIds(goodsIds);
+
+        let errors = [];
+        cartGoods.map((goods) => {
+            realGoods.map((g) => {
+                if (goods.goods_id == g.goods_id) {
+                    if (goods.goods_number > g.goods_number) {
+                        errors.push(g.goods_name);
+                    }
+                    return;
+                }
+            })
+        })
+
+        return errors;
     }
 }
 

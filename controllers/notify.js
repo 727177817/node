@@ -58,12 +58,12 @@ class NotifyController extends BaseController {
                         order_id: payInfo.order_id
                     }, {
                         pay_status: config.PS_PAYED,
-                        pay_time: Math.round(new Date().getTime() / 1000)
+                        pay_time: this.getTimestamp()
                     });
 
                     // orderId, actionUser, orderStatus, shippingStatus, payStatus, actionNote, logTime
                     let actionNote = '微信支付回调处理';
-                    let logTime = Math.round(new Date().getTime() / 1000) - 8 * 3600;
+                    let logTime = this.getTimestamp();
                     await OrderAction.record(payInfo.order_id, 'system', config.OS_CONFIRMED, config.SS_UNSHIPPED, config.PS_PAYED, actionNote, logTime);
 
                 } else if ($result == -1) {

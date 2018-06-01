@@ -47,7 +47,12 @@ class CartController extends BaseController {
 
         let user = ctx.user;
         let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-        ctx.body = result;
+
+        // 计算购物车的数量和价格
+        ctx.body = {
+            goods: result,
+            total: this.calcTotal(result)
+        };
     }
 
     /**
@@ -127,7 +132,7 @@ class CartController extends BaseController {
 
         // 校验商品库存
         let goods = await Goods.detail(cartObj.goods_id, user.warehouseId);
-        if(body.quantity > goods.goods_number){
+        if (body.quantity > goods.goods_number) {
             ctx.throw(400, '操作失败，商品库存不足');
             return;
         }
@@ -246,6 +251,28 @@ class CartController extends BaseController {
     getFinalPrice(price, num) {
         // return price * num;
         return price;
+    }
+
+    /**
+     * 取得购物车小计，包括总价和数量等
+     * @param {array} 购物车商品
+     * @return  float   购物车总计
+     */
+    calcTotal(cartGoods) {
+        let total = {
+            price: 0,
+            quantity: 0
+        };
+
+        cartGoods.map((item) => {
+            total.price += item.goods_price * item.goods_number;
+            total.quantity += item.goods_number * 1;
+        });
+
+        // 取整保留2位小数
+        total.price = Math.round(total.price * 100) / 100;
+
+        return total;
     }
 
 }

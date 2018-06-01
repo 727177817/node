@@ -43,7 +43,7 @@ var response_formatter = async(ctx, next) => {
                 {
                     if (ctx.app.env === 'development') {
                         //开发环境输出更多的错误信息
-                        console.log(JSON.stringify(err));
+                        console.log('response_formatter err ', err);
                     }
 
                     if (err.output) {

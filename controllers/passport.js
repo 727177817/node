@@ -27,10 +27,11 @@ class PassportController extends BaseController {
         }
         let users = await User.getUserInfoWechat(userinfo.unionId);
         if (!users) {
+            userinfo.regTime = this.getTimestamp();
             var register = await User.wechatRegister(userinfo)
             users = await User.getUserInfoWechat(userinfo.unionId);
         }
-        let timestamp = Date.parse(new Date())
+        let timestamp = this.getTimestamp();
         let token = MD5(MD5(userinfo.unionId + 'dota') + timestamp).toString();
         // 未设置小区信息的,不保存小区信息在redis
         if (register === 1) {
@@ -66,7 +67,7 @@ class PassportController extends BaseController {
         // 获取最近使用的小区信息
         let community = await Community.getOne(obj.community_id)
         // 签名加密token, 保存
-        let timestamp = Date.parse(new Date())
+        let timestamp = this.getTimestamp();
         let token = MD5(MD5(obj.unionId + 'dota') + timestamp).toString();
         await Redis.addUser({
             key: token,

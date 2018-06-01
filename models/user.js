@@ -23,7 +23,7 @@ class Passport extends Model {
 	            country: userInfo.country,
 	            city: userInfo.city,
 	            language: userInfo.language,
-            	reg_time: Date.parse(new Date())/1000
+            	reg_time: userInfo.regTime
             })
         	return 1
     	} catch(err) {
