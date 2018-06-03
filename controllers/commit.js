@@ -74,7 +74,7 @@ class CommitController extends BaseController {
         cartGoods.map(item => {
             goods.map(sitem => {
                 if (item.goods_id == sitem.goods_id) {
-                    item.goods_thumb = sitem.goods_thumb;
+                    item.goods_img = sitem.goods_img;
                 }
             })
         })
@@ -372,7 +372,8 @@ class CommitController extends BaseController {
                 is_gift: item.is_gift,
                 goods_attr_id: item.goods_attr_id,
                 goods_weight: item.goods_weight,
-                goods_thumb: item.goods_thumb
+                goods_thumb: item.goods_thumb,
+                goods_img: item.goods_img
             });
         });
         let ret0 = await OrderGoods.insert(goods);
