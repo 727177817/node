@@ -20,7 +20,7 @@ class GoodsController extends BaseController {
             return;
         }
 
-        let user = ctx.user;//user.key; user.userId, user.communityId,user.warehouseId
+        let user = ctx.user;
         let goodsId = ctx.query.goodsId;
         if (!goodsId) {
             ctx.throw(400, '缺少参数goodsId');

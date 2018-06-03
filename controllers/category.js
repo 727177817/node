@@ -20,7 +20,7 @@ class CategoryController extends BaseController {
         }
 
         // 获取首页商品分类
-        let category = await Category.category()
+        let category = await Category.getAll()
         // 获取分类商品
         let goodsList = await Goods.list(ctx.user.warehouseId)
         for (let i = 0; i < category.length; i++) {

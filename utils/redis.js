@@ -29,7 +29,8 @@ function start() {
  */
 async function addUser(params) {
     if (params) {
-        await client.hmset(params.key, 'userId', params.userId, 'communityId', params.communityId, 'warehouseId', params.warehouseId);
+        await client.hmset(params.key, 'userId', params.userId);
+        await client.hmset(params.userId, 'communityId', params.communityId, 'warehouseId', params.warehouseId);
         await client.expire(params.key, 2592000);
     }
 }
@@ -41,14 +42,21 @@ async function addUser(params) {
  * @return {[type]}        用户信息
  */
 async function getUser(params) {
-    let user
-    if (params.field) {
-        user = await client.hget(params.key, params.field);
-    }else{
-        user = await client.hgetall(params.key);
+    let user;
+
+    let tokenObj = await client.hgetall(params.key);
+    if (!tokenObj) {
+        return null;
     }
-    if(user == null) return null;
-    if(Object.keys(user).length == 0) return null;
+    user = { ...tokenObj };
+
+    let userInfo = await client.hgetall(user.userId);
+    if (userInfo) {
+        user = { ...user, ...userInfo };
+    }
+
+    if (Object.keys(user).length == 0) return null;
+    
     return user;
 };
 

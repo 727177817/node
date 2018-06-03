@@ -51,16 +51,6 @@ class CommonController extends BaseController {
      * @return {[type]}        [description]
      */
     async postCommunity(ctx, next) {
-        // let token = ctx.request.header.token
-        // let userId = await Redis.getUser({
-        //     key: token,
-        //     field: 'userId'
-        // })
-        // if (!userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
         let body = ctx.request.body;
         let token = ctx.request.header.token;
         let user = ctx.user;
@@ -98,20 +88,6 @@ class CommonController extends BaseController {
      * @return {[type]}        [description]
      */
     async getCartCount(ctx, next) {
-        // let token = ctx.request.header.token
-        // let user = await Redis.getUser({
-        //     key: token
-        // })
-        // if (!user.userId) {
-        //     ctx.throw(401);
-        //     return;
-        // }
-
-        // if (!user.warehouseId) {
-        //     ctx.throw(400, '缺少参数warehouseId');
-        //     return;
-        // }
-
         if (!this.checkUserIntegrity(ctx)) {
             return;
         }

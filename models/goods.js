@@ -15,13 +15,15 @@ class Goods extends Model {
             .select().from(this.name).where({ 'is_delete': 0, 'warehouse_id': warehouseId });
         return list
     }
+
     /*
      * 商品详情
      * @param {String} [goodsId]           商品Id
      */
     async detail(goodsId, warehouseId) {
         var detail = await this.db
-            .first().from(this.name).where({ 'goods_id': goodsId, 'is_delete': 0, 'warehouse_id': warehouseId });
+            .first().from(this.name)
+            .where({ 'goods_id': goodsId, 'is_delete': 0, 'warehouse_id': warehouseId });
         return detail
     }
 
@@ -40,7 +42,8 @@ class Goods extends Model {
      */
     async homeCategoryGoods(warehouseId) {
         var list = await this.db
-            .select().from(this.name).where({ 'is_best': 1, 'is_delete': 0, 'warehouse_id': warehouseId })
+            .select().from(this.name)
+            .where({ 'is_best': 1, 'is_delete': 0, 'warehouse_id': warehouseId })
         return list
     }
 
@@ -49,7 +52,8 @@ class Goods extends Model {
      */
     async hotGoods(warehouseId) {
         var list = await this.db
-            .select().from(this.name).where({ 'is_hot': 1, 'is_on_sale': 1, 'is_delete': 0, 'warehouse_id': warehouseId })
+            .select().from(this.name)
+            .where({ 'is_hot': 1, 'is_on_sale': 1, 'is_delete': 0, 'warehouse_id': warehouseId })
         return list
     }
 

@@ -25,11 +25,15 @@ class HomeController extends BaseController {
         // 获取最近使用的小区信息
         let community = await Community.getOne(user.communityId)
         // banner广告
-        let ads = await Ad.getAvaliableWithPositionAndWarehouse(config.HOME_AD_POSITION, user.warehouseId, timestamp)
+        let ads = [];
+        if(user.warehouseId){
+            ads = await Ad.getAvaliableWithPositionAndWarehouse(config.HOME_AD_POSITION, user.warehouseId, timestamp)
+        }
         // 热销商品
-        let hotGoods = await Goods.hotGoods(user.warehouseId)
+        let hotGoods = await Goods.hotGoods(user.warehouseId);
+        
         // 获取首页商品分类
-        let category = await Category.homeAds(user.warehouseId)
+        let category = await Category.getCategoryForHome();
         // 获取分类商品
         let categoryGoodsList = await Goods.homeCategoryGoods(user.warehouseId)
         for (let i = 0; i < category.length; i++) {
@@ -43,7 +47,7 @@ class HomeController extends BaseController {
         }
 
         //公告信息，首页分类固定为14
-        let notices = await Article.getArticlesForHome(user.communityId, 14);
+        let notices = await Article.getArticlesForHome(user.communityId, config.HOME_NOTICE_TYPE_ID);
 
         ctx.body = {
             ads,

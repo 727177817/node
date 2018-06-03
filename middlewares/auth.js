@@ -1,5 +1,7 @@
 const config = require('../config');
 const Redis = require('../utils/redis.js');
+const User = require('../models/user.js');
+const Community = require('../models/community.js');
 
 /**
  * 在app.use(router)之前调用
@@ -12,12 +14,35 @@ var auth = async(ctx, next) => {
             key: token
         });
 
-        if (!token || !user) {
+        if (!token || !user || !user.userId) {
             ctx.body = {
                 code: 401,
                 message: 'Unauthorized'
             }
             return;
+        }
+
+        //redis中没有用户信息(没有小区或仓库)则去数据库查找
+        //没有找到该用户信息则返回401
+        //否则更新用户信息
+        if (!user.communityId || !user.warehouseId) {
+            let userInfo = await User.getUserInfo(user.userId);
+            if (!userInfo) {
+                ctx.body = {
+                    code: 401,
+                    message: 'Unauthorized'
+                }
+                return;
+            }
+
+            let community = await Community.getOne(userInfo.community_id);
+            if (community) {
+                user.warehouseId = community.suppliers_id;
+            }
+
+            user.key = token;
+            user.communityId = userInfo.community_id;
+            await Redis.addUser(user);
         }
 
         // 将当前登录用户信息存储以便后续路由中使用

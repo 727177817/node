@@ -55,4 +55,7 @@ add('AS_SHIPPING_FEE', 3);
 /* 首页广告位ID */
 add('HOME_AD_POSITION', 2);
 
+/* 首页公告类型ID */
+add('HOME_NOTICE_TYPE_ID', 14);
+
 module.exports = CONSTANT;
