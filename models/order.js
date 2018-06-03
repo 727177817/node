@@ -1,10 +1,19 @@
 const Model = require('../models/model');
+const config = require('../config');
 
 class Order extends Model {
 
     constructor() {
         super();
         this.name = 'ecs_order_info'
+    }
+
+    async getByConditionWithPage(condition, page, size) {
+        var orderInfo = await this.db
+            .select().from(this.name).where(condition)
+            .orderBy('add_time', 'desc')
+            .limit(this.getSize(size)).offset(this.getPage(page));
+        return orderInfo
     }
 
     async getList(userId, page, size) {
@@ -19,7 +28,7 @@ class Order extends Model {
         return await this.db(this.name)
             .select().where({
                 'user_id': userId,
-                'pay_status': 1
+                'pay_status': config.PS_PAYED
             }).orderBy('add_time', 'desc').limit(this.getSize(size)).offset(this.getPage(page));
     }
 
@@ -27,7 +36,7 @@ class Order extends Model {
         return await this.db(this.name)
             .select().where({
                 'user_id': userId,
-                'pay_status': 0
+                'pay_status': config.PS_UNPAYED
             }).orderBy('add_time', 'desc').limit(this.getSize(size)).offset(this.getPage(page));
     }
 

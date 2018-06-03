@@ -171,11 +171,17 @@ class CommitController extends BaseController {
             is_paid: 0
         });
 
+        let goods = await OrderGoods.getOrderGoods(orderInfo.order_id);
+        let body;
+        if(goods && goods.length > 0){
+            body = goods[0].goods_name + '等';
+        }
         let param = {
             price: orderInfo.order_amount,
             orderId: orderInfo.order_id,
             billno: payLogId,
-            openid: userInfo.open_id
+            openid: userInfo.open_id,
+            body: body
         };
 
         let wechatPay = new WechatPay();

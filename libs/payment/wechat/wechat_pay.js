@@ -107,7 +107,7 @@ class WechatPay {
         let $params = {};
 
         $params['appid'] = this.appid;
-        $params['body'] = '天天果园-订单';
+        $params['body'] = $payinfo['body'] || '趣鱼超市-订单';
         $params['mch_id'] = $payinfo['mch_id'];
         $params['nonce_str'] = this.nonce_str;
         $params['total_fee'] = $payinfo['total_fee'];
@@ -481,7 +481,8 @@ class WechatPay {
             'openid': $payments['openid'],
             'total_fee': $total_fee,
             'trade_type': 'JSAPI',
-            'mch_id': this.mch_id
+            'mch_id': this.mch_id,
+            'body': $payments['body']
         });
 
         if (!$prepay_id) {

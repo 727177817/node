@@ -28,23 +28,44 @@ class OrderController extends BaseController {
         let size = ctx.query.size;
 
         let orderList = [];
+        let condition = {
+            user_id: userId
+        };
         switch (status) {
             case '0':
                 {
-                    orderList = await Order.getList(userId, page, size);
+                    // 全部订单查询当前用户的所有订单
+                    // orderList = await Order.getList(userId, page, size);
                     break;
                 }
             case '1':
                 {
-                    orderList = await Order.getUnpaidOrders(userId, page, size);
+                    // 待支付订单查询已确定未支付的订单
+                    condition.order_status = config.OS_CONFIRMED;
+                    condition.pay_status = config.PS_UNPAYED;
+                    // orderList = await Order.getUnpaidOrders(userId, page, size);
                     break;
                 }
             case '2':
                 {
+                    // 待发货订单查询已确定已支付未发货的订单
+                    condition.order_status = config.OS_CONFIRMED;
+                    condition.pay_status = config.PS_PAYED;
+                    condition.shipping_status = config.SS_UNSHIPPED;
+                    // orderList = await Order.getPaidOrders(userId, page, size);
+                    break;
+                }
+            case '3':
+                {
+                    // 已完成订单查询已确定已支付已收货的订单
+                    condition.order_status = config.OS_CONFIRMED;
+                    condition.pay_status = config.PS_PAYED;
+                    condition.shipping_status = config.SS_RECEIVED;
                     orderList = await Order.getPaidOrders(userId, page, size);
                     break;
                 }
         }
+        orderList = await Order.getByConditionWithPage(condition, page, size);
 
         // 获取所有订单ID
         let orderIds = [];
@@ -157,7 +178,7 @@ class OrderController extends BaseController {
 
 
     /**
-     * 已取消，待支付，已支付，配送中，已完成，退货
+     * 已取消，待支付，待发货，配送中，已完成，退货
      * @return {[type]} [description]
      */
     getRealStatus(orderStatus, shippingStatus, payStatus) {
@@ -172,7 +193,7 @@ class OrderController extends BaseController {
                 } else if (shippingStatus == config.SS_RECEIVED) {
                     return '已完成';
                 }
-                return '已支付'
+                return '待发货'
             } else {
                 return '待支付';
             }
