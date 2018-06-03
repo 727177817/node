@@ -4,6 +4,7 @@ const Goods = require('../models/goods.js');
 const Community = require('../models/community.js');
 const Article = require('../models/article.js');
 const BaseController = require('./basecontroller.js');
+const config = require('../config');
 
 /**
  * 首页相关接口
@@ -19,11 +20,12 @@ class HomeController extends BaseController {
     async getHome(ctx, next) {
 
         let user = ctx.user;
+        let timestamp = this.getTimestamp();
 
         // 获取最近使用的小区信息
         let community = await Community.getOne(user.communityId)
         // banner广告
-        let ads = await Ad.banner(user.communityId)
+        let ads = await Ad.getAvaliableWithPositionAndWarehouse(config.HOME_AD_POSITION, user.warehouseId, timestamp)
         // 热销商品
         let hotGoods = await Goods.hotGoods(user.warehouseId)
         // 获取首页商品分类

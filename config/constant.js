@@ -52,4 +52,7 @@ add('WX_AUTH_API', 'https://open.weixin.qq.com/connect/oauth2/authorize');
 /* 默认配送费用 */
 add('AS_SHIPPING_FEE', 3);
 
+/* 首页广告位ID */
+add('HOME_AD_POSITION', 2);
+
 module.exports = CONSTANT;

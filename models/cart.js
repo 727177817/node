@@ -103,5 +103,24 @@ class Cart extends Model {
             });
     }
 
+    /**
+     * 获取购物车商品数量
+     * 过滤规则同上
+     * @param  {[type]} userId      [description]
+     * @param  {[type]} warehouseId [description]
+     * @return {[type]}             [description]
+     */
+    async getSumByUserIdAndWarehouseId(userId, warehouseId) {
+        return await this.db
+            .sum('ecs_cart.goods_number as count').from(this.name)
+            .leftJoin('ecs_goods', 'ecs_cart.goods_id', 'ecs_goods.goods_id')
+            .where({
+                'user_id': userId,
+                'ecs_cart.warehouse_id': warehouseId,
+                'ecs_goods.is_delete': 0,
+                'ecs_goods.is_on_sale': 1
+            });
+    }
+
 }
 module.exports = new Cart();

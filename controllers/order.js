@@ -46,20 +46,27 @@ class OrderController extends BaseController {
                 }
         }
 
-        // 查询订单商品
-        for (let i = 0; i < orderList.length; i++) {
-            let orderId = orderList[i].order_id
-            let orderGoods = await Order.getOrderGoods(orderId);
-            // 查询订单所有商品
-            let orderGoodsIds = []
-            for (let j = 0; j < orderGoods.length; j++) {
-                orderGoodsIds.push(orderGoods[j].goods_id)
+        // 获取所有订单ID
+        let orderIds = [];
+        orderList.map((order) => {
+            orderIds.push(order.order_id);
+        });
+
+        // 按订单分组商品
+        let allGoods = await OrderGoods.getByOrderIds(orderIds);
+        let sortGoods = {};
+        allGoods.map((goods) => {
+            if (!sortGoods[goods.order_id]) {
+                sortGoods[goods.order_id] = [];
             }
-            // 查询订单商品详细内容
-            console.log(orderGoodsIds)
-            var orderGoodsList = await OrderGoods.getListByIds(orderGoodsIds, orderId);
-            Object.assign(orderList[i], { goods: orderGoodsList })
-        }
+            sortGoods[goods.order_id].push(goods);
+        });
+
+        // 商品关联到订单上
+        orderList.map((order) => {
+            order.goods = sortGoods[order.order_id];
+        });
+
         ctx.body = orderList
     }
 
@@ -70,7 +77,8 @@ class OrderController extends BaseController {
      */
     async getDetail(ctx, next) {
         let userId = ctx.user.userId;
-        let orderSn = ctx.query.orderSn
+        let orderSn = ctx.query.orderSn;
+
         if (!orderSn) {
             ctx.throw(400, '缺少参数orderSn');
             return;
@@ -83,7 +91,7 @@ class OrderController extends BaseController {
             return;
         }
 
-        let orderGoods = await Order.getOrderGoods(orderInfo.order_id);
+        let orderGoods = await OrderGoods.getOrderGoods(orderInfo.order_id);
         Object.assign(orderInfo, { goods: orderGoods })
         ctx.body = await orderInfo
     }
@@ -126,8 +134,7 @@ class OrderController extends BaseController {
         });
 
         // 如果使用优惠券则退回
-        if (orderInfo.bonus_id > 0)
-        {
+        if (orderInfo.bonus_id > 0) {
             await Coupon.setUnUsed(orderInfo.bonus_id);
         }
 
@@ -137,7 +144,7 @@ class OrderController extends BaseController {
         await OrderAction.record(orderInfo.order_id, 'guest', config.OS_CANCELED, orderInfo.shipping_status, orderInfo.pay_status, actionNote, logTime);
 
         // 取消订单退回库存
-        let orderGoods = await Order.getOrderGoods(orderInfo.order_id);
+        let orderGoods = await OrderGoods.getOrderGoods(orderInfo.order_id);
         orderGoods.map((item) => {
             Goods.changeQuantity(item.goods_id, item.goods_number);
         });

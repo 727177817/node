@@ -43,25 +43,5 @@ class Order extends Model {
                 'order_sn': orderSn
             });
     }
-
-    /*
-     * 获取订单商品
-     * @param {String} [orderId]   订单Id
-     */
-    async getOrderGoods(orderId) {
-        var ret = await this.db('ecs_order_goods')
-            .select().where('order_id', orderId);
-        return ret
-    }
-
-    /*
-     * 获取多个订单商品
-     * @param {String} [orderId]   订单Id
-     */
-    async getListByIds(goodsIds, orderId) {
-        var list = await this.db('ecs_order_goods')
-            .select().whereIn('goods_id', goodsIds).where('order_id', orderId);
-        return list
-    }
 }
 module.exports = new Order();

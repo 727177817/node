@@ -29,7 +29,8 @@ class CartController extends BaseController {
         }
 
         let user = ctx.user;
-        let result = await Cart.getCountByUserIdAndWarehouseId(user.userId, user.warehouseId);
+        // let result = await Cart.getCountByUserIdAndWarehouseId(user.userId, user.warehouseId);
+        let result = await Cart.getSumByUserIdAndWarehouseId(user.userId, user.warehouseId);
 
         ctx.body = result;
     }
@@ -75,7 +76,10 @@ class CartController extends BaseController {
         let result = await this.addToCart(body.goodsId, 1, user.userId, user.warehouseId);
         if (result === 'success') {
             let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-            ctx.body = result;
+            ctx.body = {
+                goods: result,
+                total: this.calcTotal(result)
+            };
         } else {
             ctx.throw(400, result);
         }
@@ -98,7 +102,10 @@ class CartController extends BaseController {
         let res = await Cart.remove(user.userId, body.recId);
         if (res > 0) {
             let result = await Cart.getAllByUserIdAndWarehouseId(user.userId, user.warehouseId);
-            ctx.body = result;
+            ctx.body = {
+                goods: result,
+                total: this.calcTotal(result)
+            };
         } else {
             ctx.throw(400, '删除失败');
         }
