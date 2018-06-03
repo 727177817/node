@@ -50,6 +50,7 @@ class OrderController extends BaseController {
         let orderIds = [];
         orderList.map((order) => {
             orderIds.push(order.order_id);
+            order.realStatus = this.getRealStatus(order.order_status, order.shipping_status, order.pay_status);
         });
 
         // 按订单分组商品
@@ -90,6 +91,8 @@ class OrderController extends BaseController {
             ctx.throw(400, '订单信息不存在');
             return;
         }
+
+        orderInfo.realStatus = this.getRealStatus(orderInfo.order_status, orderInfo.shipping_status, orderInfo.pay_status);
 
         let orderGoods = await OrderGoods.getOrderGoods(orderInfo.order_id);
         Object.assign(orderInfo, { goods: orderGoods })
@@ -150,6 +153,30 @@ class OrderController extends BaseController {
         });
 
         ctx.body = 1;
+    }
+
+
+    /**
+     * 已取消，待支付，已支付，配送中，已完成，退货
+     * @return {[type]} [description]
+     */
+    getRealStatus(orderStatus, shippingStatus, payStatus) {
+        if (orderStatus == config.OS_RETURNED) {
+            return '已退货';
+        } else if (orderStatus == config.OS_CANCELED) {
+            return '已取消';
+        } else {
+            if (payStatus == config.PS_PAYED) {
+                if (shippingStatus == config.SS_SHIPPED) {
+                    return '配送中';
+                } else if (shippingStatus == config.SS_RECEIVED) {
+                    return '已完成';
+                }
+                return '已支付'
+            } else {
+                return '待支付';
+            }
+        }
     }
 }
 
