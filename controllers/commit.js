@@ -22,7 +22,7 @@ class CommitController extends BaseController {
 
     async getTest(ctx, next) {
 
-        ctx.body = this.getTimestamp();
+        ctx.body = this.getShippingDuration();
     }
 
     async postTest(ctx, next) {
@@ -43,7 +43,9 @@ class CommitController extends BaseController {
 
         let userId = ctx.user.userId,
             warehouseId = ctx.user.warehouseId,
-            communityId = ctx.user.communityId;
+            communityId = ctx.user.communityId,
+            couponId = ctx.query.couponId,
+            couponSn = ctx.query.couponSn;
 
         // 收货地址，可选择当前所选小区对应仓库的所有地址
         let communityIds = [];
@@ -79,10 +81,39 @@ class CommitController extends BaseController {
             })
         })
 
+        let $bonus = {};
+        // 如果使用了优惠券
+        if (couponId || couponSn) {
+
+            //计算购物车中的商品总价
+            let cartAmount = this.getCartAmount(cartGoods);
+
+            /* 检查红包是否存在 */
+            if (couponId) {
+                $bonus = await Coupon.getOne(couponId);
+
+                if (!$bonus || $bonus['user_id'] != userId || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > cartAmount) {
+                    ctx.throw(400, '使用红包错误');
+                    return;
+                }
+            } else if (couponSn) {
+                couponSn = trim(couponSn);
+                $bonus = await Coupon.getOneByBonusSn(couponSn);
+                $now = this.getTimestamp();
+
+                if (!$bonus || $bonus['user_id'] > 0 || $bonus['order_id'] > 0 ||
+                    $bonus['min_goods_amount'] > cartAmount ||
+                    $now > $bonus['use_end_date']) {
+                    ctx.throw(400, '使用红包错误');
+                    return;
+                }
+            }
+        }
+
         //订单金额，默认配送方式
         let total = this.order_fee({
             'shipping_id': 1,
-        }, cartGoods, {});
+        }, cartGoods, $bonus);
 
         //获取优惠券列表
         let coupons = await Coupon.getAvaliableCoupons(userId, total.goods_price, this.getTimestamp());
@@ -92,6 +123,7 @@ class CommitController extends BaseController {
             goods: cartGoods,
             total: total,
             coupons: coupons,
+            durations: this.getShippingDuration(),
             timestamp: this.getTimestamp() //系统当前时间
         }
     }
@@ -125,7 +157,7 @@ class CommitController extends BaseController {
         }
 
         //TODO 校验配送时间的合理性
-        let shippingDate = this.getShippingTime(shippingTime);
+        let shippingDate = this.getShippingTime(shippingTime, shippingType);
         if (isNaN(shippingDate)) {
             ctx.throw(400, shippingDate);
             return;
@@ -173,7 +205,7 @@ class CommitController extends BaseController {
 
         let goods = await OrderGoods.getOrderGoods(orderInfo.order_id);
         let body;
-        if(goods && goods.length > 0){
+        if (goods && goods.length > 0) {
             body = goods[0].goods_name + '等';
         }
         let param = {
@@ -203,8 +235,8 @@ class CommitController extends BaseController {
 
         /* 检查商品库存 */
         let e = await this.flow_cart_stock(cartGoods);
-        if(e.length > 0){
-            return  e.join(',') + '库存不足';
+        if (e.length > 0) {
+            return e.join(',') + '库存不足';
         }
 
         let $consignee = await Address.getOneWithUserId(userId, consigneeId);
@@ -235,7 +267,7 @@ class CommitController extends BaseController {
             'extension_id': 0,
             'surplus': 0,
             'integral': 0,
-            'shipping_type': shippingType, //当天的09-14和15-21，分别对应1、2
+            'shipping_type': shippingType, //标明是今天配送还是第二天配送，分别对应1、2
             'shipping_time': 0,
             'best_time': shippingTime
         };
@@ -522,12 +554,94 @@ class CommitController extends BaseController {
     }
 
     /**
+     * 获取可选的配送时间段
+     * 1. 没半小时为已配送区间
+     * 2. 18点后可选择今天和第二天配送
+     * 3. 18点前只能选择今天配送
+     * 4. 配送时间只能选9-21点
+     * @return {[type]} [description]
+     */
+    getShippingDuration() {
+
+        let result = [];
+        // let date = new Date('2018-06-05 21:22:00');
+        let date = new Date();
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+
+        if (hour < 22) {
+            if (hour < 9) {
+                date.setHours(9, 0, 0, 0);
+            } else {
+                if (minute < 30) {
+                    date.setMinutes(0, 0, 0);
+                } else {
+                    date.setMinutes(30, 0, 0);
+                    // date.setHours(hour + 1, 0, 0, 0);
+                }
+            }
+
+            let arr = this.generateDuration(date);
+            if(arr.length > 0){
+                arr[0].label = '立即配送（' + arr[0].label + '）';
+            }
+            result.push({
+                label: '今天',
+                shippintType: 1,
+                durations: arr
+            });
+        }
+
+        if (hour >= 18) {
+            date.setDate(date.getDate() + 1);
+            date.setHours(9, 0, 0, 0);
+            result.push({
+                label: '第二天',
+                shippintType: 2,
+                durations: this.generateDuration(date)
+            });
+        }
+
+        return result;
+    }
+
+    /**
+     * 从某个时间开始到该时间21结束，生成时间段
+     * @param  {[type]} start [description]
+     * @return {[type]}       [description]
+     */
+    generateDuration(start) {
+        let ret = [];
+        while (start.getHours() <= 22) {
+            ret.push(this.padZero(start.getHours()) + ':' + this.padZero(start.getMinutes()));
+            start.setMinutes(start.getMinutes() + 30);
+        }
+
+        let result = [];
+        for (let i = 0, len = ret.length - 2; i < len; i++) {
+            result.push({
+                value: ret[i],
+                label: ret[i] + '-' + ret[i + 1]
+            });
+        }
+
+        return result;
+    }
+
+    padZero(num) {
+        return num < 10 ? '0' + num : num;
+    }
+
+    /**
      * 校验配送时间的合理
      * 1. 配送时间为当天为09-14和15-21
      * 2. 配送时间需晚1小时
      * @return {[type]} [description]
      */
-    getShippingTime(shippingTime) {
+    getShippingTime(shippingTime, shippingType) {
+        if (shippingType != 1 || shippingType != 2) {
+            return '配送时间类型选择不正确';
+        }
         if (!/^\d+:\d+$/.test(shippingTime)) {
             return '配送时间格式不正确';
         }
@@ -537,25 +651,40 @@ class CommitController extends BaseController {
         let shippingHour = parseInt(shippingTime.split(':')[0]);
         let shippingMinute = parseInt(shippingTime.split(':')[1]);
 
-        if (hour >= 21 && hour < 24) {
+        if (hour < 18) {
+            //18点前只能选择当天配送
+            if (shippingType != 1) {
+                return '18点前只能选择当天配送';
+            }
+        } else if (hour >= 22) {
+            // 22点后只能选择第二天配送
+            if (shippingType != 2) {
+                return '22点后只能选择第二天配送';
+            }
+        }
+
+        if (shippingType == 1) {
+            //当天配送只能选择当前时间到22点之间的
+            if (shippingHour <= hour && shippingHour >= 22) {
+                return '非法配送时间，应当选择' + hour + '-22点';
+            }
+        } else if (shippingType == 2) {
+            // 第二天配送只能选择9-22点之间的
+            if (shippingHour < 9 || shippingHour >= 22) {
+                return '非法配送时间，应当选择09-22点';
+            }
+        }
+
+        // if (hour >= 22 && hour < 24) {
+        //     date.setDate(date.getDate() + 1);
+        // }
+        if (shippingType == 2) {
             date.setDate(date.getDate() + 1);
         }
         date.setHours(shippingHour);
         date.setMinutes(shippingMinute);
         date.setSeconds(0);
         date.setMilliseconds(0);
-
-        if (hour >= 21 || hour < 9) {
-            //21点之后第二天9点之前可以选择第二天的09-21点配送
-            if (shippingHour < 9 || shippingHour > 21) {
-                return '非法配送时间，应当选择09-21点';
-            }
-
-        } else {
-            if (shippingHour <= hour && shippingHour > 21) {
-                return '非法配送时间，应当选择' + hour + '-21点';
-            }
-        }
 
         // 转换成utc时间戳
         return Date.parse(date) / 1000 - 8 * 3600;
