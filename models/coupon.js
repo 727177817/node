@@ -16,6 +16,39 @@ class Coupon extends Model {
             }).first();
     }
 
+    async getTypeById(id) {
+        return await this.db('ecs_bonus_type')
+            .where({
+                type_id: id
+            }).first();
+    }
+
+    async getLimitCouponByTypeId(id) {
+        return await this.db(this.name)
+            .where({
+                bonus_type_id: id,
+                user_id: 0,
+            }).select();
+    }
+
+
+    async getBCouponByTypeId(id) {
+        return await this.db(this.name)
+            .where({
+                bonus_type_id: id,
+            })
+            .andWhereNot('user_id', 0)
+            .select()
+            .orderBy('bonus_id', 'desc');
+    }
+
+    async getCouponByTypeIdAndUserId(id, userId) {
+        return await this.db(this.name)
+            .where({
+                bonus_type_id: id,
+                user_id: userId,
+            }).select();
+    }
 
     async getOneByBonusSn(bonusSn) {
         return await this.db(this.name)
@@ -86,7 +119,7 @@ class Coupon extends Model {
         });
     }
 
-    async setUnUsed(bonusId){
+    async setUnUsed(bonusId) {
         return await this.db(this.name).where({
             bonus_id: bonusId
         }).update({
@@ -94,6 +127,6 @@ class Coupon extends Model {
             used_time: 0
         });
     }
-    
+
 }
 module.exports = new Coupon();

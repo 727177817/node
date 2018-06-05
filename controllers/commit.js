@@ -511,6 +511,12 @@ class CommitController extends BaseController {
 
         $total['amount'] -= $use_bonus; // 还需要支付的订单金额
         // $max_amount      -= $use_bonus; // 积分最多还能支付的金额
+        
+        // 格式化
+        $total['amount'] = this.number_format($total['amount']);
+        $total['goods_price'] = this.number_format($total['goods_price']);
+        $total['market_price'] = this.number_format($total['market_price']);
+        $total['saving'] = this.number_format($total['saving']);
 
         return $total;
     }
