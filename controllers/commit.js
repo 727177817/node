@@ -113,7 +113,8 @@ class CommitController extends BaseController {
         //订单金额，默认配送方式
         let total = this.order_fee({
             'shipping_id': 1,
-        }, cartGoods, $bonus);
+            'bonus_id': $bonus.bonus_id
+        }, cartGoods, null, $bonus);
 
         //获取优惠券列表
         let coupons = await Coupon.getAvaliableCoupons(userId, total.goods_price, this.getTimestamp());
@@ -580,10 +581,10 @@ class CommitController extends BaseController {
                 date.setHours(9, 0, 0, 0);
             } else {
                 if (minute < 30) {
-                    date.setMinutes(0, 0, 0);
-                } else {
+                    // date.setMinutes(0, 0, 0);
                     date.setMinutes(30, 0, 0);
-                    // date.setHours(hour + 1, 0, 0, 0);
+                } else {
+                    date.setHours(hour + 1, 0, 0, 0);
                 }
             }
 
@@ -645,7 +646,7 @@ class CommitController extends BaseController {
      * @return {[type]} [description]
      */
     getShippingTime(shippingTime, shippingType) {
-        if (shippingType != 1 || shippingType != 2) {
+        if (shippingType != '1' && shippingType != '2') {
             return '配送时间类型选择不正确';
         }
         if (!/^\d+:\d+$/.test(shippingTime)) {

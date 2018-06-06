@@ -5,6 +5,7 @@ const config = require('../config');
 const OrderAction = require('../models/order_action.js');
 const Coupon = require('../models/coupon.js');
 const Goods = require('../models/goods.js');
+const moment = require('moment');
 
 /**
  * 订单相关接口
@@ -114,6 +115,7 @@ class OrderController extends BaseController {
         }
 
         orderInfo.realStatus = this.getRealStatus(orderInfo.order_status, orderInfo.shipping_status, orderInfo.pay_status);
+        orderInfo.best_time_str = this.format_best_time(orderInfo.best_time);
 
         let orderGoods = await OrderGoods.getOrderGoods(orderInfo.order_id);
         Object.assign(orderInfo, { goods: orderGoods })
@@ -198,6 +200,22 @@ class OrderController extends BaseController {
                 return '待支付';
             }
         }
+    }
+
+    /**
+     * 获取格式化的配送时间
+     * 2018-06-05 09:00-09:30
+     * @param  {[type]} best_time [description]
+     * @return {[type]}           [description]
+     */
+    format_best_time(best_time) {
+        let date = moment.unix(best_time)
+        let str1 = date.format('YYYY-MM-DD');
+        let str2 = date.format('HH:mm');
+        date.add(30, 'minutes');
+        let str3 = date.format('HH:mm');
+
+        return str1 + ' ' + str2 + '-' + str3;
     }
 }
 
